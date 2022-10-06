@@ -24,6 +24,8 @@ namespace TerriBull {
 
     /* Manages Mechanical Components */
     class MechanicalSystem;
+    /* Abstract Class for Drivetrain */
+    class Drive;
     /* Manages Odometry and Positioning */
     class Odometry;
     /* Main Controller for the Robot */
@@ -35,6 +37,7 @@ namespace TerriBull {
 
     /* Controls Mechanical System */
     class PidController;
+
 
     /**
      * @brief Useful Algorithms and Functions

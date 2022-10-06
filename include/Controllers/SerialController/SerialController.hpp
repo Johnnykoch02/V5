@@ -1,18 +1,18 @@
-#ifndef SERIALMANAGER_H
-#define SERIALMANAGER_H
+#ifndef SERIALCONTROLLER_H
+#define SERIALCONTROLLER_H
 
 #include <string>
 #include "../TeriBull/TerriBull.hpp"
 
-class SerialManager {
+class TerriBull::SerialController {
     public:
     char buffer[250];
 
-    SerialManager();
+    SerialController();
     void update();
     void readBuffer();
     void processDataFromBuffer();
-    void sendData(std::string data);
+    void sendData(::std::string data);
 };
 
 
