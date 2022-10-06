@@ -6,9 +6,10 @@
 
 
 class TerriBull::TaskManager {
-public:
+private:
     TerriBull::Task *current_task;
-    PriorityQueue<TerriBull::Task> tasks;
+    TerriBull::PriorityQueue<TerriBull::Task> tasks;
+public:
     TaskManager();
     void ClearAllTasks();
     void addTask(TerriBull::Task *task);
