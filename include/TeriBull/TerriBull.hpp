@@ -2,6 +2,7 @@
 #ifndef __TERRIBULL__
 #define __TERRIBULL__
 
+#include <list>
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS 
 */
@@ -17,13 +18,15 @@ namespace TerriBull {
     class TaskManager;
     /* Task Data Container */
     class Task;
-
+    typedef ::std::list<Task*> TaskList; 
     /* Manages Serial Communication of the Robot */
     class SerialController;
 
 
     /* Manages Mechanical Components */
     class MechanicalSystem;
+    /* Virtual */
+    class MechanicalComponent;
     /* Abstract Class for Drivetrain */
     class Drive;
     /* Manages Odometry and Positioning */
@@ -349,15 +352,18 @@ namespace TerriBull {
     }
 
     T* pop() {
-        T* returnValue = new T(this->head->getData());
-        this->remove(this->get(0));
+        T* returnValue = this->head->getData();
+        this->head->setData(nullptr);
+        Node<T> oldHead = this->head;
+        this->head = this->head->getNext();
+        this->size--;
+        delete oldHead;
         return returnValue;
         /*This could easily be wrong*/
     }
     
     T* peek() {
-        T* returnValue = new T(this->head->getData());
-        return returnValue;
+        return this->head->getData();
     }
 
     int length(){ return this->size;}
