@@ -1,0 +1,27 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Shooter_Big_Bot",
+            "controller_configurations": {
+                "default": {
+                    "LJ_X_AXIS": "MOVEMENT_FORWARD&BACKWARD",
+                    "LJ_Y_AXIS": "MOVEMENT_UP&DOWN",
+                    "RJ_X_AXIS": "",
+                    "RJ_Y_AXIS": "",
+                    "LT": "",
+                    "LB": "TURNING_LEFT",
+                    "L3": "",
+                    "RT": "",
+                    "RB": "TURNING_RIGHT",
+                    "R3": "",
+                    "A": "",
+                    "B": "",
+                    "X": "",
+                    "Y": ""
+                }
+            
+            }
+        }
+    ]
+}

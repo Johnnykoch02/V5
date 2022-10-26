@@ -3,6 +3,8 @@
 #define __TERRIBULL__
 
 #include <list>
+#include <map>
+#include <string>
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS 
 */
@@ -13,7 +15,9 @@ namespace TerriBull {
      * 
      */
 
-  
+    typedef ::std::string string;
+
+    typedef ::std::map<string, size_t> Str2SizeMap;
     /* Manages Tasks for the Robot */
     class TaskManager;
     /* Task Data Container */
