@@ -10,3 +10,29 @@
  * @copyright Copyright (c) 2022
  * 
  */
+
+#ifndef TASK_H
+#define TASK_H
+
+ #include "../../TerriBull.hpp"
+
+typedef enum TaskTypes {DRIVE, ROLLER, SHOOTER, INTERNAL_VARIABLES} TaskTypes;
+
+ class TerriBull::Task {
+
+    
+
+   private:
+   TaskTypes pType;
+
+   public:
+   bool finishedFlag;
+   // virtual Task(Task *task) = 0;
+   // ~Task();
+   virtual void init() = 0;
+   virtual void update(float delta) = 0;
+ };
+
+
+#endif
+ */
