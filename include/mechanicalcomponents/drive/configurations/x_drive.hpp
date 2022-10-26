@@ -22,6 +22,7 @@ class X_Drive : public TerriBull::Drive {
 
     // hello hi
 
+    pros::Motor pMotorA;
     /**
     This Class MUST Implement These Functions in order to properly implement the
     TerriBull::Drive Class! For more information on this:
@@ -40,6 +41,8 @@ class X_Drive : public TerriBull::Drive {
         //std::vector<float> vector3(5, 12);
     }
 
+    void drive(float x, float y);
+    void resultant_vector();
     void tare_encoders();
 
 };
@@ -53,7 +56,7 @@ const Vector CARDINAL_VECTORS[9] = {
     Vector { 0.0, 1.0, VOLT_MAX }, Vector { 0.0, -1.0, VOLT_MAX },
     Vector { -1.0, 0.0, VOLT_MAX }, Vector { 1.0, 0.0, VOLT_MAX }, Vector { 0.0, 0.0, 0 },
     Vector { -1.0, 1.0, VOLT_MAX }, Vector { 1.0, 1.0, VOLT_MAX }, 
-    Vector { -1.0, -1.0, VOLT_MAX }, Vector { 1.0, -1.0, VOLT_MAX }
+    Vector {BackWardLeft -1.0, -1.0, VOLT_MAX }, Vector { 1.0, -1.0, VOLT_MAX }
 };
 
 enum MotorCommands
@@ -61,9 +64,10 @@ enum MotorCommands
     Forward,      Backward,
     Left,         Right,       Nil,
     ForwardLeft,  ForwardRight, 
-    BackWardLeft, BackwardRight
+    , BackwardRight
 };
 
 movefn(CARDINAL_VECTORS[MotorCommands::BackWards]);
 
 */
+#endif
