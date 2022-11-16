@@ -2,6 +2,7 @@
 #define X_DRIVE_H
 #include "../drive.hpp"
 #include "TeriBull/TerriBull.hpp"
+#include "pros/motors.h"
 #include "pros/motors.hpp"
 #include <math.h>
 #include <vector>
@@ -15,10 +16,10 @@ class X_Drive : public TerriBull::Drive {
      */
     
     private:
-    pros::Motor pMotorA; // -> Top Left
-    pros::Motor pMotorB; // -> Bottom Left
-    pros::Motor pMotorC; // -> Top Right
-    pros::Motor pMotorD; // -> Bottom Right
+    pros::Motor * pMotorA; // -> Top Left
+    pros::Motor * pMotorB; // -> Bottom Left
+    pros::Motor * pMotorC; // -> Top Right
+    pros::Motor * pMotorD; // -> Bottom Right
 
     // hello hi
 
@@ -30,40 +31,22 @@ class X_Drive : public TerriBull::Drive {
     This does not mean you cannot use Helper Functions to help you solve this implementation
      <in Fact, its encouraged to use as many as you need!>
     */
-    void drive(float x, float y) {
-        
 
-    }
+    X_Drive(int portA, int portB, int portC, int portD);
 
-    void resultant_vector()
-    {
-        //std::vector<float> vector3(5, 12);
-    }
+    void drive(float x, float y);
+
+    void resultant_vector();
 
     void tare_encoders();
 
 };
 
+X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
+    pMotorA = new pros::Motor(portA, pros::E_MOTOR_GEARSET_18, false);
+    pMotorB = new pros::Motor(portB, pros::E_MOTOR_GEARSET_18, false);
+    pMotorC = new pros::Motor(portC, pros::E_MOTOR_GEARSET_18, true);
+    pMotorD = new pros::Motor(portD, pros::E_MOTOR_GEARSET_18, true);
+}
+
 #endif
-
-/*
-struct Vector { float x, y, displacement; };
-
-const Vector CARDINAL_VECTORS[9] = {
-    Vector { 0.0, 1.0, VOLT_MAX }, Vector { 0.0, -1.0, VOLT_MAX },
-    Vector { -1.0, 0.0, VOLT_MAX }, Vector { 1.0, 0.0, VOLT_MAX }, Vector { 0.0, 0.0, 0 },
-    Vector { -1.0, 1.0, VOLT_MAX }, Vector { 1.0, 1.0, VOLT_MAX }, 
-    Vector { -1.0, -1.0, VOLT_MAX }, Vector { 1.0, -1.0, VOLT_MAX }
-};
-
-enum MotorCommands
-{
-    Forward,      Backward,
-    Left,         Right,       Nil,
-    ForwardLeft,  ForwardRight, 
-    BackWardLeft, BackwardRight
-};
-
-movefn(CARDINAL_VECTORS[MotorCommands::BackWards]);
-
-*/
