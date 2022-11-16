@@ -2,6 +2,7 @@
 #ifndef __TERRIBULL__
 #define __TERRIBULL__
 
+#include "pros/motors.hpp"
 #include <list>
 #include <map>
 #include <string>
@@ -14,6 +15,9 @@ namespace TerriBull {
      * @brief TerriBull Robotics Utilities and Class Predeclarations
      * 
      */
+    /* Standard Library Type Definitions */
+    typedef ::std::string string;
+    typedef ::std::map<string, size_t> Str2SizeMap;
 
     typedef ::std::string string;
 
@@ -45,12 +49,15 @@ namespace TerriBull {
     /* Controls Mechanical System */
     class PidController;
 
+    /* TerriBull Type Definitions */
+    typedef ::std::vector<::pros::Motor> MotorGroup;
+    
 
     /**
      * @brief Useful Algorithms and Functions
      * 
      */
-
+    
 
     /**
      * @brief Template Classes
@@ -326,7 +333,6 @@ namespace TerriBull {
             }
             node = node->getNext();
         }
-        
         return false;
     }
 

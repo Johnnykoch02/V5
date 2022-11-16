@@ -8,7 +8,7 @@
 class TerriBull::GameObject {
     private:
     public:
-    std::string identifier;
+    TerriBull::string identifier;
     float *x;
     float width;
     float height;
@@ -22,7 +22,7 @@ class TerriBull::GameObject {
         this->x = new float;
         this->y = new float;
     }
-    GameObject(float x, float y, std::string identifier, int type, float width, float height) : GameObject() {
+    GameObject(float x, float y, TerriBull::string identifier, int type, float width, float height) : GameObject() {
         this->x[0] = x;
         this->y[0] = y;
         this->identifier = identifier;
@@ -36,7 +36,7 @@ class TerriBull::GameObject {
         this->y[0] = y;
     }
 
-    bool checkID(std::string identifier) { 
+    bool checkID(TerriBull::string identifier) { 
         if (this->identifier != identifier) return false;
 
         return true;

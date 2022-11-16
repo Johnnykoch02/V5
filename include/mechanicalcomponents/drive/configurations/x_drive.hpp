@@ -2,6 +2,7 @@
 #define X_DRIVE_H
 #include "../drive.hpp"
 #include "TeriBull/TerriBull.hpp"
+#include "pros/motors.h"
 #include "pros/motors.hpp"
 #include <math.h>
 #include <vector>
@@ -15,6 +16,13 @@ class X_Drive : public TerriBull::Drive {
      */
     
     private:
+    pros::Motor * pMotorA; // -> Top Left
+    pros::Motor * pMotorB; // -> Bottom Left
+    pros::Motor * pMotorC; // -> Top Right
+    pros::Motor * pMotorD; // -> Bottom Right
+
+    // hello hi
+
     pros::Motor pMotorA; // -> Top Left
     pros::Motor pMotorB; // -> Bottom Left
     pros::Motor pMotorC; // -> Top Right
@@ -31,6 +39,13 @@ class X_Drive : public TerriBull::Drive {
     This does not mean you cannot use Helper Functions to help you solve this implementation
      <in Fact, its encouraged to use as many as you need!>
     */
+
+    X_Drive(int portA, int portB, int portC, int portD);
+
+    void drive(float x, float y);
+
+    void resultant_vector();
+
     void drive(float x, float y) {
         
 
@@ -46,6 +61,13 @@ class X_Drive : public TerriBull::Drive {
     void tare_encoders();
 
 };
+
+X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
+    pMotorA = new pros::Motor(portA, pros::E_MOTOR_GEARSET_18, false);
+    pMotorB = new pros::Motor(portB, pros::E_MOTOR_GEARSET_18, false);
+    pMotorC = new pros::Motor(portC, pros::E_MOTOR_GEARSET_18, true);
+    pMotorD = new pros::Motor(portD, pros::E_MOTOR_GEARSET_18, true);
+}
 
 #endif
 
