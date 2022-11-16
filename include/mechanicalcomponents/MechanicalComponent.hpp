@@ -7,8 +7,7 @@ class TerriBull::MechanicalComponent  {
     private:
     TerriBull::string pType;
     TerriBull::Str2SizeMap pPorts;
-    //Vector for     
-    TerriBull::Str2SizeMap pPorts;    
+
     public:
     MechanicalComponent();
     MechanicalComponent(const string type, const TerriBull::Str2SizeMap  ports) : pType(type), pPorts(ports) {}

@@ -63,14 +63,6 @@ public:
     
         }
     }
-    TerriBull::Task *current_task;
-    TerriBull::PriorityQueue<TerriBull::Task> tasks;
-public:
-    TaskManager();
-    void ClearAllTasks();
-    void addTask(TerriBull::Task *task);
-    void run();
-
 
 };
 #endif

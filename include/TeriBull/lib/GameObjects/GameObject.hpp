@@ -14,6 +14,7 @@ class TerriBull::GameObject {
     float height;
     float * y;
     int type;
+    
     ~GameObject() {
         delete this->x;
         delete this->y;
