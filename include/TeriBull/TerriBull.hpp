@@ -49,6 +49,7 @@ namespace TerriBull {
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
     
+
     /**
      * @brief Useful Algorithms and Functions
      * 

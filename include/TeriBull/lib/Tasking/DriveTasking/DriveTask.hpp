@@ -9,7 +9,7 @@ class DriveTask : public TerriBull::Task {
 
     virtual void init() = 0;
     virtual void update(float delta) = 0;
-    
+
 }
 
 #endif  /* DRIVETASK_H */
