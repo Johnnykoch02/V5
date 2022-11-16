@@ -19,6 +19,9 @@ namespace TerriBull {
     typedef ::std::string string;
     typedef ::std::map<string, size_t> Str2SizeMap;
 
+    typedef ::std::string string;
+
+    typedef ::std::map<string, size_t> Str2SizeMap;
     /* Manages Tasks for the Robot */
     class TaskManager;
     /* Task Data Container */
@@ -49,6 +52,7 @@ namespace TerriBull {
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
     
+
     /**
      * @brief Useful Algorithms and Functions
      * 

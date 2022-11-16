@@ -23,6 +23,14 @@ class X_Drive : public TerriBull::Drive {
 
     // hello hi
 
+    pros::Motor pMotorA; // -> Top Left
+    pros::Motor pMotorB; // -> Bottom Left
+    pros::Motor pMotorC; // -> Top Right
+    pros::Motor pMotorD; // -> Bottom Right
+
+    // hello hi
+
+    pros::Motor pMotorA;
     /**
     This Class MUST Implement These Functions in order to properly implement the
     TerriBull::Drive Class! For more information on this:
@@ -38,6 +46,18 @@ class X_Drive : public TerriBull::Drive {
 
     void resultant_vector();
 
+    void drive(float x, float y) {
+        
+
+    }
+
+    void resultant_vector()
+    {
+        //std::vector<float> vector3(5, 12);
+    }
+
+    void drive(float x, float y);
+    void resultant_vector();
     void tare_encoders();
 
 };
@@ -49,4 +69,27 @@ X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
     pMotorD = new pros::Motor(portD, pros::E_MOTOR_GEARSET_18, true);
 }
 
+#endif
+
+/*
+struct Vector { float x, y, displacement; };
+
+const Vector CARDINAL_VECTORS[9] = {
+    Vector { 0.0, 1.0, VOLT_MAX }, Vector { 0.0, -1.0, VOLT_MAX },
+    Vector { -1.0, 0.0, VOLT_MAX }, Vector { 1.0, 0.0, VOLT_MAX }, Vector { 0.0, 0.0, 0 },
+    Vector { -1.0, 1.0, VOLT_MAX }, Vector { 1.0, 1.0, VOLT_MAX }, 
+    Vector {BackWardLeft -1.0, -1.0, VOLT_MAX }, Vector { 1.0, -1.0, VOLT_MAX }
+};
+
+enum MotorCommands
+{
+    Forward,      Backward,
+    Left,         Right,       Nil,
+    ForwardLeft,  ForwardRight, 
+    , BackwardRight
+};
+
+movefn(CARDINAL_VECTORS[MotorCommands::BackWards]);
+
+*/
 #endif
