@@ -294,6 +294,7 @@ namespace TerriBull {
                         this->tail = prev;
                         delete node;
                     }
+                    
                     else {
                         /*Create Linkage*/
                         prev->setNext(next);
