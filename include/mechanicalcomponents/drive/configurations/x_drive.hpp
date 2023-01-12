@@ -1,44 +1,39 @@
 #ifndef X_DRIVE_H
 #define X_DRIVE_H
 #include "../drive.hpp"
-#include "TeriBull/TerriBull.hpp"
+#include "../../TerriBull/TerriBull.hpp"
 #include "pros/motors.h"
 #include "pros/motors.hpp"
+#include "pros/llemu.hpp"
 #include <math.h>
 #include <vector>
 
 float rx,ry;
 
 class X_Drive : public TerriBull::Drive {
-    /**
-     * @brief This Class has Four Motors! I have already defined one of them 
-     * This class Implements TerriBull Drive to Drive to a position x,y!
-     */
     
+    typedef ::std::map<::pros::Motor*, TerriBull::Vector2> ErrorMap;
+
     private:
     pros::Motor * pMotorA; // -> Top Left
     pros::Motor * pMotorB; // -> Bottom Left
     pros::Motor * pMotorC; // -> Top Right
     pros::Motor * pMotorD; // -> Bottom Right
 
-    // hello hi
-
-    /**
-    This Class MUST Implement These Functions in order to properly implement the
-    TerriBull::Drive Class! For more information on this:
-        https://www.youtube.com/watch?v=77eueMbWI0Y -> Inheretence and Polymorphism
-
-    This does not mean you cannot use Helper Functions to help you solve this implementation
-     <in Fact, its encouraged to use as many as you need!>
-    */
 
     X_Drive(int portA, int portB, int portC, int portD);
 
-    void drive(float x, float y);
+    void drive(TerriBull::Vector2 pos);
 
-    void resultant_vector();
+    void setVoltage(float lt, float lb, float rt, float rb);
 
-    void tare_encoders();
+    float dError();
+      
+    void reset();
+
+    // void resultant_vector();
+
+    // void tare_encoders();
 
 };
 
@@ -47,6 +42,81 @@ X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
     pMotorB = new pros::Motor(portB, pros::E_MOTOR_GEARSET_18, false);
     pMotorC = new pros::Motor(portC, pros::E_MOTOR_GEARSET_18, true);
     pMotorD = new pros::Motor(portD, pros::E_MOTOR_GEARSET_18, true);
+
+}
+
+X_Drive::~X_Drive() {
+    delete pMotorA;
+    delete pMotorB;
+    delete pMotorC;
+    delete pMotorD;
+}
+
+void X_Drive::drive(TerriBull::Vector2 pos) {
+    /* Theta of desired      Modified By our current Look Angle */
+
+    float angle = pos.theta - ((*this->pCurrentAngle) - 90);
+    angle = (angle<0) ? 360.0 + angle : angle;
+    int x = int(round(angle/45)) % 8;
+    int dir = 0;
+    float pct = 0;
+
+    this->currentError = (pos - *(this->pCurrentPos)).r;
+
+    /* Basic PID Equation */
+    pct = kP*currentError + kI*currentError*currentError + kD*this->dError();
+
+
+    pros::lcd::set_text(4, std::to_string(x) );
+    switch(x) {
+      case 0:
+      case 4:
+        dir = (angle < 90) ? 1 : -1;
+        setVoltage(pct*dir, -pct*dir, pct*dir, pct*-dir);
+        break;
+      case 1:
+      case 5:
+        dir = (angle < 125) ? 1 : -1;
+        setVoltage( dir*pct, 0, 0,dir*pct);
+        break;
+      case 2:
+      case 6:
+        dir = (angle < 180) ? 1 : -1;
+        setVoltage( dir*pct, dir*pct, dir*pct,dir*pct);
+        break;
+      case 3:
+      case 7:
+        dir = (angle < 215) ? 1 : -1;
+        setVoltage( 0, -dir*pct, -dir*pct,0);
+        break;
+        default:
+          ::pros::lcd::set_text(4, "ERROR" );
+          break;
+    }
+
+    this->previousError = this->currentError;
+}
+
+void X_Drive::change_orientation(float theta) {
+  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+
+}
+
+void  X_Drive::setVoltage(float lt, float lb, float rt, float rb)  {
+  /* Less than some threshold */ 
+  if (fabs(lt) < motorPowerThreshold && fabs(rt) < motorPowerThreshold && 
+      fabs(lb) < motorPowerThreshold && fabs(rb) < motorPowerThreshold) {
+    lt = lb = rt = rb = 0;
+  }
+  pMotorA->move_voltage(lt*this->pVoltageCap);
+  pMotorB->move_voltage(rt*this->pVoltageCap);
+  pMotorC->move_voltage(lb*this->pVoltageCap);
+  pMotorD->move_voltage(rb*this->pVoltageCap);
+
+}
+
+void X_Drive::reset() {
+  this->currentError = this->previousError = 0;
 }
 
 #endif

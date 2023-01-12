@@ -1,7 +1,7 @@
 #ifndef OBJECTHANDLER_H
 #define OBJECTHANDLER_H
 
-#include "../TeriBull/TerriBull.hpp"
+#include "../TerriBull/TerriBull.hpp"
 #include <list>
 #include <map>
 #include <vector>

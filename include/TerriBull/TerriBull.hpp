@@ -6,6 +6,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <cmath>
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS 
 */
@@ -18,7 +19,8 @@ namespace TerriBull {
     /* Standard Library Type Definitions */
     typedef ::std::string string;
     typedef ::std::map<string, size_t> Str2SizeMap;
-
+    /* Vectorization Class */
+    class Vector2;
     /* Manages Tasks for the Robot */
     class TaskManager;
     /* Task Data Container */
@@ -35,7 +37,7 @@ namespace TerriBull {
     /* Abstract Class for Drivetrain */
     class Drive;
     /* Manages Odometry and Positioning */
-    class Odometry;
+    // class Odometry;
     /* Main Controller for the Robot */
     class RoboController;
     /* Object Management and Data Information */
@@ -49,11 +51,33 @@ namespace TerriBull {
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
     
+    /* Program Constants */
+    int const MAX_VOLTAGE = 12000;
+    
     /**
      * @brief Useful Algorithms and Functions
      * 
      */
-    
+    float const PI =  3.14159;
+
+    float DEG2RAD( const float deg )
+    {
+    	return deg * PI/180;
+    }
+    float RAD2DEG( const float rad )
+    {
+    	return rad * 180/PI;
+    }
+ 
+    float GetDTheta(float tf, float ti) {
+    float positiveDTheta = fmod((tf+360)-ti, 360.0);
+    float negativeDTheta = -360 + positiveDTheta;
+
+    if (fabs(positiveDTheta) <= fabs(negativeDTheta))
+      return positiveDTheta;
+    else return negativeDTheta;
+
+}
 
     /**
      * @brief Template Classes
@@ -294,7 +318,7 @@ namespace TerriBull {
                         this->tail = prev;
                         delete node;
                     }
-                    
+
                     else {
                         /*Create Linkage*/
                         prev->setNext(next);
@@ -437,6 +461,25 @@ namespace TerriBull {
         this->pq->clear();
     }
     };
+
+    #endif
+
+    #ifndef __TERRIBULL_INCLUDES__
+    #define __TERRIBULL_INCLUDES__
+    
+    #include "./lib/Vector2.hpp"
+    #include "../Controllers/TaskManager/TaskManager.hpp"
+    #include "./lib/Tasking/Task.hpp"
+    #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+    #include "../Controllers/SerialController/SerialController.hpp"
+    #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
+    #include "../MechanicalComponents/MechanicalComponent.hpp"
+    #include "../MechanicalComponents/Drive/drive.hpp"
+    #include "../Controllers/RoboController/RoboController.hpp"
+    #include "../Controllers/ObjectHanlder/ObjectHandler.hpp"
+    #include "./lib/GameObjects/GameObject.hpp"
+    #include "../Controllers/PidController/PidController.hpp"
+    
 
     #endif
 

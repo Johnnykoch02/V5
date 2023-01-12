@@ -22,7 +22,11 @@
                 }
             },
             "mechanical_system": {
-
+                "imu": 5,
+                "drive": {
+                    "config": "x_drive",
+                    "motor_ports": [1, 2, 3, 4]
+                }
             }
 
         }
