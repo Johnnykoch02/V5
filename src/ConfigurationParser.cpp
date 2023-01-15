@@ -4,30 +4,6 @@
 #include<fstream>
 
 using namespace std;
-
-int main() {
-	/* Read the json file using ifstream */
-	ifstream jsonfile("jsonfile.json");
-
-	/* The root node of the json file*/
-	Json::Value root;
-
-	/* Read the json data from the file into the root node */
-	jsonfile >> root;
-
-	/* Get the value of the "name" property */
-	string name = root.get("name", "").asString();
-
-	/* Get the value of the "age" property */
-	int age = root.get("age", 0).asInt();
-
-	/* Print the parsed values */
-	cout << "Name: " << name << endl;
-	cout << "Age: " << age << endl;
-
-	return 0;
-}
-
 #ifndef CONFIG_PARSER_H
 #define CONFIG_PARSER_H
 
@@ -52,7 +28,12 @@ int main() {
                 }
 
                 	*(this->pFile) >> this->pRoot;      
-                    this->pRoot.get("configurations", "ERROR: Variable not found.").getMemberNames();
+                    auto vals = this->pRoot.get("configurations", "ERROR: Variable not found.").getMemberNames();
+                    for (auto val : vals) 
+                    {
+                        cout << val << endl;
+                    }
+
             }
             ~ConfigurationParser();
 
@@ -60,5 +41,17 @@ int main() {
             return this->errCode == NO_ERROR;
         }
     };
+    ConfigurationParser::~ConfigurationParser () {
+        pFile->close();
+        delete pFile;
+    }
 
 #endif
+
+int main() {
+	/* Read the json file using ifstream */
+	ConfigurationParser parser("../configuration.json", "Shooter_Big_Bot");
+
+	return 0;
+}
+

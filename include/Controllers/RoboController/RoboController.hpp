@@ -24,11 +24,12 @@ class RoboController {
         TaskManager* taskManager;
         MechanicalSystem* system;
         SerialController* serialController;
+        // ConfigurationParser configParser;
 
     public:
 
     RoboController();
-    
+
 };
 
 #endif
