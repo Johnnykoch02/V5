@@ -2,7 +2,7 @@ ARCHTUPLE=arm-none-eabi-
 DEVICE=VEX EDR V5
 
 MFLAGS=-mcpu=cortex-a9 -mfpu=neon-fp16 -mfloat-abi=softfp -Os -g
-CPPFLAGS=-D_POSIX_THREADS -D_UNIX98_THREAD_MUTEX_ATTRIBUTES
+CPPFLAGS=-D_POSIX_THREADS -D_UNIX98_THREAD_MUTEX_ATTRIBUTES -ljsoncpp
 GCCFLAGS=-ffunction-sections -fdata-sections -fdiagnostics-color -funwind-tables
 
 WARNFLAGS+=-Wno-psabi
@@ -17,7 +17,7 @@ MAKEDEPFOLDER = -$(VV)mkdir -p $(DEPDIR)/$$(dir $$(patsubst $(BINDIR)/%, %, $(RO
 RENAMEDEPENDENCYFILE = -$(VV)mv -f $(DEPDIR)/$$*.Td $$(patsubst $(SRCDIR)/%, $(DEPDIR)/%.d, $(ROOT)/$$<) && touch $$@
 
 LIBRARIES+=$(wildcard $(FWDIR)/*.a)
-LIBRARIES+=-ljsoncpp
+# LIBRARIES+=ljsoncpp
 # Cannot include newlib and libc because not all of the req'd stubs are implemented
 EXCLUDE_COLD_LIBRARIES+=$(FWDIR)/libc.a $(FWDIR)/libm.a
 COLD_LIBRARIES=$(filter-out $(EXCLUDE_COLD_LIBRARIES), $(LIBRARIES))
