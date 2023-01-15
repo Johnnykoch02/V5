@@ -254,7 +254,7 @@ $(BINDIR)/%.$1.o: $(SRCDIR)/%.$1 $(DEPDIR)/$(basename $1).d
 	$(VV)mkdir -p $$(dir $$@)
 	$(MAKEDEPFOLDER)
 	@echo "Hello World"
-	$$(call test_output_2,Compiled $$< ,$(CC) -c $(INCLUDE) -iquote"$(INCDIR)/$$(dir $$*)" $(CFLAGS) $(EXTRA_CFLAGS) $(DEPFLAGS) -ljsoncpp -o $$@ $$<,$(OK_STRING))
+	$$(call test_output_2,Compiled $$< ,$(CC) -c $(INCLUDE) -iquote"$(INCDIR)/$$(dir $$*)" -ljsoncpp $(CFLAGS) $(EXTRA_CFLAGS) $(DEPFLAGS) -o $$@ $$<,$(OK_STRING))
 	$(RENAMEDEPENDENCYFILE)
 endef
 $(foreach cext,$(CEXTS),$(eval $(call c_rule,$(cext))))
@@ -265,7 +265,7 @@ $(BINDIR)/%.$1.o: $(SRCDIR)/%.$1 $(DEPDIR)/$(basename %).d
 	$(VV)mkdir -p $$(dir $$@)
 	$(MAKEDEPFOLDER)
 	@echo "Hello World"
-	$$(call test_output_2,Compiled $$< ,$(CXX) -c $(INCLUDE) -iquote"$(INCDIR)/$$(dir $$*)" $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(DEPFLAGS) -ljsoncpp -o $$@ $$<,$(OK_STRING))
+	$$(call test_output_2,Compiled $$< ,$(CXX) -c $(INCLUDE) -iquote"$(INCDIR)/$$(dir $$*)" -ljsoncpp $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(DEPFLAGS) -o $$@ $$<,$(OK_STRING))
 	$(RENAMEDEPENDENCYFILE)
 endef
 $(foreach cxxext,$(CXXEXTS),$(eval $(call cxx_rule,$(cxxext))))
