@@ -17,7 +17,7 @@ MAKEDEPFOLDER = -$(VV)mkdir -p $(DEPDIR)/$$(dir $$(patsubst $(BINDIR)/%, %, $(RO
 RENAMEDEPENDENCYFILE = -$(VV)mv -f $(DEPDIR)/$$*.Td $$(patsubst $(SRCDIR)/%, $(DEPDIR)/%.d, $(ROOT)/$$<) && touch $$@
 
 LIBRARIES+=$(wildcard $(FWDIR)/*.a)
-LIBRARIES+=jsoncpp
+# LIBRARIES+=jsoncpp
 # Cannot include newlib and libc because not all of the req'd stubs are implemented
 EXCLUDE_COLD_LIBRARIES+=$(FWDIR)/libc.a $(FWDIR)/libm.a
 COLD_LIBRARIES=$(filter-out $(EXCLUDE_COLD_LIBRARIES), $(LIBRARIES))
@@ -218,7 +218,7 @@ $(MONOLITH_BIN): $(MONOLITH_ELF) $(BINDIR)
 
 $(MONOLITH_ELF): $(ELF_DEPS) $(LIBRARIES)
 	$(call _pros_ld_timestamp)
-	$(call test_output_2,Linking project with $(ARCHIVE_TEXT_LIST) ,$(LD) $(LDFLAGS) $(ELF_DEPS) $(LDTIMEOBJ) $(call wlprefix,-T$(FWDIR)/v5.ld $(LNK_FLAGS)) -o $@,$(OK_STRING))
+	$(call test_output_2,Linking project with $(ARCHIVE_TEXT_LIST) ,$(LD) -ljsoncpp $(LDFLAGS) $(ELF_DEPS) $(LDTIMEOBJ) $(call wlprefix,-T$(FWDIR)/v5.ld $(LNK_FLAGS)) -o $@,$(OK_STRING))
 	@echo Section sizes:
 	-$(VV)$(SIZETOOL) $(SIZEFLAGS) $@ $(SIZES_SED) $(SIZES_NUMFMT)
 
