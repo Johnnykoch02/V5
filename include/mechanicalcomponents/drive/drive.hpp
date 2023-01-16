@@ -1,3 +1,14 @@
+/**
+ * @file MechanicalSystem.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief drive base class for driver system
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include "../../TerriBull/TerriBull.hpp"
 
 #ifndef DRIVE_H

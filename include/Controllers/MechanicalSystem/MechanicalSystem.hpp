@@ -1,3 +1,14 @@
+/**
+ * @file MechanicalSystem.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Controller of all physical components on the BullBot
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef MECHANICAL_SYSTEM_H
 #define MECHANICAL_SYSTEM_H
 

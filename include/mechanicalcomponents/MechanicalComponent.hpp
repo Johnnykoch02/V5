@@ -1,3 +1,14 @@
+/**
+ * @file MechanicalSystem.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Mechanical componenent base class for robot components
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef MECHANICAL_COMPONENT
 #define MECHANICAL_COMPONENT
 

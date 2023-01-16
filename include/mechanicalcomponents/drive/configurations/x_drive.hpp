@@ -1,3 +1,14 @@
+/**
+ * @file x_drive.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief xdrive driver configuration
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef X_DRIVE_H
 #define X_DRIVE_H
 #include "../drive.hpp"

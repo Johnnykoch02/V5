@@ -1,3 +1,15 @@
+/**
+ * @file Vector2.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Basic 2D Vector Class designed to give easy access to many of the 
+ * necessary calculations on Vector2 Instance creation.
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef VECTOR2_H 
 #define VECTOR2_H
 

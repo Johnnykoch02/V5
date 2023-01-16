@@ -1,3 +1,14 @@
+/**
+ * @file MechanicalSystem.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Data structure for implementing game objects on the field
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 

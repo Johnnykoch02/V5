@@ -1,3 +1,15 @@
+/**
+ * @file ObjectHandler.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Maintains and manages objects and object locations
+ *  in the Field
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef OBJECTHANDLER_H
 #define OBJECTHANDLER_H
 

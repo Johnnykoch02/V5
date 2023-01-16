@@ -1,4 +1,15 @@
-
+/**
+ * @file ConfigurationParser.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief JSON configuration parser designed to be paired with configuration.json to 
+ * extract a current configuration of the BullBot.
+ *     
+ * @version 0.1
+ * @date 2023-01-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef CONFIG_PARSER_H
 #define CONFIG_PARSER_H
 

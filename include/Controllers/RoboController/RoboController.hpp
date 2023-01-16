@@ -20,16 +20,51 @@ using namespace TerriBull;
 
 class RoboController {
     private:
-        ObjectHandler* objHandler;
-        TaskManager* taskManager;
-        MechanicalSystem* system;
-        SerialController* serialController;
-        // ConfigurationParser configParser;
+    /* Systems */
+    ObjectHandler* objHandler;
+    TaskManager* taskManager;
+    MechanicalSystem* system;
+    SerialController* serialController;
+    ConfigurationParser configParser;
 
     public:
 
     RoboController();
 
+    /* Setter Methods */
+    void setObjHandler(ObjectHandler* ObjectHandler) {
+        this->objHandler = ObjectHandler;
+    }
+    void setTaskManager(TaskManager* taskManager) {
+        this->taskManager = taskManager;
+    }
+    void setSystem(MechanicalSystem* system) {
+        this->system = system;
+    }
+    void setSerialController(SerialController* serialController) {
+        this->serialController = serialController;
+    }
+    /* Getter Methods */
+    ObjectHandler* getObjHandler() {
+        return this->objHandler;
+    }
+    TaskManager* getTaskManager() {
+        return this->taskManager;
+    }
+    MechanicalSystem* getSystem() {
+        return this->system;
+    }
+    SerialController* getSerialController() {
+        return this->serialController;
+    }
+    /* Operational Methods */
+    void Init();
+    void run();
+    void stop();
 };
+
+
+
+
 
 #endif
