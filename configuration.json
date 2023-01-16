@@ -21,6 +21,8 @@
                     "Y": ""
                 }
             },
+            "controller_config": "default",
+            
             "mechanical_system": {
                 "imu": 5,
                 "drive": {

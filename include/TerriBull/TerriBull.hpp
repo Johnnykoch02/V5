@@ -468,16 +468,24 @@ namespace TerriBull {
     #define __TERRIBULL_INCLUDES__
     
     #include "./lib/Vector2.hpp"
+
     #include "../Controllers/TaskManager/TaskManager.hpp"
     #include "./lib/Tasking/Task.hpp"
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+
     #include "../Controllers/SerialController/SerialController.hpp"
+
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
+
     #include "../MechanicalComponents/Drive/drive.hpp"
+    #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
+
     #include "../Controllers/RoboController/RoboController.hpp"
+
     #include "../Controllers/ObjectHanlder/ObjectHandler.hpp"
     #include "./lib/GameObjects/GameObject.hpp"
+
     #include "../Controllers/PidController/PidController.hpp"
     
 
