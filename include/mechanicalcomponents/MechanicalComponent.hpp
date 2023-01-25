@@ -27,8 +27,8 @@ class TerriBull::MechanicalComponent  {
 
     public:
     MechanicalComponent();
-    MechanicalComponent(const string type, const TerriBull::Str2SizeMap  ports) :
-     pType(type), pPorts(ports), kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
+    MechanicalComponent(const TerriBull::Str2SizeMap  ports) :
+     pPorts(ports), kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
     float getError() const final {
         return currentError;
     } 

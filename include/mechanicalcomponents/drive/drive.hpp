@@ -35,6 +35,7 @@ class TerriBull::Drive : public MechanicalComponent {
     virtual float dError() const = 0;
     virtual void resultant_vector() = 0;
     virtual void tare_encoders() = 0;
+    ::std::string getType() {return "drive"; }
 };
 
 

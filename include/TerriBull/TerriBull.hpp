@@ -499,13 +499,13 @@ namespace TerriBull {
 
 
     #include "./lib/ConfigurationParser.hpp"
-    
+
+    #include "./lib/Logger.hpp"
 
     #endif
 
-
-
-
+    /* Global Variables */
+    Logger logger("/VEX/filepath_for_logging.log");
 
 }
 

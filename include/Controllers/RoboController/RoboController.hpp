@@ -17,6 +17,8 @@
 #include "../../TerriBull/TerriBull.hpp"
 
 using namespace TerriBull;
+#include <string>
+
 
 class RoboController {
     private:
@@ -25,7 +27,7 @@ class RoboController {
     TaskManager* taskManager;
     MechanicalSystem* system;
     SerialController* serialController;
-    ConfigurationParser configParser;
+    ConfigurationParser* configParser;
 
     public:
 
@@ -63,6 +65,35 @@ class RoboController {
     void stop();
 };
 
+void RobotController::Init() {
+    /* TBD */
+    this->configParser = new ConfigurationParser("/VEX/configuration.json", "Shooter_Big_Bot");
+    if (confgParser->success()) {
+        /* Init Mech Sys */
+        this->system = configParser->getMechanicalSystemConfig();
+        if (!confgParser->success()) {
+            logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ to_string(configParser->errCode)));
+            exit(1);
+        }
+        /* Init Task Manager */
+        this->taskManager = new TaskManager(); /* TODO: Needs TaskManager::Init() */
+
+        /* Init Serial Controller */
+        this->serialController = new SerialController(); /* TODO: Needs TaskManager::Init() */
+
+        /* Init Object Handler */
+        this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
+
+    }
+    else {
+        logger.logError(("Configuration Parsing Failed on initalization, Error Code: "+ to_string(configParser->errCode)));
+        exit(1);
+    }
+}
+
+void RobotController::run() {
+    
+}
 
 
 
