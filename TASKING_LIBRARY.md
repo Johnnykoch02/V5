@@ -6,5 +6,5 @@
 # Driving Macros:
     - CURRENT_POS_X
     - CURRENT_POS_Y
-    - CLOSEST_OBJ_X
-    - CLOSEST_OBJ_Y
+    - CLOSEST_DISK_X
+    - CLOSEST_DISK_Y

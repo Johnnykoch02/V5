@@ -128,6 +128,10 @@ void  X_Drive::setVoltage(float lt, float lb, float rt, float rb)  {
 
 void X_Drive::reset() {
   this->currentError = this->previousError = 0;
+  pMotorA->move_voltage(0);
+  pMotorB->move_voltage(0);
+  pMotorC->move_voltage(0);
+  pMotorD->move_voltage(0);
 }
 
 #endif

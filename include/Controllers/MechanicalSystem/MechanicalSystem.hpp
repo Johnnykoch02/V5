@@ -56,7 +56,7 @@ void MechanicalSystem::GoToPosition(float x, float y) {
 }
 
 float MechanicalSystem::getAngle() {
-  float theta = this->pImu->get_heading();
+  float theta = this->pImu->get_heading(); /*TODO: Change hard Coded 90 to be a parsed variable */
   *(this->pAngle) = ::std::fmod(((360 - theta) + 90), 360.0);
   return *(this->pAngle);
 }

@@ -21,12 +21,14 @@
 #include "../../TerriBull/TerriBull.hpp"
 #include "../../TerriBull/lib/Tasking/Task.hpp"
 #include <list>
+#include "../../TerriBull/lib/Expressions/Expression.hpp"
 
 
 class TerriBull::TaskManager {
 private:
     TerriBull::TaskList *currentTaskSet;
     TerriBull::PriorityQueue<TerriBull::TaskList> tasks;
+    std::vector<Expression*> Expressions;
 public:
     TaskManager() {
         currentTaskSet = nullptr;
@@ -69,6 +71,10 @@ public:
         {/* Do Nothing?*/
         // pros::lcd::print(3, "All Tasks Completed.");
     
+        }
+        /* TODO: Optimize the way Expressions are updated such that the Expressions being updated are only those that are realavent to the Current Task */
+        for (auto expression : this->Expressions) {
+            expression->updateTotal();
         }
     }
 

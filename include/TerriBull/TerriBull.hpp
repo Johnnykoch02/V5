@@ -505,7 +505,7 @@ namespace TerriBull {
     #endif
 
     /* Global Variables */
-    Logger logger("/VEX/filepath_for_logging.log");
+    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
 
 }
 
