@@ -13,23 +13,22 @@
 #define X_DRIVE_H
 #include "../drive.hpp"
 #include "../../TerriBull/TerriBull.hpp"
-#include "pros/motors.h"
-#include "pros/motors.hpp"
-#include "pros/llemu.hpp"
 #include <math.h>
 #include <vector>
 
 float rx,ry;
+
+using namespace TerriBull;
 
 class X_Drive : public TerriBull::Drive {
     
     typedef ::std::map<::pros::Motor*, TerriBull::Vector2> ErrorMap;
 
     private:
-    pros::Motor * pMotorA; // -> Top Left
-    pros::Motor * pMotorB; // -> Bottom Left
-    pros::Motor * pMotorC; // -> Top Right
-    pros::Motor * pMotorD; // -> Bottom Right
+    ::pros::Motor * pMotorA; // -> Top Left
+    ::pros::Motor * pMotorB; // -> Bottom Left
+    ::pros::Motor * pMotorC; // -> Top Right
+    ::pros::Motor * pMotorD; // -> Bottom Right
 
 
     X_Drive(int portA, int portB, int portC, int portD);
@@ -49,11 +48,16 @@ class X_Drive : public TerriBull::Drive {
 };
 
 X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
-    pMotorA = new pros::Motor(portA, pros::E_MOTOR_GEARSET_18, false);
-    pMotorB = new pros::Motor(portB, pros::E_MOTOR_GEARSET_18, false);
-    pMotorC = new pros::Motor(portC, pros::E_MOTOR_GEARSET_18, true);
-    pMotorD = new pros::Motor(portD, pros::E_MOTOR_GEARSET_18, true);
+    pMotorA = new ::pros::Motor(portA, ::pros::E_MOTOR_GEARSET_18, false);
+    pMotorB = new ::pros::Motor(portB, ::pros::E_MOTOR_GEARSET_18, false);
+    pMotorC = new ::pros::Motor(portC, ::pros::E_MOTOR_GEARSET_18, true);
+    pMotorD = new ::pros::Motor(portD, ::pros::E_MOTOR_GEARSET_18, true);
+    this->setPID(0.5, 0.2, 0.3);
 
+    this->pMotorA->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorB->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorC->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorD->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
 }
 
 X_Drive::~X_Drive() {
@@ -110,7 +114,10 @@ void X_Drive::drive(TerriBull::Vector2 pos) {
 
 void X_Drive::change_orientation(float theta) {
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
-
+  float pct = kP*this->currentError + kI*this->currentError*this->currentError + kD*this->dError();
+  int dir = this->currentError/fabs(this->currentError);
+  this->setVoltage(pct*dir, 0, 0, -pct*dir);
+  this->previousError = this->currentError;
 }
 
 void  X_Drive::setVoltage(float lt, float lb, float rt, float rb)  {

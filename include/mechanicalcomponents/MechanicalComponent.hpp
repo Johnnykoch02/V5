@@ -36,6 +36,12 @@ class TerriBull::MechanicalComponent  {
         return (this->currentError - this->previousError);
     }
 
+    void setPID(float kP, kD, kI) {
+        this->kP = kP;
+        this->kD = kD;
+        this->kI = kI;
+    }
+
     virtual ::std::string getType() const final {
         return this->pType;
     };

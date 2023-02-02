@@ -15,9 +15,9 @@
 
     #include<iostream>
 
-    // #ifdef __linux__
+    #ifdef __linux__
     #include "/usr/include/jsoncpp/json/json.h"
-    // #elif _WIN32
+    #else
     #include "../jsoncpp/include/json/json.h"
     #endif
 
@@ -27,9 +27,8 @@
     #include<fstream>
 
     using namespace std;
-    #include ""
     #include <stdio.h>
-    class ConfigurationParser {
+    class TerriBull::ConfigurationParser {
         private:
         string pFileLocation;
         /* Json Related Parsing Variables */
@@ -51,6 +50,8 @@
 
             /* IMU Sensor*/
             Json::Value IMUConfig;
+            Json::Value StartingAngle;
+            Json::Value StaringPos;
 
             /* CONTROLLER CONFIG VARIABLES */
 
@@ -96,6 +97,8 @@
                 this->pConfigVariables.DriveMotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
 
                 this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["imu"];
+                this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["starting_angle"];
+                this->pConfigVariables.StaringPos = this->pConfigVariables.Config["starting_position"];
 
             }
             ~ConfigurationParser();
@@ -140,8 +143,18 @@
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
+        if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StaringPos.isNull()) {
+            this->errCode = VARIABLE_PARSE_ERROR;
+            return nullptr;
+        }
+
+
+
         /* Construct a new base System */
         TerriBull::MechanicalSystem* system = new Terribull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive);
+        system->setStartingAngle(this->pConfigVariables.StartingAngle.asFloat());
+        system->setStaringPosition(this->pConfigVariables.StaringPos["x"].asFloat(), this->pConfigVariables.StaringPos["y"].asFloat());
+        
         /* Iterate through Mechanical System Config Member Fields */
         for (auto ref : this->pConfigVariables.Config["mechanical_system"].getMemberNames()) {
             /* This Section is to be Continued */

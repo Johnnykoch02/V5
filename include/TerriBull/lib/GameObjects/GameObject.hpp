@@ -19,33 +19,29 @@
 class TerriBull::GameObject {
     private:
     public:
+    typedef enum {
+        DISK, ROBOT, ROLLER
+    } Types;
+
     TerriBull::string identifier;
-    float *x;
+    Vector2 pos;
     float width;
     float height;
-    float * y;
-    int type;
+    Types type;
     
     ~GameObject() {
-        delete this->x;
-        delete this->y;
+        
     }
     GameObject() {
-        this->x = new float;
-        this->y = new float;
+        
     }
-    GameObject(float x, float y, TerriBull::string identifier, int type, float width, float height) : GameObject() {
-        this->x[0] = x;
-        this->y[0] = y;
+    GameObject(Vector2 pos, TerriBull::string identifier, int type, float width, float height) : GameObject() {
+        this->pos = pos;
         this->identifier = identifier;
     }
 
-    void setX(float x) {    
-        this->x[0] = x;
-    }
-    
-    void setY(float y) {
-        this->y[0] = y;
+    setPos(Vector2 pos) {
+        this->pos = pos;
     }
 
     bool checkID(TerriBull::string identifier) { 

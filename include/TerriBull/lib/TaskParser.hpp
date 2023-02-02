@@ -10,8 +10,8 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#ifndef CONFIG_PARSER_H
-#define CONFIG_PARSER_H
+#ifndef TAASK_PARSER_H
+#define TAASK_PARSER_H
 
     #include<iostream>
 
@@ -40,6 +40,7 @@
         /* Json Related Parsing Variables */
         ifstream * pFile;
         Json::Value pRoot;
+        map<string, float*> pMacroList;
         typedef enum {NO_ERROR, FILE_NOT_FOUND, FILE_OPEN_ERROR, VARIABLE_PARSE_ERROR} Error;
         uint8_t errCode = 0;
 
@@ -67,6 +68,17 @@
                 return;
             }
 
+
+        }
+
+        ~TaskParser() {
+            if (this->pFile) {
+                delete this->pFile;
+                this->pFile = NULL;
+            }
+        }
+
+        void parseTasks() {
             /*
             Variable Parsing and Extraction
             */
@@ -91,26 +103,21 @@
         }
 
 
-map<string, float> mMacroList;
 
-float findMacroValue(string macroName)
-{
-    if (mMacroList.find(macroName) != mMacroList.end())
+
+    float* findMacroValue(string macroName)
     {
-        return mMacroList[macroName];
+        if (this->pMacroList.find(macroName) != this->pMacroList.end())
+            return this->pMacroList[macroName];
+        else return nullptr;
     }
-    else
-    {
-        return 0.0f;
-    }
-}
 
     Expression parseExpression(string expression)
     {
         // Creates a stringstream to extract data from the expression
         stringstream ss(expression);
         char op;
-        float val1, val2, result;
+        float *val1, val2;
         // Extracting the first value
         ss >> val1;
         // If the first value is a Macro, finding the Macro value

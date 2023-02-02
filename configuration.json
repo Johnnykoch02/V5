@@ -24,6 +24,11 @@
             "controller_config": "default",
             
             "mechanical_system": {
+                "starting_angle": 90,
+                "starting_position": {
+                    "x": 0,
+                    "y":0
+                },
                 "imu": 5,
                 "drive": {
                     "config": "x_drive",

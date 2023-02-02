@@ -25,6 +25,7 @@ class TerriBull::MechanicalSystem {
         TerriBull::Drive * pDrive;
         TerriBull::Vector2 pPosition;
         float * pAngle;
+        float pStartingAngle;
         
     public:
 
@@ -43,11 +44,25 @@ class TerriBull::MechanicalSystem {
 
 
     float getAngle();
+    
+    void setStartingAngle(float angle) {
+        this->pStartingAngle = angle;
+    }
+    
+    void setStartingPosition(float x, float y) {
+        this->pPosition = Vector2::cartesianToVector2(x, y);
+    }
 
     /* Tasking Specific */
     float getDriveError() const {
         return this->pDrive->dError();
     }
+
+    Vector2 getPosition() {
+        return this->pPosition;
+    }
+
+    void update();
 
 };
 
@@ -57,8 +72,12 @@ void MechanicalSystem::GoToPosition(float x, float y) {
 
 float MechanicalSystem::getAngle() {
   float theta = this->pImu->get_heading(); /*TODO: Change hard Coded 90 to be a parsed variable */
-  *(this->pAngle) = ::std::fmod(((360 - theta) + 90), 360.0);
+  *(this->pAngle) = ::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);
   return *(this->pAngle);
+}
+
+void update() {
+    this->getAngle();
 }
 
 

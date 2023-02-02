@@ -21,12 +21,13 @@
 #include <math.h>
 
 class TerriBull::ObjectHandler { 
+    private:
+    Vector2 
     public:
       std::list<TerriBull::GameObject> Objects;
       const std::map<int, int> MaxOfTypes = {
         {2, 1}, //REDGOAL
         {6, 1}, //BLUEGOAL
-    
     };
     const std::map<int, std::vector<float>> WidthHeights = {
         {2, {13.5,13.5}}, //REDGOAL
@@ -35,13 +36,21 @@ class TerriBull::ObjectHandler {
     };
 
     ObjectHandler();
-    GameObject* query(std::string identifier);
-    GameObject* getClosestObj(int type, float x, float y);
-    void updateObjPos(std::string identifier,int type, float x, float y);
-
-    void addObject(std::string identifier, int type, float x, float y);
-
-
-
-
+    GameObject* query(::std::string identifier);
+    GameObject* getClosestObj(GameObject::Types type, Vector2 pos);
+    void updateObjPos(::std::string identifier,GameObject::Types type, Vector2 pos) {}
+    void addObject(::std::string identifier, GameObject::Types type, Vector2 pos) {}
+    void update() {}
 };
+
+GameObject* getClosestObj (int type, Vector2 pos) {
+   return nullptr;
+}
+
+GameObject* query(::std::string identifier) {
+  return nullptr;
+}
+
+
+#endif // OBJECTHANDLER_H
+/*

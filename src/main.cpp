@@ -31,13 +31,20 @@ void initialize() {
 }
 
 
-void autonomous() {}
+void autonomous() {
+	TerriBull::RoboController controlSys();
+	controlSys.init();
+	while (true) {
+		controlSys.run();
+    }
+	}
+}
 
 
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+
+	::pros::Motor left_mtr(1);
+	::pros::Motor right_mtr(2);
 
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,

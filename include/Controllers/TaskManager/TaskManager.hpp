@@ -42,6 +42,11 @@ public:
     void addTaskSet(TaskList *tasks) {
         this->tasks.enqueue(tasks, 0);
     }
+
+    void Init() {
+
+    }
+
     void run() {
         if (this->currentTaskSet != nullptr)
         { /* Update and chek our current task*/
