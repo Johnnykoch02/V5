@@ -1,9 +1,9 @@
-#ifndef LOGGER_H
-#define LOGGER_H
 
 #include <string>
 #include <fstream>
 
+#ifndef LOGGER_H
+#define LOGGER_H
 
 
 class Logger {
