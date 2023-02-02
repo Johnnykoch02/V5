@@ -2,8 +2,8 @@ ARCHTUPLE=arm-none-eabi-
 DEVICE=VEX EDR V5
 
 MFLAGS=-mcpu=cortex-a9 -mfpu=neon-fp16 -mfloat-abi=softfp -Os -g
-CPPFLAGS=-D_POSIX_THREADS -D_UNIX98_THREAD_MUTEX_ATTRIBUTES -std=c++17
-GCCFLAGS=-ffunction-sections -fdata-sections -fdiagnostics-color -funwind-tables -std=c++17
+CPPFLAGS=-D_POSIX_THREADS -D_UNIX98_THREAD_MUTEX_ATTRIBUTES 
+GCCFLAGS=-ffunction-sections -fdata-sections -fdiagnostics-color -funwind-tables
 
 WARNFLAGS+=-Wno-psabi
 
@@ -25,9 +25,9 @@ wlprefix=-Wl,$(subst $(SPACE),$(COMMA),$1)
 LNK_FLAGS=--gc-sections --start-group $(strip $(LIBRARIES)) -lgcc -lstdc++ --end-group -T$(FWDIR)/v5-common.ld
 
 ASMFLAGS=$(MFLAGS) $(WARNFLAGS)
-CFLAGS= $(MFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(GCCFLAGS) --std=gnu17
+CFLAGS= $(MFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(GCCFLAGS) --std=gnu11
 CXXFLAGS= $(MFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(GCCFLAGS) --std=gnu++17
-LDFLAGS= $(MFLAGS) $(WARNFLAGS) $(GCCFLAGS)
+LDFLAGS= $(MFLAGS) $(WARNFLAGS) -nostdlib $(GCCFLAGS)
 SIZEFLAGS=-d --common
 NUMFMTFLAGS=--to=iec --format %.2f --suffix=B
 
