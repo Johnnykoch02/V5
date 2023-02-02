@@ -28,7 +28,7 @@
 
     using namespace std;
     #include <stdio.h>
-    class TerriBull::ConfigurationParser {
+    class ::ConfigurationParser {
         private:
         string pFileLocation;
         /* Json Related Parsing Variables */

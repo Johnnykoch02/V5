@@ -59,7 +59,6 @@ namespace TerriBull {
     /* Controls Mechanical System */
     class PidController;
 
-    class ConfigurationParser;
 
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
