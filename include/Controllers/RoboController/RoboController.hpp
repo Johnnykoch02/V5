@@ -102,8 +102,8 @@ void RoboController::run() {
     this->serialController->update();
     // this->objHandler->update();
 
-    int yInput = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-    int xInput = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+    int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);
+    int xInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_X);
     if (abs(yInput) < 5) yInput = 0;
     if (abs(xInput)<5) xInput = 0;
     if (yInput != 0 || xInput != 0) {

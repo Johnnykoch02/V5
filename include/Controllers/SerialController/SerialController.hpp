@@ -33,7 +33,7 @@ class TerriBull::SerialController {
 
 
 SerialController::SerialController() {
-    pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
+    ::pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
 }
 
 void SerialController::update() { 
