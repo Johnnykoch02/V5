@@ -82,7 +82,7 @@ void X_Drive::drive(TerriBull::Vector2 pos) {
     pct = kP*currentError + kI*currentError*currentError + kD*this->dError();
 
 
-    pros::lcd::set_text(4, std::to_string(x) );
+    pros::lcd::set_text(4,::std::to_string(x) );
     switch(x) {
       case 0:
       case 4:

@@ -77,8 +77,8 @@ Vector2 Vector2::cartesianToVector2(float x, float y) {
     Vector2 v;
     v.x = x;
     v.y = y;
-    v.r = sqrt(x*x+y*y);
-    v.theta = fmod(RAD2DEG(atan2(y, x)), 360.0);
+    v.r = ::std::sqrt(x*x+y*y);
+    v.theta = ::std::fmod(RAD2DEG(atan2(y, x)), 360.0);
     return v;
 }
 
@@ -95,8 +95,8 @@ Vector2 Vector2::unit() {
     Vector2 v;
     v.theta = this->theta;
     v.r = 1;
-    v.x = cos(theta);
-    v.y = sin(theta);
+    v.x = ::std::cos(theta);
+    v.y = ::std::sin(theta);
     return v;
 }
 

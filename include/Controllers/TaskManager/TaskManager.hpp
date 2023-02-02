@@ -28,7 +28,7 @@ class TerriBull::TaskManager {
 private:
     TerriBull::TaskList *currentTaskSet;
     TerriBull::PriorityQueue<TerriBull::TaskList> tasks;
-    std::vector<Expression*> Expressions;
+    ::std::vector<Expression*> Expressions;
 public:
     TaskManager() {
         currentTaskSet = nullptr;

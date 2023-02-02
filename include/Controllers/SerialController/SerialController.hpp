@@ -70,7 +70,7 @@ void SerialController::processDataFromBuffer() {
 
 }
 
-void sendData(std::string data) {
+void sendData(::std::string data) {
     std::cout<<data<<std::endl;
 }
 #endif

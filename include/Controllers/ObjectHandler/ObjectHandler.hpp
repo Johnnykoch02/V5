@@ -24,12 +24,12 @@ class TerriBull::ObjectHandler {
     private:
     Vector2 
     public:
-      std::list<TerriBull::GameObject> Objects;
-      const std::map<int, int> MaxOfTypes = {
+      ::std::list<TerriBull::GameObject> Objects;
+      const ::std::map<int, int> MaxOfTypes = {
         {2, 1}, //REDGOAL
         {6, 1}, //BLUEGOAL
     };
-    const std::map<int, std::vector<float>> WidthHeights = {
+    const std::map<int, ::std::vector<float>> WidthHeights = {
         {2, {13.5,13.5}}, //REDGOAL
         {6, {13.5,13.5}} //BLUEGOAL
       /* ADD MORE */
