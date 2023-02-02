@@ -508,7 +508,7 @@ namespace TerriBull {
 
     /* Global Variables */
     Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
-    ::pros::Controller controller(pros::E_CONTROLLER_MASTER); /* Global Controller */
+    ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
 }
 
 #endif
