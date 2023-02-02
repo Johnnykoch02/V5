@@ -398,7 +398,7 @@ namespace TerriBull {
     T* pop() {
         T* returnValue = this->head->getData();
         this->head->setData(nullptr);
-        Node<T> oldHead = this->head;
+        Node<T>* oldHead = this->head;
         this->head = this->head->getNext();
         this->size--;
         delete oldHead;
