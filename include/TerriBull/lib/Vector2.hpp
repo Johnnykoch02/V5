@@ -17,7 +17,7 @@
 
 using namespace TerriBull;
 
-class TerriBull::Vector2 {
+class Vector2 {
     private:
 
     public:
