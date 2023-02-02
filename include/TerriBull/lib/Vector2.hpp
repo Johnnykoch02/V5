@@ -13,9 +13,9 @@
 #ifndef VECTOR2_H 
 #define VECTOR2_H
 
-#include "TerriBull/TerriBull.hpp"
+// #include "TerriBull/TerriBull.hpp"
 
-using namespace TerriBull;
+namespace TerriBull {
 
 class Vector2 {
     private:
@@ -99,5 +99,7 @@ Vector2 Vector2::unit() {
     v.y = ::std::sin(theta);
     return v;
 }
+
+};
 
 #endif
