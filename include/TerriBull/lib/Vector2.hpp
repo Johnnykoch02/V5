@@ -13,11 +13,9 @@
 #ifndef VECTOR2_H 
 #define VECTOR2_H
 
-// #include "TerriBull/TerriBull.hpp"
+#include "TerriBull/TerriBull.hpp"
 
-namespace TerriBull {
-
-class Vector2 {
+class ::TerriBull::Vector2 {
     private:
 
     public:
@@ -28,9 +26,9 @@ class Vector2 {
 
         Vector2();
         ~Vector2() {}
-        Vector2(const Vector2& v) : x(v.x), y(v.y), r(v.r), theta(v.theta) {}
-        Vector2(const Vector2*  v) : x(v->x), y(v->y), r(v->r), theta(v->theta) {}
-        Vector2 operator *(float scale) {
+        Vector2(const ::TerriBull::Vector2& v) : x(v.x), y(v.y), r(v.r), theta(v.theta) {}
+        Vector2(const ::TerriBull::Vector2*  v) : x(v->x), y(v->y), r(v->r), theta(v->theta) {}
+        ::TerriBull::Vector2 operator *(float scale) {
             Vector2 v;
             v.x = scale * this->x;
             v.y = scale * this->y;
@@ -43,37 +41,37 @@ class Vector2 {
             return this->x * that.x + this->y * that.y + this->y;
         } 
 
-        Vector2 operator +(const Vector2& that) {
+        ::TerriBull::Vector2 operator +(const ::TerriBull::Vector2& that) {
            float x = this->x + that.x;
            float y = this->y + that.y;
            return Vector2::cartesianToVector2( x, y);
         }
         
-        Vector2 operator -(const Vector2& that) {
+        ::TerriBull::Vector2 operator -(const ::TerriBull::Vector2& that) {
            float x = this->x - that.x;
            float y = this->y - that.y;
-           return Vector2::cartesianToVector2( x, y);
+           return ::TerriBull::Vector2::cartesianToVector2( x, y);
         }
 
-        bool operator ==(Vector2 const & that) const {
+        bool operator ==(::TerriBull::Vector2 const & that) const {
             return this->x == that.x && this->y == that.y;
         }
-        bool operator!=(Vector2 const & that) const {
+        bool operator!=(::TerriBull::Vector2 const & that) const {
             return this->x!= that.x || this->y!= that.y;
         }
 
-        static Vector2 cartesianToVector2(float x, float y);
-        static Vector2 polarToVector2(float r, float theta);
-        Vector2 unit();
+        static ::TerriBull::Vector2 cartesianToVector2(float x, float y);
+        static ::TerriBull::Vector2 polarToVector2(float r, float theta);
+        ::TerriBull::Vector2 unit();
         bool sameDirection(Vector2 const & other);
 
 
 };
-Vector2::Vector2() {
+::TerriBull::Vector2::Vector2() {
   
 }
 
-Vector2 Vector2::cartesianToVector2(float x, float y) {
+::TerriBull::Vector2 ::TerriBull::Vector2::cartesianToVector2(float x, float y) {
     Vector2 v;
     v.x = x;
     v.y = y;
@@ -82,7 +80,7 @@ Vector2 Vector2::cartesianToVector2(float x, float y) {
     return v;
 }
 
-Vector2 Vector2::polarToVector2(float r, float theta) {
+::TerriBull::Vector2 ::TerriBull::Vector2::polarToVector2(float r, float theta) {
     Vector2 v;
     v.x = r*cos(theta);
     v.y = r*sin(theta);
@@ -91,7 +89,7 @@ Vector2 Vector2::polarToVector2(float r, float theta) {
     return v;
 }
 
-Vector2 Vector2::unit() {
+::TerriBull::Vector2 ::TerriBull::Vector2::unit() {
     Vector2 v;
     v.theta = this->theta;
     v.r = 1;
@@ -99,7 +97,5 @@ Vector2 Vector2::unit() {
     v.y = ::std::sin(theta);
     return v;
 }
-
-};
 
 #endif
