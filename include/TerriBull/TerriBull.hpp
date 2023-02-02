@@ -52,7 +52,7 @@ namespace TerriBull {
     /* Main Controller for the Robot */
     class RoboController;
     /* Object Management and Data Information */
-    class ObjectHandler;
+    // class ObjectHandler;
     /* Game Object Class */
     class GameObject;
 
@@ -487,8 +487,8 @@ namespace TerriBull {
 
     #include "../Controllers/SerialController/SerialController.hpp"
 
-    #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
-    #include "./lib/GameObjects/GameObject.hpp"
+    // #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
+    // #include "./lib/GameObjects/GameObject.hpp"
 
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"

@@ -23,7 +23,7 @@ using namespace TerriBull;
 class RoboController {
     private:
     /* Systems */
-    ObjectHandler* objHandler;
+    // ObjectHandler* objHandler;
     TaskManager* taskManager;
     MechanicalSystem* system;
     SerialController* serialController;
@@ -34,9 +34,9 @@ class RoboController {
     RoboController();
 
     /* Setter Methods */
-    void setObjHandler(ObjectHandler* ObjectHandler) {
-        this->objHandler = ObjectHandler;
-    }
+    // void setObjHandler(ObjectHandler* ObjectHandler) {
+    //     this->objHandler = ObjectHandler;
+    // }
     void setTaskManager(TaskManager* taskManager) {
         this->taskManager = taskManager;
     }
@@ -47,9 +47,9 @@ class RoboController {
         this->serialController = serialController;
     }
     /* Getter Methods */
-    ObjectHandler* getObjHandler() {
-        return this->objHandler;
-    }
+    // ObjectHandler* getObjHandler() {
+    //     return this->objHandler;
+    // }
     TaskManager* getTaskManager() {
         return this->taskManager;
     }
@@ -82,7 +82,7 @@ void RoboController::Init() {
         this->serialController = new SerialController(); /* TODO: Needs TaskManager::Init() */
 
         /* Init Object Handler */
-        this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
+        // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
         // this->taskManager->addTaskSet(
         //     new TaskList({
@@ -100,7 +100,7 @@ void RoboController::Init() {
 void RoboController::run() {
     this->taskManager->run();
     this->serialController->update();
-    this->objHandler->update();
+    // this->objHandler->update();
 
     int yInput = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     int xInput = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
