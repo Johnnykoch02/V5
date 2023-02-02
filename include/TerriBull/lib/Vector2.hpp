@@ -36,6 +36,7 @@ class TerriBull::Vector2 {
             v.y = scale * this->y;
             v.r = this->r;
             v.theta = this->theta;
+            return v;
         }
 
         float operator *(Vector2 const & that) {
