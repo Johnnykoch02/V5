@@ -37,8 +37,8 @@ void autonomous() {
 	while (true) {
 		controlSys.run();
     }
-	}
 }
+
 
 
 void opcontrol() {
