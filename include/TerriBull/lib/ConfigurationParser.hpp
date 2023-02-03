@@ -16,11 +16,11 @@
     #include<iostream>
 
     // #ifdef _WIN32
-    #include "../../../jsoncpp/include/json/json.h"
+    // #include "../../../jsoncpp/include/json/json.h"
     // #elif _WIN64
     // #include "../../../jsoncpp/include/json/json.h"
     // #else
-    // #include "/usr/include/jsoncpp/json/json.h"
+    #include "/usr/include/jsoncpp/json/json.h"
     // #endif
 
     #include "../TerriBull.hpp"
