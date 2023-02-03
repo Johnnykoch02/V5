@@ -63,7 +63,7 @@
 
 
         public:
-            ConfigurationParser(string fileLocation, string configuration) : pFileLocation(fileLocation) {
+            ConfigurationParser(::std::string fileLocation, ::std::string configuration) : pFileLocation(fileLocation) {
                 /* Preceed to load in Data from File*/
                 this->pFile = new ifstream(pFileLocation.c_str());
                 if ( !this->pFile->is_open() ) {
