@@ -55,7 +55,7 @@
             /* IMU Sensor */
             Json::Value IMUConfig;
             Json::Value StartingAngle;
-            Json::Value StaringPos;
+            Json::Value StartingPos;
 
             /* CONTROLLER CONFIG VARIABLES */
 
@@ -89,6 +89,7 @@
                         this->pConfigVariables.Config = this->pRoot["configurations"][i];
                     }
                 }
+
                 if (this->pConfigVariables.Config.asString() == "") {
                     this->errCode = VARIABLE_PARSE_ERROR;
                     return;
@@ -102,7 +103,8 @@
 
                 this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["imu"];
                 this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["starting_angle"];
-                this->pConfigVariables.StaringPos = this->pConfigVariables.Config["starting_position"];
+                this->pConfigVariables.StartingPos = this->pConfigVariables.Config["starting_position"];
+                cout << StartingPo
 
             }
             ~ConfigurationParser();
@@ -147,7 +149,7 @@
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
-        if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StaringPos.isNull()) {
+        if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StartingPos.isNull()) {
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
@@ -157,7 +159,7 @@
         /* Construct a new base System */
         TerriBull::MechanicalSystem* system = new TerriBull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive);
         system->setStartingAngle(this->pConfigVariables.StartingAngle.asFloat());
-        system->setStartingPosition(this->pConfigVariables.StaringPos["x"].asFloat(), this->pConfigVariables.StaringPos["y"].asFloat());
+        system->setStartingPosition(this->pConfigVariables.StartingPos["x"].asFloat(), this->pConfigVariables.StartingPos["y"].asFloat());
         
         /* Iterate through Mechanical System Config Member Fields */
         for (auto ref : this->pConfigVariables.Config["mechanical_system"].getMemberNames()) {
@@ -180,7 +182,9 @@
     }
 
 
+int main() {
 
+}
 
 #endif
 
