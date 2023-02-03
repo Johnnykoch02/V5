@@ -104,7 +104,6 @@
                 this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["imu"];
                 this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["starting_angle"];
                 this->pConfigVariables.StartingPos = this->pConfigVariables.Config["starting_position"];
-                cout << StartingPo
 
             }
             ~ConfigurationParser();
