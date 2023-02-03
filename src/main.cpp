@@ -32,10 +32,10 @@ void initialize() {
 
 
 void autonomous() {
-	TerriBull::RoboController controlSys();
-	controlSys.init();
+	// TerriBull::RoboController controlSys();
+	// controlSys.init();
 	while (true) {
-		controlSys.run();
+		// controlSys.run();
     }
 }
 
