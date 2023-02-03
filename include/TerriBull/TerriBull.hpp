@@ -477,6 +477,11 @@ namespace TerriBull {
 
     #endif
 
+
+    /* Global Variables */
+    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
+    ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
+};
     #ifndef __TERRIBULL_INCLUDES__
     #define __TERRIBULL_INCLUDES__
 
@@ -505,10 +510,5 @@ namespace TerriBull {
     // #include "../Controllers/RoboController/RoboController.hpp"
 
     #endif
-
-    /* Global Variables */
-    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
-    ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
-};
 
 #endif
