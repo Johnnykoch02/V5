@@ -14,6 +14,7 @@
 #define __TERRIBULL__
 
 #include "pros/motors.hpp"
+#include "./lib/Logger.hpp"
 #include <list>
 #include <map>
 #include <string>
@@ -482,7 +483,7 @@ namespace TerriBull {
     #include "../api.h"
 
     #include "./lib/Vector2.hpp"
-    #include "./lib/Logger.hpp"
+    
 
     // #include "../Controllers/SerialController/SerialController.hpp"
 
@@ -506,7 +507,7 @@ namespace TerriBull {
     #endif
 
     /* Global Variables */
-    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
+    ::Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
     ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
 };
 
