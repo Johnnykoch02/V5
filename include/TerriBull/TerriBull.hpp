@@ -39,27 +39,19 @@ namespace TerriBull {
     class Task;
     typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
-    // class SerialController;
-
-
+    class SerialController;
     /* Manages Mechanical Components */
     class MechanicalSystem;
     /* Virtual */
     class MechanicalComponent;
     /* Abstract Class for Drivetrain */
     class Drive;
-    /* Manages Odometry and Positioning */
-    // class Odometry;
     /* Main Controller for the Robot */
-    // class RoboController;
+    class RoboController;
     /* Object Management and Data Information */
-    // class ObjectHandler;
+    class ObjectHandler;
     /* Game Object Class */
-    // class GameObject;
-
-    /* Controls Mechanical System */
-    // class PidController;
-
+    class GameObject;
 
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
@@ -488,27 +480,18 @@ namespace TerriBull {
     #include "../api.h"
 
     #include "./lib/Vector2.hpp"
-    
-
-    // #include "../Controllers/SerialController/SerialController.hpp"
-
-    // #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
-    // #include "./lib/GameObjects/GameObject.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
     #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
-
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
-
-
     #include "../Controllers/TaskManager/TaskManager.hpp"
-
-// 
     #include "./lib/ConfigurationParser.hpp"
-// 
-    // #include "../Controllers/RoboController/RoboController.hpp"
+    #include "./lib/GameObjects/GameObject.hpp"
+    #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
+    #include "../Controllers/SerialController/SerialController.hpp"
+    #include "../Controllers/RoboController/RoboController.hpp"
 
     #endif
 

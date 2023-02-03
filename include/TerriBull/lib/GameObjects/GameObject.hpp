@@ -40,7 +40,7 @@ class TerriBull::GameObject {
         this->identifier = identifier;
     }
 
-    setPos(Vector2 pos) {
+    void setPos(Vector2 pos) {
         this->pos = pos;
     }
 

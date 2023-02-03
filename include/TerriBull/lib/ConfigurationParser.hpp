@@ -16,11 +16,11 @@
     #include<iostream>
 
     // #ifdef _WIN32
-    // #include "../../../jsoncpp/include/json/json.h"
+    #include "../../../jsoncpp/include/json/json.h"
     // #elif _WIN64
     // #include "../../../jsoncpp/include/json/json.h"
     // #else
-    #include "/usr/include/jsoncpp/json/json.h"
+    // #include "/usr/include/jsoncpp/json/json.h"
     // #endif
 
     #include "../TerriBull.hpp"
@@ -29,10 +29,9 @@
     #include "../../MechanicalComponents/Drive/configurations/x_drive.hpp"
 
     /*END INCLUDE*/
+
     #include <string>
     #include <fstream>
-
-    // using namespace std;
     #include <stdio.h>
     class ConfigurationParser {
         private:
@@ -69,6 +68,10 @@
 
 
         public:
+            uint8_t getErrCode() {
+                return this->errCode;
+            }
+
             ConfigurationParser(::std::string fileLocation, ::std::string configuration) : pFileLocation(fileLocation) {
                 /* Preceed to load in Data from File*/
                 this->pFile = new ::std::ifstream(pFileLocation.c_str());
@@ -126,6 +129,7 @@
         delete pFile;
     }
 
+
     TerriBull::Drive* ConfigurationParser::getDriveConfig() {
                 if (this->pConfigVariables.DriveConfig.isNull() || this->pConfigVariables.DriveMotorPorts.isNull()) {
                     this->errCode = VARIABLE_PARSE_ERROR;
@@ -181,11 +185,6 @@
 
         return system;
     }
-
-
-int main() {
-
-}
 
 #endif
 

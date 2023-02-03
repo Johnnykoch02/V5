@@ -18,8 +18,6 @@
 #include <vector>
 #include <iostream>
 
-using namespace TerriBull;
-
 class TerriBull::SerialController {
     public:
     char buffer[500];

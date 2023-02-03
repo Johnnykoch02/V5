@@ -15,24 +15,27 @@
 #define ROBOCONTROLLER_H
 
 #include "../../TerriBull/TerriBull.hpp"
+#include "../../TerriBull/lib/ConfigurationParser.hpp"
 
 using namespace TerriBull;
 #include <string>
 
 
-class RoboController {
+class TerriBull::RoboController {
     private:
     /* Systems */
     // ObjectHandler* objHandler;
-    TaskManager* taskManager;
-    MechanicalSystem* system;
-    SerialController* serialController;
+    TerriBull::TaskManager* taskManager;
+    TerriBull::MechanicalSystem* system;
+    TerriBull::SerialController* serialController;
     ConfigurationParser* configParser;
 
     public:
 
-    RoboController();
+    RoboController() {}
+    ~RoboController() {}
 
+ 
     /* Setter Methods */
     // void setObjHandler(ObjectHandler* ObjectHandler) {
     //     this->objHandler = ObjectHandler;
@@ -61,18 +64,18 @@ class RoboController {
     }
     /* Operational Methods */
     void Init();
-    void run();
-    void stop();
+    void Run();
+    void Stop();
 };
 
-void RoboController::Init() {
+void TerriBull::RoboController::Init() {
     /* TBD                                          <-Fix this file path-> */
     this->configParser = new ConfigurationParser("configuration.json", "Shooter_Big_Bot");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
-        this->system = configParser->getMechanicalSystemConfig();
-        if (!confgParser->success()) {
-            logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ to_string(configParser->errCode)));
+        this->system = this->configParser->getMechanicalSystemConfig();
+        if (!this->configParser->success()) {
+            logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ ::std::to_string(configParser->getErrCode())));
             exit(1);
         }
         /* Init Task Manager */
@@ -92,12 +95,12 @@ void RoboController::Init() {
 
     }
     else {
-        logger.logError(("Configuration Parsing Failed on initalization, Error Code: "+ to_string(configParser->errCode)));
+        logger.logError(("Configuration Parsing Failed on initalization, Error Code: "+ ::std::to_string(configParser->getErrCode())));
         exit(1);
     }
 }
 
-void RoboController::run() {
+void TerriBull::RoboController::Run() {
     this->taskManager->run();
     this->serialController->update();
     // this->objHandler->update();
@@ -108,9 +111,8 @@ void RoboController::run() {
     if (abs(xInput)<5) xInput = 0;
     if (yInput != 0 || xInput != 0) {
         Vector2 currentPos = system->getPosition();
-      this->system->GoToPosition(currentPos+xInput, currentPos.y + yInput);
+      this->system->GoToPosition(currentPos.x+xInput, currentPos.y + yInput);
     }
-
 
 }
 
