@@ -34,10 +34,10 @@ namespace TerriBull {
     /* Vectorization Class */
     class Vector2;
     /* Manages Tasks for the Robot */
-    // class TaskManager;
+    class TaskManager;
     /* Task Data Container */
     class Task;
-    // typedef ::std::list<Task*> TaskList;
+    typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     // class SerialController;
 
@@ -503,10 +503,10 @@ namespace TerriBull {
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
 
 
-    // #include "../Controllers/TaskManager/TaskManager.hpp"
+    #include "../Controllers/TaskManager/TaskManager.hpp"
 
 // 
-    // #include "./lib/ConfigurationParser.hpp"
+    #include "./lib/ConfigurationParser.hpp"
 // 
     // #include "../Controllers/RoboController/RoboController.hpp"
 

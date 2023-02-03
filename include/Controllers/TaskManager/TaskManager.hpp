@@ -21,14 +21,14 @@
 #include "../../TerriBull/TerriBull.hpp"
 #include "../../TerriBull/lib/Tasking/Task.hpp"
 #include <list>
-#include "../../TerriBull/lib/Expressions/Expression.hpp"
+// #include "../../TerriBull/lib/Expressions/Expression.hpp"
 
 
 class TerriBull::TaskManager {
 private:
     TerriBull::TaskList *currentTaskSet;
     TerriBull::PriorityQueue<TerriBull::TaskList> tasks;
-    ::std::vector<Expression*> Expressions;
+    // ::std::vector<Expression*> Expressions;
 public:
     TaskManager() {
         currentTaskSet = nullptr;
@@ -53,7 +53,7 @@ public:
             int finishedTasks = 0, totalTasks = 0;
             for ( auto tsk : *(this->currentTaskSet)) {
                 totalTasks++;
-                tsk->update();
+                tsk->update(0);
                             
                 if (tsk->finishedFlag == true)
                 { /* Task is complete */
@@ -78,9 +78,9 @@ public:
     
         }
         /* TODO: Optimize the way Expressions are updated such that the Expressions being updated are only those that are realavent to the Current Task */
-        for (auto expression : this->Expressions) {
-            expression->updateTotal();
-        }
+        // for (auto expression : this->Expressions) {
+        //     expression->updateTotal();
+        // }
     }
 
 };

@@ -30,7 +30,7 @@ class X_Drive : public TerriBull::Drive {
     ::pros::Motor * pMotorC; // -> Top Right
     ::pros::Motor * pMotorD; // -> Bottom Right
 
-
+    public:
     X_Drive(int portA, int portB, int portC, int portD);
     ~X_Drive();
 
@@ -41,6 +41,9 @@ class X_Drive : public TerriBull::Drive {
     float dError();
       
     void reset();
+
+    void resultant_vector() {}
+    void tare_encoders()  {}
 
     void change_orientation(float theta);
 
