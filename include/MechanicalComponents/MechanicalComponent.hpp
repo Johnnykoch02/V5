@@ -26,7 +26,7 @@ class TerriBull::MechanicalComponent  {
     float kP, kD, kI;
 
     public:
-    MechanicalComponent();
+    MechanicalComponent() : kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
     MechanicalComponent(const TerriBull::Str2SizeMap  ports) :
      pPorts(ports), kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
     virtual float getError() const final {

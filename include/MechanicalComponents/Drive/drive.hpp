@@ -25,7 +25,7 @@ class TerriBull::Drive : public MechanicalComponent {
     // Vector2 pPreviousError;
 
     public:
-    Drive() :  TerriBull::MechanicalComponent::MechanicalComponent() {}
+    Drive() :  MechanicalComponent() {}
     void setAnglePtr(float * ptr) { this->pCurrentAngle = ptr; }
     void setPosPtr(Vector2* ptr) { this->pCurrentPos = ptr; }
     virtual void drive(Vector2 pos) = 0;
