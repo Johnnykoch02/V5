@@ -15,11 +15,13 @@
 
     #include<iostream>
 
-    #ifdef __unix || __unix__
-    // #include "/usr/include/jsoncpp/json/json.h"
-    #else
-    #include "../../../jsoncpp/include/json/json.h"
-    #endif
+    // #ifdef _WIN32
+    // #include "../../../jsoncpp/include/json/json.h"
+    // #elif _WIN64
+    // #include "../../../jsoncpp/include/json/json.h"
+    // #else
+    #include "/usr/include/jsoncpp/json/json.h"
+    // #endif
 
     #include "../TerriBull.hpp"
 
