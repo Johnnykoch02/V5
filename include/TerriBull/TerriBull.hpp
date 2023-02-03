@@ -36,7 +36,7 @@ namespace TerriBull {
     /* Manages Tasks for the Robot */
     // class TaskManager;
     /* Task Data Container */
-    // class Task;
+    class Task;
     // typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     // class SerialController;
@@ -499,12 +499,12 @@ namespace TerriBull {
     #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
 
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
-
+    #include "./lib/Tasking/Task.hpp"
+    #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
 
 
     // #include "../Controllers/TaskManager/TaskManager.hpp"
-    // #include "./lib/Tasking/Task.hpp"
-    // #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+
 // 
     // #include "./lib/ConfigurationParser.hpp"
 // 
