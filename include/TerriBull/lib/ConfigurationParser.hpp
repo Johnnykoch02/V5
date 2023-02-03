@@ -16,9 +16,9 @@
     #include<iostream>
 
     // #ifdef __linux__
-    #include "/usr/include/jsoncpp/json/json.h"
+    // #include "/usr/include/jsoncpp/json/json.h"
     // #else
-    // #include "../../../jsoncpp/include/json/json.h"
+    #include "../../../jsoncpp/include/json/json.h"
     // #endif
 
     #include "../TerriBull.hpp"

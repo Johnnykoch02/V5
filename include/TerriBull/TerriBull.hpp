@@ -33,31 +33,31 @@ namespace TerriBull {
     /* Vectorization Class */
     class Vector2;
     /* Manages Tasks for the Robot */
-    class TaskManager;
+    // class TaskManager;
     /* Task Data Container */
-    class Task;
-    typedef ::std::list<Task*> TaskList;
+    // class Task;
+    // typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
-    class SerialController;
+    // class SerialController;
 
 
     /* Manages Mechanical Components */
-    class MechanicalSystem;
+    // class MechanicalSystem;
     /* Virtual */
-    class MechanicalComponent;
+    // class MechanicalComponent;
     /* Abstract Class for Drivetrain */
-    class Drive;
+    // class Drive;
     /* Manages Odometry and Positioning */
     // class Odometry;
     /* Main Controller for the Robot */
-    class RoboController;
+    // class RoboController;
     /* Object Management and Data Information */
     // class ObjectHandler;
     /* Game Object Class */
-    class GameObject;
+    // class GameObject;
 
     /* Controls Mechanical System */
-    class PidController;
+    // class PidController;
 
 
     /* TerriBull Type Definitions */
@@ -484,24 +484,24 @@ namespace TerriBull {
     #include "./lib/Vector2.hpp"
     #include "./lib/Logger.hpp"
 
-    #include "../Controllers/SerialController/SerialController.hpp"
+    // #include "../Controllers/SerialController/SerialController.hpp"
 
     // #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
     // #include "./lib/GameObjects/GameObject.hpp"
 
-    #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
-    #include "../MechanicalComponents/MechanicalComponent.hpp"
+    // #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
+    // #include "../MechanicalComponents/MechanicalComponent.hpp"
 
-    #include "../MechanicalComponents/Drive/drive.hpp"
-    #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
+    // #include "../MechanicalComponents/Drive/drive.hpp"
+    // #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
 
-    #include "../Controllers/TaskManager/TaskManager.hpp"
-    #include "./lib/Tasking/Task.hpp"
-    #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
-
-    #include "./lib/ConfigurationParser.hpp"
-
-    #include "../Controllers/RoboController/RoboController.hpp"
+    // #include "../Controllers/TaskManager/TaskManager.hpp"
+    // #include "./lib/Tasking/Task.hpp"
+    // #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+// 
+    // #include "./lib/ConfigurationParser.hpp"
+// 
+    // #include "../Controllers/RoboController/RoboController.hpp"
 
     #endif
 
