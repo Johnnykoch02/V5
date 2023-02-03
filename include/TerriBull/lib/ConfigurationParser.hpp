@@ -15,7 +15,7 @@
 
     #include<iostream>
 
-    #ifdef __LINUX__
+    #ifdef __unix || __unix__
     // #include "/usr/include/jsoncpp/json/json.h"
     #else
     #include "../../../jsoncpp/include/json/json.h"
