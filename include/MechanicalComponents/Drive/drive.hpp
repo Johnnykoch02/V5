@@ -32,7 +32,6 @@ class TerriBull::Drive : public MechanicalComponent {
     virtual void change_orientation(float theta) = 0;
     virtual void reset() = 0;
     // virtual void setOrientation(float theta) = 0;
-    virtual float dError() const = 0;
     virtual void resultant_vector() = 0;
     virtual void tare_encoders() = 0;
     ::std::string getType() {return "drive"; }

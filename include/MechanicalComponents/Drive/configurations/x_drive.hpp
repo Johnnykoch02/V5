@@ -32,6 +32,7 @@ class X_Drive : public TerriBull::Drive {
 
 
     X_Drive(int portA, int portB, int portC, int portD);
+    ~X_Drive();
 
     void drive(TerriBull::Vector2 pos);
 
@@ -40,6 +41,8 @@ class X_Drive : public TerriBull::Drive {
     float dError();
       
     void reset();
+
+    void change_orientation(float theta);
 
     // void resultant_vector();
 

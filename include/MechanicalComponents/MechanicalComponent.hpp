@@ -29,14 +29,14 @@ class TerriBull::MechanicalComponent  {
     MechanicalComponent();
     MechanicalComponent(const TerriBull::Str2SizeMap  ports) :
      pPorts(ports), kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
-    float getError() const final {
+    virtual float getError() const final {
         return currentError;
     } 
-    float dError() const final{
+    virtual float dError() const final{
         return (this->currentError - this->previousError);
     }
 
-    void setPID(float kP, kD, kI) {
+    void setPID(float kP, float kD, float kI) {
         this->kP = kP;
         this->kD = kD;
         this->kI = kI;

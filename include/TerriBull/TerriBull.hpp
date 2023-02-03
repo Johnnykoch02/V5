@@ -45,9 +45,9 @@ namespace TerriBull {
     /* Manages Mechanical Components */
     // class MechanicalSystem;
     /* Virtual */
-    // class MechanicalComponent;
+    class MechanicalComponent;
     /* Abstract Class for Drivetrain */
-    // class Drive;
+    class Drive;
     /* Manages Odometry and Positioning */
     // class Odometry;
     /* Main Controller for the Robot */
@@ -496,10 +496,10 @@ namespace TerriBull {
     // #include "./lib/GameObjects/GameObject.hpp"
 
     // #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
-    // #include "../MechanicalComponents/MechanicalComponent.hpp"
+    #include "../MechanicalComponents/MechanicalComponent.hpp"
 
-    // #include "../MechanicalComponents/Drive/drive.hpp"
-    // #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
+    #include "../MechanicalComponents/Drive/drive.hpp"
+    #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
 
     // #include "../Controllers/TaskManager/TaskManager.hpp"
     // #include "./lib/Tasking/Task.hpp"
