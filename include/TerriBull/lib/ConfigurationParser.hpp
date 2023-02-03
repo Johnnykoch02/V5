@@ -28,7 +28,7 @@
 
     using namespace std;
     #include <stdio.h>
-    class ::ConfigurationParser {
+    class ConfigurationParser {
         private:
         string pFileLocation;
         /* Json Related Parsing Variables */
@@ -106,8 +106,8 @@
             /*
             Functions to return Robot Configuration
             */
-            TerriBull::Drive* getDriveConfig();
-            TerriBull::MechanicalSystem* getMechanicalSystemConfig();
+            ::TerriBull::Drive* getDriveConfig();
+            ::TerriBull::MechanicalSystem* getMechanicalSystemConfig();
 
         bool success() const {
             return this->errCode == NO_ERROR;
@@ -119,7 +119,7 @@
         delete pFile;
     }
 
-    TerriBull::Drive* ConfigurationParser::getDriveConfig() {
+    ::TerriBull::Drive* ConfigurationParser::getDriveConfig() {
                 if (this->pDriveConfig.isNull() || this->pDriveMotorPorts.isNull()) {
                     this->errCode = VARIABLE_PARSE_ERROR;
                     return nullptr;
@@ -133,12 +133,12 @@
                 else return nullptr;
     }
 
-    TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
+    ::TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
         if (this->pConfigVariables.Config.isNull() || this->pConfigVariables.IMUConfig.isNull()) {
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
-        TerriBull::Drive* drive = this->getDriveConfig();
+        ::TerriBull::Drive* drive = this->getDriveConfig();
         if (drive == nullptr) {
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
@@ -151,7 +151,7 @@
 
 
         /* Construct a new base System */
-        TerriBull::MechanicalSystem* system = new Terribull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive);
+        ::TerriBull::MechanicalSystem* system = new ::TerriBull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive);
         system->setStartingAngle(this->pConfigVariables.StartingAngle.asFloat());
         system->setStaringPosition(this->pConfigVariables.StaringPos["x"].asFloat(), this->pConfigVariables.StaringPos["y"].asFloat());
         
