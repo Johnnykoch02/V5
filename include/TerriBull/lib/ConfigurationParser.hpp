@@ -16,9 +16,9 @@
     #include<iostream>
 
     // #ifdef __linux__
-    // #include "/usr/include/jsoncpp/json/json.h"
+    #include "/usr/include/jsoncpp/json/json.h"
     // #else
-    #include "../../../jsoncpp/include/json/json.h"
+    // #include "../../../jsoncpp/include/json/json.h"
     // #endif
 
     #include "../TerriBull.hpp"
@@ -33,25 +33,25 @@
         string pFileLocation;
         /* Json Related Parsing Variables */
         ifstream * pFile;
-        Json::Value pRoot;
+        ::Json::Value pRoot;
         typedef enum {NO_ERROR, FILE_NOT_FOUND, FILE_OPEN_ERROR, VARIABLE_PARSE_ERROR} Error;
         uint8_t errCode = 0;
         /* MECHANICAL SYSTEM VARIABLES */
       
         typedef struct {
 
-            Json::Value Config; /* User Selected Config */
+            ::Json::Value Config; /* User Selected Config */
 
             /*
             Drive Variables
             */
-            Json::Value DriveConfig;
-            Json::Value DriveMotorPorts;
+            ::Json::Value DriveConfig;
+            ::Json::Value DriveMotorPorts;
 
             /* IMU Sensor*/
-            Json::Value IMUConfig;
-            Json::Value StartingAngle;
-            Json::Value StaringPos;
+            ::Json::Value IMUConfig;
+            ::Json::Value StartingAngle;
+            ::Json::Value StaringPos;
 
             /* CONTROLLER CONFIG VARIABLES */
 
@@ -124,10 +124,10 @@
                     this->errCode = VARIABLE_PARSE_ERROR;
                     return nullptr;
                 }
-                Json::String DriveType = this->pDriveConfig.asString();
+                ::Json::String DriveType = this->pDriveConfig.asString();
                 /* Drive Configurations that are Currently Supported */
                 if (DriveType == "x_drive") {
-                    return new TerriBull::X_Drive(this->pDriveMotorPorts[0].asInt(), this->pDriveMotorPorts[1].asInt(), this->pDriveMotorPorts[2].asInt(),this->pDriveMotorPorts[3].asInt());
+                    return new ::TerriBull::X_Drive(this->pDriveMotorPorts[0].asInt(), this->pDriveMotorPorts[1].asInt(), this->pDriveMotorPorts[2].asInt(),this->pDriveMotorPorts[3].asInt());
                 }
 
                 else return nullptr;
