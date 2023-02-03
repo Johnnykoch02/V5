@@ -18,7 +18,7 @@
 
 typedef enum TaskTypes {DRIVE, ROLLER, SHOOTER, INTERNAL_VARIABLES} TaskTypes;
 
- class TerriBull::Task {
+ class ::TerriBull::Task {
     
    private:
    TaskTypes pType;

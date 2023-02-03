@@ -19,8 +19,8 @@ private:
   ::std::fstream logFile;
 };
 
-Logger::Logger(std::string fileName) {
-  logFile.open(fileName, std::ios::out);
+Logger::Logger(::std::string fileName) {
+  logFile.open(fileName, ::std::ios::out);
 }
 
 Logger::~Logger() {
