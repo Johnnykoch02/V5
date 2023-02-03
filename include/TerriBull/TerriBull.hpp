@@ -43,7 +43,7 @@ namespace TerriBull {
 
 
     /* Manages Mechanical Components */
-    // class MechanicalSystem;
+    class MechanicalSystem;
     /* Virtual */
     class MechanicalComponent;
     /* Abstract Class for Drivetrain */
@@ -494,12 +494,13 @@ namespace TerriBull {
 
     // #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
     // #include "./lib/GameObjects/GameObject.hpp"
-
-    // #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
-
     #include "../MechanicalComponents/Drive/drive.hpp"
     #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
+
+    #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
+
+
 
     // #include "../Controllers/TaskManager/TaskManager.hpp"
     // #include "./lib/Tasking/Task.hpp"

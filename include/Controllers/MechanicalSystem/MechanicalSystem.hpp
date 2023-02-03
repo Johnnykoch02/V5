@@ -19,17 +19,17 @@
 // using namespace TerriBull;
 
 
-class ::TerriBull::MechanicalSystem {
+class TerriBull::MechanicalSystem {
     private:
         ::pros::Imu* pImu;
-        ::TerriBull::::Drive * pDrive;
-        ::TerriBull::Vector2 pPosition;
+        TerriBull::Drive * pDrive;
+        TerriBull::Vector2 pPosition;
         float * pAngle;
         float pStartingAngle;
         
     public:
 
-    MechanicalSystem(int _imu, Drive * _drive)  {
+    MechanicalSystem(int _imu, TerriBull::Drive * _drive)  {
         /*IMU Setup*/
         this->pImu = new ::pros::Imu(_imu);
         /*Drive Setup*/
@@ -50,7 +50,7 @@ class ::TerriBull::MechanicalSystem {
     }
     
     void setStartingPosition(float x, float y) {
-        this->pPosition = ::TerriBull::Vector2::cartesianToVector2(x, y);
+        this->pPosition = TerriBull::Vector2::cartesianToVector2(x, y);
     }
 
     /* Tasking Specific */
@@ -58,7 +58,7 @@ class ::TerriBull::MechanicalSystem {
         return this->pDrive->dError();
     }
 
-    ::TerriBull::Vector2 getPosition() {
+    TerriBull::Vector2 getPosition() {
         return this->pPosition;
     }
 
@@ -66,17 +66,17 @@ class ::TerriBull::MechanicalSystem {
 
 };
 
-void ::TerriBull::MechanicalSystem::GoToPosition(float x, float y) {
-    this->pDrive->drive(Vector2::cartesianToVector2(x, y));
+void TerriBull::MechanicalSystem::GoToPosition(float x, float y) {
+    this->pDrive->drive(TerriBull::Vector2::cartesianToVector2(x, y));
 }
 
-float ::TerriBull::MechanicalSystem::getAngle() {
+float TerriBull::MechanicalSystem::getAngle() {
   float theta = this->pImu->get_heading(); /*TODO: Change hard Coded 90 to be a parsed variable */
   *(this->pAngle) = ::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);
   return *(this->pAngle);
 }
 
-void update() {
+void TerriBull::MechanicalSystem::update() {
     this->getAngle();
 }
 
