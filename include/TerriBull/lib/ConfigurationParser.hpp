@@ -15,11 +15,11 @@
 
     #include<iostream>
 
-    // #ifdef __linux__
+    #ifdef __LINUX__
     // #include "/usr/include/jsoncpp/json/json.h"
-    // #else
+    #else
     #include "../../../jsoncpp/include/json/json.h"
-    // #endif
+    #endif
 
     #include "../TerriBull.hpp"
 
