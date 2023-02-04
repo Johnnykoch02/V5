@@ -1,28 +1,34 @@
+/**
+ * @file TaskManager.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Manager for performing Task Sets. 
+    Tasking Set Components:
+        -   Drive
+        -   Roller
+        -   Shooter
+        -   Intake
+    
+ * @version 0.1
+ * @date 2022-10-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
-#include "../TeriBull/TerriBull.hpp"
-#include "../TerriBull/lib/Tasking/Task.hpp"
+#include "../../TerriBull/TerriBull.hpp"
+#include "../../TerriBull/lib/Tasking/Task.hpp"
 #include <list>
+// #include "../../TerriBull/lib/Expressions/Expression.hpp"
 
-/**
- * @brief Methods:
-void insert(index, data)	This function inserts a new item before the position the iterator points.
-void push_back(data)	This functions add a new item at the list’s end.
-void push_front(data)	It adds a new item at the list’s front.
-data* pop_front()	It deletes the list’s first item.
-size_t size()	This function determines the number of list elements.
-data* front()	To determines the list’s first items.
-data* back()	To determines the list’s last item.
-reverse()	It reverses the list items.
-merge()	It merges two sorted lists.
- * 
- */
 
 class TerriBull::TaskManager {
 private:
     TerriBull::TaskList *currentTaskSet;
     TerriBull::PriorityQueue<TerriBull::TaskList> tasks;
+    // ::std::vector<Expression*> Expressions;
 public:
     TaskManager() {
         currentTaskSet = nullptr;
@@ -36,25 +42,34 @@ public:
     void addTaskSet(TaskList *tasks) {
         this->tasks.enqueue(tasks, 0);
     }
+
+    void Init() {
+
+    }
+
     void run() {
         if (this->currentTaskSet != nullptr)
         { /* Update and chek our current task*/
-        int finishedTasks = 0, totalTasks = 0;
-            for ( auto tsk = this->currentTaskSet->begin(); tsk != this->currentTaskSet->end(); ++tsk ) {
-                tsk->update();
+            int finishedTasks = 0, totalTasks = 0;
+            for ( auto tsk : *(this->currentTaskSet)) {
+                totalTasks++;
+                tsk->update(0);
                             
                 if (tsk->finishedFlag == true)
                 { /* Task is complete */
-                    delete this->currentTaskSet;
-                    this->currentTaskSet = nullptr;
+                    finishedTasks++;
                 }
+            }
+            if (totalTasks == finishedTasks) {
+                delete this->currentTaskSet;
+                this->currentTaskSet = nullptr;
             }
     
         }
         else if (tasks.isEmpty() == false)
         { /* Obtain the next task*/
             this->currentTaskSet = this->tasks.deque();
-            for ( auto tsk = this->currentTaskSet->begin(); tsk != this->currentTaskSet->end(); ++tsk ) 
+            for (  auto tsk : *(this->currentTaskSet) ) 
                 tsk->init();
         }
         else
@@ -62,6 +77,10 @@ public:
         // pros::lcd::print(3, "All Tasks Completed.");
     
         }
+        /* TODO: Optimize the way Expressions are updated such that the Expressions being updated are only those that are realavent to the Current Task */
+        // for (auto expression : this->Expressions) {
+        //     expression->updateTotal();
+        // }
     }
 
 };

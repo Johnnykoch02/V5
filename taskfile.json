@@ -1,0 +1,11 @@
+{
+    "tasks": [
+        {
+            "drive": {
+                "x": "{{CURRENT_POS_X}}",
+                "y": "{{CURRENT_POS_Y+50}}",
+                "theta": 90,
+                "DriveType": 1
+            }
+        }
+]}

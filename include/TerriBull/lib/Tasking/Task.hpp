@@ -1,7 +1,7 @@
 /**
  * @file Task.hpp
  * @author John Koch jkoch21@usf.edu
- * @brief Tasking for the Robot requires an abstract class definition for it. 
+ * @brief Tasking for the BullBot requires an abstract class definition for it. 
     Tasking Operations:
     
  * @version 0.1
@@ -19,7 +19,7 @@
 typedef enum TaskTypes {DRIVE, ROLLER, SHOOTER, INTERNAL_VARIABLES} TaskTypes;
 
  class TerriBull::Task {
-
+    
    private:
    TaskTypes pType;
 
@@ -33,4 +33,3 @@ typedef enum TaskTypes {DRIVE, ROLLER, SHOOTER, INTERNAL_VARIABLES} TaskTypes;
 
 
 #endif
- */

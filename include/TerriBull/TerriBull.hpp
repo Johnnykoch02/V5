@@ -1,41 +1,51 @@
-
+/**
+ * @file TerriBull.hpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief TerriBull Single Robotics Library implementation designed to run on
+ * the University of South Florida VEX BullBots seamlessly across all devices.
+ *
+ * @version 0.1
+ * @date 2023-01-04
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #ifndef __TERRIBULL__
 #define __TERRIBULL__
 
 #include "pros/motors.hpp"
+#include "./lib/Logger.hpp"
 #include <list>
 #include <map>
 #include <string>
+#include <cmath>
 /**
- * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS 
+ * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS
 */
 namespace TerriBull {
 
     /**
      * @brief TerriBull Robotics Utilities and Class Predeclarations
-     * 
+     *
      */
     /* Standard Library Type Definitions */
     typedef ::std::string string;
     typedef ::std::map<string, size_t> Str2SizeMap;
-
+    /* Vectorization Class */
+    class Vector2;
     /* Manages Tasks for the Robot */
     class TaskManager;
     /* Task Data Container */
     class Task;
-    typedef ::std::list<Task*> TaskList; 
+    typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;
-
-
     /* Manages Mechanical Components */
     class MechanicalSystem;
     /* Virtual */
     class MechanicalComponent;
     /* Abstract Class for Drivetrain */
     class Drive;
-    /* Manages Odometry and Positioning */
-    class Odometry;
     /* Main Controller for the Robot */
     class RoboController;
     /* Object Management and Data Information */
@@ -43,22 +53,40 @@ namespace TerriBull {
     /* Game Object Class */
     class GameObject;
 
-    /* Controls Mechanical System */
-    class PidController;
-
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
-    
+
+    /* Program Constants */
+    int const MAX_VOLTAGE = 12000;
 
     /**
      * @brief Useful Algorithms and Functions
-     * 
+     *
      */
-    
+    float const PI =  3.14159;
+
+    float DEG2RAD( const float deg )
+    {
+    	return deg * PI/180;
+    }
+    float RAD2DEG( const float rad )
+    {
+    	return rad * 180/PI;
+    }
+
+    float GetDTheta(float tf, float ti) {
+    float positiveDTheta = fmod((tf+360)-ti, 360.0);
+    float negativeDTheta = -360 + positiveDTheta;
+
+    if (fabs(positiveDTheta) <= fabs(negativeDTheta))
+      return positiveDTheta;
+    else return negativeDTheta;
+
+}
 
     /**
      * @brief Template Classes
-     * 
+     *
      */
 
     /* Node Template Class */
@@ -117,7 +145,7 @@ namespace TerriBull {
         this->data = data;
     }
       T *getData() { return this->data; }
-    
+
       int16_t getPriority() { return this->priority; }
 
       friend ostream &operator<<(ostream &stream, const Node<T> &node) {
@@ -143,7 +171,7 @@ namespace TerriBull {
     int size;
     Node<T> *g(int index, int cur, Node<T> *curr);
     public:
-        
+
     Node<T> *head;
     Node<T> *tail;
 
@@ -154,7 +182,7 @@ namespace TerriBull {
     }
 
     ~linkedlist() {
-        if (this->head != nullptr) {  
+        if (this->head != nullptr) {
             Node<T> *node = this->head;
             Node<T> *tempNode;
             while(node->hasNext()) {
@@ -201,7 +229,7 @@ namespace TerriBull {
             this->tail= node;
             this->size++;
             insertion = true;
-        }   
+        }
         /*
         The List has only one node, check the prioritys and insert accordingly
         */
@@ -231,7 +259,7 @@ namespace TerriBull {
             Node<T> *current = this->tail;
             while(priority>current->getPriority() && insertion==false) {
                 //Our current node has not found the right insertion spot, and we haven't reached the end of the list
-                if (current != this->head) { 
+                if (current != this->head) {
 
                     current = current->getPrev();
                 }
@@ -241,8 +269,8 @@ namespace TerriBull {
                     node->setNext(this->head);
                     this->head->setPrev(node);
                     this->head = node;
-                    insertion = true; 
-                    this->size++; 
+                    insertion = true;
+                    this->size++;
                 }
             }
             // WE found our spot!
@@ -295,7 +323,7 @@ namespace TerriBull {
                         this->tail = prev;
                         delete node;
                     }
-                    
+
                     else {
                         /*Create Linkage*/
                         prev->setNext(next);
@@ -307,7 +335,7 @@ namespace TerriBull {
 
                 else /* We have either 1 or two nodes in our list.*/
                 {
-                    if (this->length() == 1) 
+                    if (this->length() == 1)
                     {
                         this->head = nullptr;
                         this->tail = nullptr;
@@ -335,7 +363,7 @@ namespace TerriBull {
     }
 
     void clear() {
-        if (this->head != nullptr) {  
+        if (this->head != nullptr) {
             Node<T> *node = this->head;
             Node<T> *tempNode;
             while(node->hasNext()) {
@@ -362,14 +390,14 @@ namespace TerriBull {
     T* pop() {
         T* returnValue = this->head->getData();
         this->head->setData(nullptr);
-        Node<T> oldHead = this->head;
+        Node<T>* oldHead = this->head;
         this->head = this->head->getNext();
         this->size--;
         delete oldHead;
         return returnValue;
         /*This could easily be wrong*/
     }
-    
+
     T* peek() {
         return this->head->getData();
     }
@@ -442,9 +470,29 @@ namespace TerriBull {
     #endif
 
 
+    /* Global Variables */
+    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
+    ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
+};
+    #ifndef __TERRIBULL_INCLUDES__
+    #define __TERRIBULL_INCLUDES__
 
+    #include "../api.h"
 
+    #include "./lib/Vector2.hpp"
+    #include "../MechanicalComponents/MechanicalComponent.hpp"
+    #include "../MechanicalComponents/Drive/drive.hpp"
+    #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
+    #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
+    #include "./lib/Tasking/Task.hpp"
+    #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+    #include "../Controllers/TaskManager/TaskManager.hpp"
+    #include "./lib/ConfigurationParser.hpp"
+    #include "./lib/GameObjects/GameObject.hpp"
+    #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
+    #include "../Controllers/SerialController/SerialController.hpp"
+    #include "../Controllers/RoboController/RoboController.hpp"
 
-}
+    #endif
 
 #endif
