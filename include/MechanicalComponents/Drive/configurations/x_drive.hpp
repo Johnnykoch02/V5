@@ -38,7 +38,7 @@ class X_Drive : public TerriBull::Drive {
 
     void setVoltage(float lt, float lb, float rt, float rb);
 
-    float dError();
+    // float dError();
       
     void reset();
 
