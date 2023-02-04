@@ -20,7 +20,7 @@
     // #elif _WIN64
     // #include "../../../jsoncpp/include/json/json.h"
     // #else
-    #include "/usr/include/jsoncpp/json/json.h"
+    #include "../../../src/dist/json/json.h"
     // #endif
 
     #include "../TerriBull.hpp"
