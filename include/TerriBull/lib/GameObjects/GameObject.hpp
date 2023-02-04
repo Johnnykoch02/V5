@@ -1,5 +1,5 @@
 /**
- * @file MechanicalSystem.hpp
+ * @file GameObject.hpp
  * @author John Koch jkoch21@usf.edu
  * @brief Data structure for implementing game objects on the field
  *     
