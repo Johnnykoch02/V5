@@ -22,12 +22,11 @@
                 }
             },
             "controller_config": "default",
-            
             "mechanical_system": {
                 "starting_angle": 90,
                 "starting_position": {
                     "x": 0,
-                    "y":0
+                    "y": 0
                 },
                 "imu": 5,
                 "drive": {
@@ -35,7 +34,6 @@
                     "motor_ports": [1, 2, 3, 4]
                 }
             }
-
         },
         {
             "name": "Shooter_Small_Bot",

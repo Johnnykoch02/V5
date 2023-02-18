@@ -61,7 +61,6 @@ namespace TerriBull {
 
     /**
      * @brief Useful Algorithms and Functions
-     *
      */
     float const PI =  3.14159;
 
@@ -471,7 +470,7 @@ namespace TerriBull {
 
 
     /* Global Variables */
-    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
+    Logger logger("/usd/logfile.log"); /* Global Logger */
     ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
 };
     #ifndef __TERRIBULL_INCLUDES__

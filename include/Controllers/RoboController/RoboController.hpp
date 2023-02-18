@@ -70,11 +70,12 @@ class TerriBull::RoboController {
 
 void TerriBull::RoboController::Init() {
     /* TBD                                          <-Fix this file path-> */
-    this->configParser = new ConfigurationParser("configuration.json", "Shooter_Big_Bot");
+    this->configParser = new ConfigurationParser("/usd/configuration.json", "Shooter_Big_Bot");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
         this->system = this->configParser->getMechanicalSystemConfig();
         if (!this->configParser->success()) {
+            pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
             logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ ::std::to_string(configParser->getErrCode())));
             exit(1);
         }
@@ -102,6 +103,7 @@ void TerriBull::RoboController::Init() {
 
 void TerriBull::RoboController::Run() {
     this->taskManager->run();
+    if (!this->configParser->success()) pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
     this->serialController->update();
     // this->objHandler->update();
 

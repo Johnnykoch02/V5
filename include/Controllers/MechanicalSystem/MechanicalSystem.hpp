@@ -26,7 +26,7 @@ class TerriBull::MechanicalSystem {
         TerriBull::Vector2 pPosition;
         float * pAngle;
         float pStartingAngle;
-        
+
     public:
 
     MechanicalSystem(int _imu, TerriBull::Drive * _drive)  {
@@ -63,6 +63,8 @@ class TerriBull::MechanicalSystem {
     }
 
     void update();
+
+    /* API TO Mechanical System */
 
 };
 
