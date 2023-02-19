@@ -69,7 +69,8 @@ class TerriBull::MechanicalSystem {
 };
 
 void TerriBull::MechanicalSystem::GoToPosition(float x, float y) {
-    this->pDrive->drive(TerriBull::Vector2::cartesianToVector2(x, y));
+    Vector2 v = TerriBull::Vector2::cartesianToVector2(x, y);
+    this->pDrive->drive(v);
 }
 
 float TerriBull::MechanicalSystem::getAngle() {

@@ -13,6 +13,7 @@
 #define X_DRIVE_H
 #include "../drive.hpp"
 #include "../../TerriBull/TerriBull.hpp"
+#include "pros/motors.hpp"
 #include <math.h>
 #include <vector>
 
@@ -25,10 +26,10 @@ class X_Drive : public TerriBull::Drive {
     typedef ::std::map<::pros::Motor*, TerriBull::Vector2> ErrorMap;
 
     private:
-    ::pros::Motor * pMotorA; // -> Top Left
-    ::pros::Motor * pMotorB; // -> Bottom Left
-    ::pros::Motor * pMotorC; // -> Top Right
-    ::pros::Motor * pMotorD; // -> Bottom Right
+    pros::Motor pMotorA = pros::Motor(1, pros::E_MOTOR_GEARSET_18, false);
+    pros::Motor pMotorB = pros::Motor(2, pros::E_MOTOR_GEARSET_18, false); // -> Bottom Left
+    pros::Motor pMotorC = pros::Motor(3, pros::E_MOTOR_GEARSET_18, true);
+    pros::Motor pMotorD = pros::Motor(4, pros::E_MOTOR_GEARSET_18, true);
 
     public:
     X_Drive(int portA, int portB, int portC, int portD);
@@ -54,29 +55,26 @@ class X_Drive : public TerriBull::Drive {
 };
 
 X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
-    pMotorA = new ::pros::Motor(portA, ::pros::E_MOTOR_GEARSET_18, false);
-    pMotorB = new ::pros::Motor(portB, ::pros::E_MOTOR_GEARSET_18, false);
-    pMotorC = new ::pros::Motor(portC, ::pros::E_MOTOR_GEARSET_18, true);
-    pMotorD = new ::pros::Motor(portD, ::pros::E_MOTOR_GEARSET_18, true);
+   
     this->setPID(0.5, 0.2, 0.3);
 
-    this->pMotorA->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
-    this->pMotorB->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
-    this->pMotorC->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
-    this->pMotorD->set_brake_mode(::pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorA.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorB.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorC.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    this->pMotorD.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 }
 
 X_Drive::~X_Drive() {
-    delete pMotorA;
-    delete pMotorB;
-    delete pMotorC;
-    delete pMotorD;
+    // delete pMotorA;
+    // delete pMotorB;
+    // delete pMotorC;
+    // delete pMotorD;
 }
 
 void X_Drive::drive(TerriBull::Vector2 pos) {
     /* Theta of desired      Modified By our current Look Angle */
 
-    float angle = pos.theta - ((*this->pCurrentAngle) - 90);
+    float angle = pos.theta - (*(this->pCurrentAngle) - 90);
     angle = (angle<0) ? 360.0 + angle : angle;
     int x = int(round(angle/45)) % 8;
     int dir = 0;
@@ -88,7 +86,7 @@ void X_Drive::drive(TerriBull::Vector2 pos) {
     pct = kP*currentError + kI*currentError*currentError + kD*this->dError();
 
 
-    pros::lcd::set_text(4,::std::to_string(x) );
+    // // pros::lcd::set_text(4,::std::to_string(x) );
     switch(x) {
       case 0:
       case 4:
@@ -111,7 +109,7 @@ void X_Drive::drive(TerriBull::Vector2 pos) {
         setVoltage( 0, -dir*pct, -dir*pct,0);
         break;
         default:
-          ::pros::lcd::set_text(4, "ERROR" );
+          // ::pros::lcd::set_text(4, "ERROR" );s
           break;
     }
 
@@ -130,21 +128,23 @@ void  X_Drive::setVoltage(float lt, float lb, float rt, float rb)  {
   /* Less than some threshold */ 
   if (fabs(lt) < motorPowerThreshold && fabs(rt) < motorPowerThreshold && 
       fabs(lb) < motorPowerThreshold && fabs(rb) < motorPowerThreshold) {
-    lt = lb = rt = rb = 0;
+    // lt = lb = rt = rb = 0;
   }
-  pMotorA->move_voltage(lt*this->pVoltageCap);
-  pMotorB->move_voltage(rt*this->pVoltageCap);
-  pMotorC->move_voltage(lb*this->pVoltageCap);
-  pMotorD->move_voltage(rb*this->pVoltageCap);
+  else {
+  }
+  this->pMotorA.move_voltage(0);//lt*this->pVoltageCap
+  this->pMotorB.move_voltage(0);//rt*this->pVoltageCap
+  this->pMotorC.move_voltage(0);//lb*this->pVoltageCap
+  this->pMotorD.move_voltage(0);//rb*this->pVoltageCap
 
 }
 
 void X_Drive::reset() {
   this->currentError = this->previousError = 0;
-  pMotorA->move_voltage(0);
-  pMotorB->move_voltage(0);
-  pMotorC->move_voltage(0);
-  pMotorD->move_voltage(0);
+  this->pMotorA.move_voltage(0);
+  this->pMotorB.move_voltage(0);
+  this->pMotorC.move_voltage(0);
+  this->pMotorD.move_voltage(0);
 }
 
 #endif
