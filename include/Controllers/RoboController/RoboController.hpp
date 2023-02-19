@@ -70,6 +70,7 @@ class TerriBull::RoboController {
 
 void TerriBull::RoboController::Init() {
     /* TBD                                          <-Fix this file path-> */
+    pros::lcd::set_text(0,"Entering Init");
     this->configParser = new ConfigurationParser("/usd/configuration.json", "Shooter_Big_Bot");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
@@ -77,7 +78,7 @@ void TerriBull::RoboController::Init() {
         if (!this->configParser->success()) {
             pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
             logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ ::std::to_string(configParser->getErrCode())));
-            exit(1);
+            // exit(1);
         }
         /* Init Task Manager */
         this->taskManager = new TaskManager(); /* TODO: Needs TaskManager::Init() */
@@ -96,14 +97,15 @@ void TerriBull::RoboController::Init() {
 
     }
     else {
+        pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
         logger.logError(("Configuration Parsing Failed on initalization, Error Code: "+ ::std::to_string(configParser->getErrCode())));
-        exit(1);
+        // exit(1);
     }
 }
 
 void TerriBull::RoboController::Run() {
     this->taskManager->run();
-    if (!this->configParser->success()) pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
+    pros::lcd::set_text(0,"Parsing Status: "+::std::to_string(configParser->getErrCode()) );
     this->serialController->update();
     // this->objHandler->update();
 
@@ -115,7 +117,8 @@ void TerriBull::RoboController::Run() {
         Vector2 currentPos = system->getPosition();
       this->system->GoToPosition(currentPos.x+xInput, currentPos.y + yInput);
     }
-
+    pros::delay(10);
+    
 }
 
 

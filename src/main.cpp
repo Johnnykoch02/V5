@@ -30,9 +30,10 @@ void initialize() {
 
 void autonomous() {
 	TerriBull::RoboController controlSys;
+	pros::lcd::print(1, "Running Auton");
 	controlSys.Init();
 	while (true) {
-		pros::lcd::clear();	
+		// pros::lcd::clear();	
 		controlSys.Run();
     }
 }
@@ -40,7 +41,8 @@ void autonomous() {
 
 
 void opcontrol() {
-
+	autonomous();
+	
 	// ::pros::Motor left_mtr(1);
 	// ::pros::Motor right_mtr(2);
 

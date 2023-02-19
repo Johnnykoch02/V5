@@ -74,6 +74,7 @@
 
             ConfigurationParser(::std::string fileLocation, ::std::string configuration) : pFileLocation(fileLocation) {
                 /* Preceed to load in Data from File*/
+                this->errCode = NO_ERROR;
                 this->pFile = new ::std::ifstream(pFileLocation.c_str());
                 if ( !this->pFile->is_open() ) {
                     if (this->pFile->good() ) {
@@ -83,6 +84,7 @@
                     }
                     return;
                 }
+                pros::lcd::set_text(0,"Open Parse File Code: " + ::std::to_string(this->errCode));
                 /* Convert to JSON Value */
                 *(this->pFile) >> this->pRoot;
 
@@ -94,8 +96,8 @@
                         this->pConfigVariables.Config = this->pRoot["configurations"][i];
                     }
                 }
-
-                if (this->pConfigVariables.Config.asString() == "") {
+                pros::lcd::set_text(1, "Parsed Config: " + this->pConfigVariables.Config["name"].asString());
+                if (this->pConfigVariables.Config["name"].asString() == "") {
                     this->errCode = VARIABLE_PARSE_ERROR;
                     return;
                 }
@@ -105,11 +107,13 @@
                 /* Load In Configuration Variables */
                 this->pConfigVariables.DriveConfig = this->pConfigVariables.Config["mechanical_system"]["drive"]["config"];
                 this->pConfigVariables.DriveMotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
+                this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
+                this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
+                this->pConfigVariables.StartingPos = this->pConfigVariables.Config["mechanical_system"]["starting_position"];
 
-                this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["imu"];
-                this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["starting_angle"];
-                this->pConfigVariables.StartingPos = this->pConfigVariables.Config["starting_position"];
-
+                pros::lcd::set_text(2, "Parsed DriveType: " + this->pConfigVariables.DriveConfig.asString());
+                // pros::lcd::set_text(3, "Parsed Start Pos: " + std::to_string(this->pConfigVariables.StartingPos["x"].asFloat()) + " " + std::to_string(this->pConfigVariables.StartingPos["y"].asFloat()));
+                // pros::lcd::set_text(4, "Parsed Start Angle: " + std::to_string(this->pConfigVariables.StartingAngle.asFloat()));
             }
             ~ConfigurationParser();
 
@@ -146,15 +150,18 @@
 
     TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
         if (this->pConfigVariables.Config.isNull() || this->pConfigVariables.IMUConfig.isNull()) {
+            pros::lcd::set_text(3, "Null IMU : " + this->pConfigVariables.IMUConfig.asString());
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
         TerriBull::Drive* drive = this->getDriveConfig();
         if (drive == nullptr) {
+            pros::lcd::set_text(3, "Null Drivebase : " + this->pConfigVariables.DriveConfig.asString());
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
         if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StartingPos.isNull()) {
+            pros::lcd::set_text(3, "Null Start Info : " + this->pConfigVariables.DriveConfig.asString());
             this->errCode = VARIABLE_PARSE_ERROR;
             return nullptr;
         }
@@ -182,7 +189,7 @@
             /* TODO: add other system components here */
 
         }
-
+        pros::lcd::set_text(4, "Created System : ");
         return system;
     }
 
