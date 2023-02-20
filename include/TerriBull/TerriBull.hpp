@@ -57,7 +57,7 @@ namespace TerriBull {
     typedef ::std::vector<::pros::Motor> MotorGroup;
 
     /* Program Constants */
-    int const MAX_VOLTAGE = 12000;
+    int const MAX_VOLTAGE = 127;
 
     /**
      * @brief Useful Algorithms and Functions

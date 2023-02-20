@@ -13,6 +13,7 @@
 #define X_DRIVE_H
 #include "../drive.hpp"
 #include "../../TerriBull/TerriBull.hpp"
+#include "../../../pros/motors.h"
 #include "../../../main.h"
 #include <cmath>
 #include <vector>
@@ -24,6 +25,7 @@ using namespace TerriBull;
 class X_Drive : public TerriBull::Drive {
     
     private:
+    int pA, pB, pC, pD;
 
     public:
     X_Drive(int portA, int portB, int portC, int portD);
@@ -47,7 +49,7 @@ class X_Drive : public TerriBull::Drive {
 
 };
 
-X_Drive::X_Drive(int portA, int portB, int portC, int portD) : TerriBull::Drive() {
+X_Drive::X_Drive(int portA, int portB, int portC, int portD) : TerriBull::Drive(), pA(portA), pB(portB), pC(portC), pD(portD) {
 
    
     this->setPID(0.5, 0.2, 0.3);
@@ -126,19 +128,24 @@ void  X_Drive::setVoltage(float lt, float lb, float rt, float rb)  {
   }
   else {
   }
-  pMotorA.move_voltage(lt*this->pVoltageCap);
-  pMotorB.move_voltage(rt*this->pVoltageCap);
-  pMotorC.move_voltage(lb*this->pVoltageCap);
-  pMotorD.move_voltage(rb*this->pVoltageCap);
+  if (fabs(lt) > motorPowerThreshold) lt = motorPowerThreshold * fabs(lt) / lt;
+  if (fabs(rt) > motorPowerThreshold) rt = motorPowerThreshold * fabs(rt) / rt;
+  if (fabs(lb) > motorPowerThreshold) lb = motorPowerThreshold * fabs(lb) / lb;
+  if (fabs(rb) > motorPowerThreshold) rb = motorPowerThreshold * fabs(rb) / rb;
+
+  pros::c::motor_move(this->pA, lt);
+  pros::c::motor_move(this->pB, lb);
+  pros::c::motor_move(this->pC, rt);
+  pros::c::motor_move(this->pD, rb);
 
 }
 
 void X_Drive::reset() {
   this->currentError = this->previousError = 0;
-  pMotorA.move_voltage(0);
-  pMotorB.move_voltage(0);
-  pMotorC.move_voltage(0);
-  pMotorD.move_voltage(0);
+  pros::c::motor_move(this->pA, 0);
+  pros::c::motor_move(this->pB, 0);
+  pros::c::motor_move(this->pC, 0);
+  pros::c::motor_move(this->pD, 0);
 }
 
 #endif
