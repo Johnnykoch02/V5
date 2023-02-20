@@ -13,23 +13,17 @@
 #define X_DRIVE_H
 #include "../drive.hpp"
 #include "../../TerriBull/TerriBull.hpp"
-#include "pros/motors.hpp"
-#include <math.h>
+#include "../../../main.h"
+#include <cmath>
 #include <vector>
 
-float rx,ry;
 
 using namespace TerriBull;
 
+
 class X_Drive : public TerriBull::Drive {
     
-    typedef ::std::map<::pros::Motor*, TerriBull::Vector2> ErrorMap;
-
     private:
-    pros::Motor pMotorA = pros::Motor(1, pros::E_MOTOR_GEARSET_18, false);
-    pros::Motor pMotorB = pros::Motor(2, pros::E_MOTOR_GEARSET_18, false); // -> Bottom Left
-    pros::Motor pMotorC = pros::Motor(3, pros::E_MOTOR_GEARSET_18, true);
-    pros::Motor pMotorD = pros::Motor(4, pros::E_MOTOR_GEARSET_18, true);
 
     public:
     X_Drive(int portA, int portB, int portC, int portD);
@@ -42,26 +36,26 @@ class X_Drive : public TerriBull::Drive {
     // float dError();
       
     void reset();
-
     void resultant_vector() {}
     void tare_encoders()  {}
 
     void change_orientation(float theta);
 
     // void resultant_vector();
-
     // void tare_encoders();
+    
 
 };
 
-X_Drive::X_Drive(int portA, int portB, int portC, int portD) {
+X_Drive::X_Drive(int portA, int portB, int portC, int portD) : TerriBull::Drive() {
+
    
     this->setPID(0.5, 0.2, 0.3);
 
-    this->pMotorA.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    this->pMotorB.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    this->pMotorC.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    this->pMotorD.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    pMotorA.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    pMotorB.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    pMotorC.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    pMotorD.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 }
 
 X_Drive::~X_Drive() {
@@ -128,23 +122,23 @@ void  X_Drive::setVoltage(float lt, float lb, float rt, float rb)  {
   /* Less than some threshold */ 
   if (fabs(lt) < motorPowerThreshold && fabs(rt) < motorPowerThreshold && 
       fabs(lb) < motorPowerThreshold && fabs(rb) < motorPowerThreshold) {
-    // lt = lb = rt = rb = 0;
+    lt = lb = rt = rb = 0;
   }
   else {
   }
-  this->pMotorA.move_voltage(0);//lt*this->pVoltageCap
-  this->pMotorB.move_voltage(0);//rt*this->pVoltageCap
-  this->pMotorC.move_voltage(0);//lb*this->pVoltageCap
-  this->pMotorD.move_voltage(0);//rb*this->pVoltageCap
+  pMotorA.move_voltage(lt*this->pVoltageCap);
+  pMotorB.move_voltage(rt*this->pVoltageCap);
+  pMotorC.move_voltage(lb*this->pVoltageCap);
+  pMotorD.move_voltage(rb*this->pVoltageCap);
 
 }
 
 void X_Drive::reset() {
   this->currentError = this->previousError = 0;
-  this->pMotorA.move_voltage(0);
-  this->pMotorB.move_voltage(0);
-  this->pMotorC.move_voltage(0);
-  this->pMotorD.move_voltage(0);
+  pMotorA.move_voltage(0);
+  pMotorB.move_voltage(0);
+  pMotorC.move_voltage(0);
+  pMotorD.move_voltage(0);
 }
 
 #endif

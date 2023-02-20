@@ -104,9 +104,9 @@ void TerriBull::RoboController::Init() {
 }
 
 void TerriBull::RoboController::Run() {
-    this->taskManager->run();
+    // this->taskManager->run();
     pros::lcd::set_text(0,"Parsing Status: "+::std::to_string(configParser->getErrCode()) );
-    this->serialController->update();
+    // this->serialController->update();
     // this->objHandler->update();
 
     int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -114,9 +114,10 @@ void TerriBull::RoboController::Run() {
     if (abs(yInput) < 5) yInput = 0;
     if (abs(xInput)<5) xInput = 0;
     if (yInput != 0 || xInput != 0) {
+        pros::lcd::set_text(4,"Translation");
         Vector2 currentPos = system->getPosition();
       this->system->GoToPosition(currentPos.x+xInput, currentPos.y + yInput);
-    }
+    } else pros::lcd::set_text(4,"No Translation");
     pros::delay(10);
     
 }

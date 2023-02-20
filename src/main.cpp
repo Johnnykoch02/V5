@@ -6,6 +6,15 @@
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
+
+
+// namespace BULL2_XD {
+	pros::Motor pMotorA (1, pros::E_MOTOR_GEARSET_18, false);
+	pros::Motor pMotorB (2, pros::E_MOTOR_GEARSET_18, false);
+	pros::Motor pMotorC (3, pros::E_MOTOR_GEARSET_18, true);
+	pros::Motor pMotorD (4, pros::E_MOTOR_GEARSET_18, true);
+// };
+
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
