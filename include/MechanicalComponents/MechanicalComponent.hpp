@@ -16,8 +16,7 @@
 
 class TerriBull::MechanicalComponent  {
     protected:
-    TerriBull::string pType;
-    TerriBull::Str2SizeMap pPorts;
+    ::std::string pType;
     int pVoltageCap = TerriBull::MAX_VOLTAGE;
     //Vector for
     float currentError;
@@ -27,8 +26,7 @@ class TerriBull::MechanicalComponent  {
 
     public:
     MechanicalComponent() : kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
-    MechanicalComponent(const TerriBull::Str2SizeMap  ports) :
-     pPorts(ports), kP(0), kD(0), kI(0), currentError(0), previousError(0) {}
+
     virtual float getError() const final {
         return currentError;
     } 

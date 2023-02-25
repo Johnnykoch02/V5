@@ -307,6 +307,11 @@
                 "version": "4.8.0"
             }
         },
-        "upload_options": {}
+        "upload_options": {
+            "compress_bin": true,
+            "description": "USF Bulls VEX Library",
+            "remote_name": "V5",
+            "slot": 1
+        }
     }
 }

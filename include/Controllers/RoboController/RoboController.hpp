@@ -116,7 +116,7 @@ void TerriBull::RoboController::Run() {
     if (yInput != 0 || xInput != 0) {
         pros::lcd::set_text(4,"Translation");
         Vector2 currentPos = system->getPosition();
-      this->system->GoToPosition(currentPos.x+xInput, currentPos.y + yInput);
+      this->system->GoToPosition(xInput, yInput);
     } else pros::lcd::set_text(4,"No Translation");
     pros::delay(10);
     

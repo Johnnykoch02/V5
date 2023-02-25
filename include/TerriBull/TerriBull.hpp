@@ -29,8 +29,8 @@ namespace TerriBull {
      *
      */
     /* Standard Library Type Definitions */
-    typedef ::std::string string;
-    typedef ::std::map<string, size_t> Str2SizeMap;
+    // typedef ::std::string string;
+    // typedef ::std::map<string, size_t> Str2SizeMap;
     /* Vectorization Class */
     class Vector2;
     /* Manages Tasks for the Robot */
@@ -147,11 +147,11 @@ namespace TerriBull {
 
       int16_t getPriority() { return this->priority; }
 
-      friend ostream &operator<<(ostream &stream, const Node<T> &node) {
-          stream << "\tNode " << &node << ":" << endl;
-          stream << "\t" << *node.data <<"\t Priority: " << node.priority;
-          return stream;
-      }
+    //   friend ostream &operator<<(ostream &stream, const Node<T> &node) {
+    //       stream << "\tNode " << &node << ":" << endl;
+    //       stream << "\t" << *node.data <<"\t Priority: " << node.priority;
+    //       return stream;
+    //   }
     };
     #endif
 
@@ -403,17 +403,17 @@ namespace TerriBull {
 
     int length(){ return this->size;}
 
-    friend ostream& operator<<(ostream &stream, linkedlist<T> const &ll) {
-        stream << "LinkedList @ " << &ll << " of size " << ll.size << ", " << "data:" << endl;
-        Node<T> *curr = ll.head;
-        int16_t index = 0;
-        while(!(curr == nullptr)) {
-            stream << *curr << ": "<<"at Index "<<index<< endl;
-            curr = curr->getNext();
-            index++;
-        }
-        return stream;
-    }
+    // friend ostream& operator<<(ostream &stream, linkedlist<T> const &ll) {
+    //     stream << "LinkedList @ " << &ll << " of size " << ll.size << ", " << "data:" << endl;
+    //     Node<T> *curr = ll.head;
+    //     int16_t index = 0;
+    //     while(!(curr == nullptr)) {
+    //         stream << *curr << ": "<<"at Index "<<index<< endl;
+    //         curr = curr->getNext();
+    //         index++;
+    //     }
+    //     return stream;
+    // }
     };
 
     #endif
@@ -472,6 +472,7 @@ namespace TerriBull {
     /* Global Variables */
     Logger logger("/usd/logfile.log"); /* Global Logger */
     ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
+
 };
     #ifndef __TERRIBULL_INCLUDES__
     #define __TERRIBULL_INCLUDES__
@@ -481,7 +482,7 @@ namespace TerriBull {
     #include "./lib/Vector2.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
-    #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
+    // #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"

@@ -179,3 +179,4 @@ include/pros/serial.h
 include/pros/serial.hpp
 include/pros/vision.h
 include/pros/vision.hpp
+logbuild.txt
