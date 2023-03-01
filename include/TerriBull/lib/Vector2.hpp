@@ -24,16 +24,16 @@ class TerriBull::Vector2 {
         float r;
         float theta;
 
-        Vector2();
+        Vector2() {}
         ~Vector2() {}
         Vector2(const TerriBull::Vector2& v) : x(v.x), y(v.y), r(v.r), theta(v.theta) {}
         Vector2(const TerriBull::Vector2*  v) : x(v->x), y(v->y), r(v->r), theta(v->theta) {}
         ::TerriBull::Vector2 operator *(float scale) {
-            Vector2 v;
-            v.x = scale * this->x;
-            v.y = scale * this->y;
-            v.r = this->r;
-            v.theta = this->theta;
+            Vector2* v = new Vector2();
+            v->x = scale * this->x;
+            v->y = scale * this->y;
+            v->r = this->r;
+            v->theta = this->theta;
             return v;
         }
 
@@ -60,42 +60,33 @@ class TerriBull::Vector2 {
             return this->x!= that.x || this->y!= that.y;
         }
 
-        static TerriBull::Vector2 cartesianToVector2(float x, float y);
-        static TerriBull::Vector2 polarToVector2(float r, float theta);
-        TerriBull::Vector2 unit();
-        bool sameDirection(Vector2 const & other);
-
-
+        static TerriBull::Vector2* cartesianToVector2(float x, float y) {
+            Vector2 *v = new Vector2();
+            v->x = x;
+            v->y = y;
+            v->r = ::std::sqrt(x*x+y*y);
+            v->theta = ::std::fmod(RAD2DEG(atan2(y, x)), 360.0);
+            return v;
+        }
+        static TerriBull::Vector2* polarToVector2(float r, float theta) {
+            Vector2* v = new Vector2();
+            v->x = r*cos(theta);
+            v->y = r*sin(theta);
+            v->r = r;
+            v->theta = theta;
+            return v;
+        }
+        TerriBull::Vector2* unit() {
+            Vector2* v = new Vector2();
+            v->theta = this->theta;
+            v->r = 1;
+            v->x = ::std::cos(theta);
+            v->y = ::std::sin(theta);
+            return v;
+        }
+        bool sameDirection(Vector2 const & other) {
+            return this->theta == other.theta;
+        }
 };
-TerriBull::Vector2::Vector2() {
-  
-}
-
-TerriBull::Vector2 TerriBull::Vector2::cartesianToVector2(float x, float y) {
-    Vector2 v;
-    v.x = x;
-    v.y = y;
-    v.r = ::std::sqrt(x*x+y*y);
-    v.theta = ::std::fmod(RAD2DEG(atan2(y, x)), 360.0);
-    return v;
-}
-
-TerriBull::Vector2 TerriBull::Vector2::polarToVector2(float r, float theta) {
-    Vector2 v;
-    v.x = r*cos(theta);
-    v.y = r*sin(theta);
-    v.r = r;
-    v.theta = theta;
-    return v;
-}
-
-TerriBull::Vector2 TerriBull::Vector2::unit() {
-    Vector2 v;
-    v.theta = this->theta;
-    v.r = 1;
-    v.x = ::std::cos(theta);
-    v.y = ::std::sin(theta);
-    return v;
-}
 
 #endif

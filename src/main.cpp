@@ -1,3 +1,14 @@
+/**
+ * @file main.cpp
+ * @author John Koch jkoch21@usf.edu
+ * @brief Main Target ran on V5
+ *
+ * @version 0.1
+ * @date 2023-01-04
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #include "main.h"
 
 /**

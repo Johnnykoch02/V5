@@ -10,15 +10,18 @@
  * @copyright Copyright (c) 2022
  *
  */
+
 #ifndef __TERRIBULL__
 #define __TERRIBULL__
 
-#include "pros/motors.hpp"
+#include "../pros/apix.h"
 #include "./lib/Logger.hpp"
 #include <list>
 #include <map>
 #include <string>
 #include <cmath>
+
+class ConfigurationParser;
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS
 */
@@ -57,31 +60,17 @@ namespace TerriBull {
     typedef ::std::vector<::pros::Motor> MotorGroup;
 
     /* Program Constants */
-    int const MAX_VOLTAGE = 127;
+    extern int const MAX_VOLTAGE;
 
     /**
      * @brief Useful Algorithms and Functions
      */
-    float const PI =  3.14159;
+    extern float const PI;
 
-    float DEG2RAD( const float deg )
-    {
-    	return deg * PI/180;
-    }
-    float RAD2DEG( const float rad )
-    {
-    	return rad * 180/PI;
-    }
-
-    float GetDTheta(float tf, float ti) {
-    float positiveDTheta = fmod((tf+360)-ti, 360.0);
-    float negativeDTheta = -360 + positiveDTheta;
-
-    if (fabs(positiveDTheta) <= fabs(negativeDTheta))
-      return positiveDTheta;
-    else return negativeDTheta;
-
-}
+    extern float DEG2RAD( const float deg );
+    extern float RAD2DEG( const float rad );
+    extern float GetDTheta(float tf, float ti);
+    
 
     /**
      * @brief Template Classes
@@ -92,8 +81,8 @@ namespace TerriBull {
     #ifndef Node_h
     #define Node_h
 
-    #include <iostream>
-    #include <string>
+    // #include <iostream>
+    // #include <string>
 
     using namespace std;
 
@@ -468,11 +457,12 @@ namespace TerriBull {
 
     #endif
 
-
+    #ifndef __TERRIBULL_GLOBALS_H
+    #define __TERRIBULL_GLOBALS_H
     /* Global Variables */
-    Logger logger("/usd/logfile.log"); /* Global Logger */
-    ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
-
+    extern Logger logger; /* Global Logger */
+    extern ::pros::Controller controller; /* Global Controller */
+    #endif
 };
     #ifndef __TERRIBULL_INCLUDES__
     #define __TERRIBULL_INCLUDES__
@@ -482,7 +472,6 @@ namespace TerriBull {
     #include "./lib/Vector2.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
-    // #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"

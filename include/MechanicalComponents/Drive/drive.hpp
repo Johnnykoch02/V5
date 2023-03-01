@@ -14,28 +14,25 @@
 
 #include "../../TerriBull/TerriBull.hpp"
 
-using namespace TerriBull;
 
-class TerriBull::Drive : public MechanicalComponent {
+class TerriBull::Drive : public TerriBull::MechanicalComponent {
     protected:
     float * pCurrentAngle;
     Vector2* pCurrentPos;
     Vector2 pPreviousPos;
-    float motorPowerThreshold = 1.0f; /* Should be tested */
+    float motorPowerThreshold; /* Should be tested */
     // Vector2 pCurrentError;
     // Vector2 pPreviousError;
-
+    virtual void setVoltage(float* vals) {}
     public:
-    Drive() :  MechanicalComponent() {}
-    void setAnglePtr(float * ptr) { this->pCurrentAngle = ptr; }
-    void setPosPtr(Vector2* ptr) { this->pCurrentPos = ptr; }
-    virtual ::std::string getType() = 0;
-    virtual float* drive(Vector2 pos) = 0;
-    virtual void change_orientation(float theta) = 0;
-    virtual void reset() = 0;
-    virtual void resultant_vector() = 0;
-    virtual void tare_encoders() = 0;
-};
-
+    Drive() : TerriBull::MechanicalComponent(), motorPowerThreshold(127) {}
+    virtual void setAnglePtr(float * ptr) final { this->pCurrentAngle = ptr; }
+    virtual void setPosPtr(Vector2* ptr) final { this->pCurrentPos = ptr; }
+    virtual float* drive(Vector2 pos) { return nullptr; }
+    virtual void change_orientation(float theta) {}
+    virtual void reset() {}
+    virtual void resultant_vector() {}
+    virtual void tare_encoders() {}
+};     
 
 #endif // DRIVE_H

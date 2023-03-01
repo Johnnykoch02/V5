@@ -37,20 +37,20 @@ class TerriBull::ObjectHandler {
 
     ObjectHandler() {}
     ~ObjectHandler() {}
-    TerriBull::GameObject* query(::std::string identifier);
-    TerriBull::GameObject* getClosestObj(GameObject::Types type, Vector2 pos);
-    void updateObjPos(::std::string identifier,GameObject::Types type, Vector2 pos) {}
-    void addObject(::std::string identifier, GameObject::Types type, Vector2 pos) {}
-    void update() {}
+    TerriBull::GameObject* query(::std::string identifier) {return nullptr;} /*TODO*/
+    TerriBull::GameObject* getClosestObj(GameObject::Types type, Vector2 pos) {return nullptr;} /*TODO*/
+    void updateObjPos(::std::string identifier,GameObject::Types type, Vector2 pos) {} /*TODO*/
+    void addObject(::std::string identifier, GameObject::Types type, Vector2 pos) {} /*TODO*/
+    void update() {} /*TODO*/
 };
 
-TerriBull::GameObject* ObjectHandler::getClosestObj (GameObject::Types type, TerriBull::Vector2 pos) {
-   return nullptr;
-}
+// TerriBull::GameObject* TerriBull::ObjectHandler::getClosestObj (GameObject::Types type, TerriBull::Vector2 pos) {
+//    return nullptr;
+// }
 
-TerriBull::GameObject* ObjectHandler::query(::std::string identifier) {
-  return nullptr;
-}
+// TerriBull::GameObject* TerriBull::ObjectHandler::query(::std::string identifier) {
+//   return nullptr;
+// }
 
 
 #endif // OBJECTHANDLER_H
