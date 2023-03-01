@@ -41,6 +41,9 @@
  */
 //#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
+extern pros::Motor pMotorA, pMotorB, pMotorC, pMotorD;
+
+
 #include "./TerriBull/TerriBull.hpp"
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

@@ -10,15 +10,18 @@
  * @copyright Copyright (c) 2022
  *
  */
+
 #ifndef __TERRIBULL__
 #define __TERRIBULL__
 
-#include "pros/motors.hpp"
+#include "../pros/apix.h"
 #include "./lib/Logger.hpp"
 #include <list>
 #include <map>
 #include <string>
 #include <cmath>
+
+class ConfigurationParser;
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS
 */
@@ -29,8 +32,8 @@ namespace TerriBull {
      *
      */
     /* Standard Library Type Definitions */
-    typedef ::std::string string;
-    typedef ::std::map<string, size_t> Str2SizeMap;
+    // typedef ::std::string string;
+    // typedef ::std::map<string, size_t> Str2SizeMap;
     /* Vectorization Class */
     class Vector2;
     /* Manages Tasks for the Robot */
@@ -48,6 +51,8 @@ namespace TerriBull {
     class Drive;
     /* Main Controller for the Robot */
     class RoboController;
+    /* Takes Controller Input and Controls the Robot */
+    class InputController;
     /* Object Management and Data Information */
     class ObjectHandler;
     /* Game Object Class */
@@ -57,32 +62,17 @@ namespace TerriBull {
     typedef ::std::vector<::pros::Motor> MotorGroup;
 
     /* Program Constants */
-    int const MAX_VOLTAGE = 12000;
+    extern int const MAX_VOLTAGE;
 
     /**
      * @brief Useful Algorithms and Functions
-     *
      */
-    float const PI =  3.14159;
+    extern float const PI;
 
-    float DEG2RAD( const float deg )
-    {
-    	return deg * PI/180;
-    }
-    float RAD2DEG( const float rad )
-    {
-    	return rad * 180/PI;
-    }
-
-    float GetDTheta(float tf, float ti) {
-    float positiveDTheta = fmod((tf+360)-ti, 360.0);
-    float negativeDTheta = -360 + positiveDTheta;
-
-    if (fabs(positiveDTheta) <= fabs(negativeDTheta))
-      return positiveDTheta;
-    else return negativeDTheta;
-
-}
+    extern float DEG2RAD( const float deg );
+    extern float RAD2DEG( const float rad );
+    extern float GetDTheta(float tf, float ti);
+    
 
     /**
      * @brief Template Classes
@@ -93,8 +83,8 @@ namespace TerriBull {
     #ifndef Node_h
     #define Node_h
 
-    #include <iostream>
-    #include <string>
+    // #include <iostream>
+    // #include <string>
 
     using namespace std;
 
@@ -148,11 +138,11 @@ namespace TerriBull {
 
       int16_t getPriority() { return this->priority; }
 
-      friend ostream &operator<<(ostream &stream, const Node<T> &node) {
-          stream << "\tNode " << &node << ":" << endl;
-          stream << "\t" << *node.data <<"\t Priority: " << node.priority;
-          return stream;
-      }
+    //   friend ostream &operator<<(ostream &stream, const Node<T> &node) {
+    //       stream << "\tNode " << &node << ":" << endl;
+    //       stream << "\t" << *node.data <<"\t Priority: " << node.priority;
+    //       return stream;
+    //   }
     };
     #endif
 
@@ -404,17 +394,17 @@ namespace TerriBull {
 
     int length(){ return this->size;}
 
-    friend ostream& operator<<(ostream &stream, linkedlist<T> const &ll) {
-        stream << "LinkedList @ " << &ll << " of size " << ll.size << ", " << "data:" << endl;
-        Node<T> *curr = ll.head;
-        int16_t index = 0;
-        while(!(curr == nullptr)) {
-            stream << *curr << ": "<<"at Index "<<index<< endl;
-            curr = curr->getNext();
-            index++;
-        }
-        return stream;
-    }
+    // friend ostream& operator<<(ostream &stream, linkedlist<T> const &ll) {
+    //     stream << "LinkedList @ " << &ll << " of size " << ll.size << ", " << "data:" << endl;
+    //     Node<T> *curr = ll.head;
+    //     int16_t index = 0;
+    //     while(!(curr == nullptr)) {
+    //         stream << *curr << ": "<<"at Index "<<index<< endl;
+    //         curr = curr->getNext();
+    //         index++;
+    //     }
+    //     return stream;
+    // }
     };
 
     #endif
@@ -469,10 +459,12 @@ namespace TerriBull {
 
     #endif
 
-
+    #ifndef __TERRIBULL_GLOBALS_H
+    #define __TERRIBULL_GLOBALS_H
     /* Global Variables */
-    Logger logger("/VEX/filepath_for_logging.log"); /* Global Logger */
-    ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
+    extern Logger logger; /* Global Logger */
+    extern ::pros::Controller controller; /* Global Controller */
+    #endif
 };
     #ifndef __TERRIBULL_INCLUDES__
     #define __TERRIBULL_INCLUDES__
@@ -482,7 +474,6 @@ namespace TerriBull {
     #include "./lib/Vector2.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
-    #include "../MechanicalComponents/Drive/configurations/x_drive.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
@@ -492,7 +483,7 @@ namespace TerriBull {
     #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
     #include "../Controllers/SerialController/SerialController.hpp"
     #include "../Controllers/RoboController/RoboController.hpp"
-
+    #include "../Controllers/InputController/InputController.hpp"
     #endif
 
 #endif

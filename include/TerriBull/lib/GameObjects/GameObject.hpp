@@ -24,7 +24,7 @@ class TerriBull::GameObject {
         DISK, ROBOT, ROLLER
     } Types;
 
-    TerriBull::string identifier;
+    ::std::string identifier;
     Vector2 pos;
     float width;
     float height;
@@ -45,7 +45,7 @@ class TerriBull::GameObject {
         this->pos = pos;
     }
 
-    bool checkID(TerriBull::string identifier) { 
+    bool checkID(::std::string identifier) { 
         if (this->identifier != identifier) return false;
 
         return true;
