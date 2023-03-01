@@ -28,7 +28,9 @@ class TerriBull::RoboController {
     TerriBull::TaskManager* taskManager;
     TerriBull::MechanicalSystem* system;
     TerriBull::SerialController* serialController;
+    TerriBull::InputController* inputController;
     ConfigurationParser* configParser;
+    uint32_t currentTime, previousTime;
 
     public:
 
@@ -52,6 +54,8 @@ class TerriBull::RoboController {
     SerialController* getSerialController();
     /* Operational Methods */
     void Init();
+    void updateTime();
+    float delta();
     void Run();
     void Stop();
 };

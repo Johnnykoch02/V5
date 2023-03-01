@@ -17,7 +17,7 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) {
     /*Drive Setup*/
     this->pDrive = _drive;
     this->pDrive->setAnglePtr(this->pAngle);
-    this->pDrive->setPosPtr(&this->pPosition);
+    this->pDrive->setPosPtr(this->pPosition);
 }
 
 void MechanicalSystem::setStartingPosition(float x, float y){
@@ -37,17 +37,13 @@ TerriBull::Vector2  MechanicalSystem::getPosition(){
 }
 
 void TerriBull::MechanicalSystem::GoToPosition(float x, float y) {
-    Vector2 v = TerriBull::Vector2::cartesianToVector2(x, y);
-    float* voltages = this->pDrive->drive(v);
-    pros::lcd::set_text(7, "Voltages: " + ::std::to_string(voltages[0]) + " " + ::std::to_string(voltages[1]) + " " + ::std::to_string(voltages[2]) + " " + ::std::to_string(voltages[3]));
-    // pros::lcd::set_text(7, "Voltages: " + ::std::to_string(int(voltages)));
-    pros::lcd::set_text(6, this->pDrive->getType());
-    if(this->pDrive->getType() == "x_drive" ) {
-        pros::lcd::set_text(6, "Moving Xdrive");
-        x_drive_motors_set_voltages(voltages[0], voltages[1], voltages[2], voltages[3]);
-    }
+    Vector2 *v = TerriBull::Vector2::cartesianToVector2(x, y);
+    this->pDrive->drive(*v);
+    delete v;
+}
 
-    delete voltages;
+void TerriBull::MechanicalSystem::resetDrive() {
+    this->pDrive->reset();
 }
 
 float TerriBull::MechanicalSystem::getAngle() {

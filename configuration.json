@@ -1,67 +1,15 @@
 {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "configurations": [
         {
             "name": "Shooter_Big_Bot",
-            "controller_configurations": {
-                "default": {
-                    "LJ_X_AXIS": "MOVEMENT_FORWARD&BACKWARD",
-                    "LJ_Y_AXIS": "MOVEMENT_UP&DOWN",
-                    "RJ_X_AXIS": "",
-                    "RJ_Y_AXIS": "",
-                    "LT": "",
-                    "LB": "TURNING_LEFT",
-                    "L3": "",
-                    "RT": "",
-                    "RB": "TURNING_RIGHT",
-                    "R3": "",
-                    "A": "",
-                    "B": "",
-                    "X": "",
-                    "Y": ""
-                }
-            },
-            "controller_config": "default",
+            "controller_config": "AidanJoeShmo",
+            "controllerP=_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
                 "starting_position": {
                     "x": 0,
                     "y": 0
-                },
-                "imu": 5,
-                "drive": {
-                    "config": "x_drive",
-                    "motor_ports": [1, 2, 3, 4]
-                }
-            }
-        },
-        {
-            "name": "Shooter_Small_Bot",
-            "controller_configurations": {
-                "default": {
-                    "LJ_X_AXIS": "MOVEMENT_FORWARD&BACKWARD",
-                    "LJ_Y_AXIS": "MOVEMENT_UP&DOWN",
-                    "RJ_X_AXIS": "",
-                    "RJ_Y_AXIS": "",
-                    "LT": "",
-                    "LB": "TURNING_LEFT",
-                    "L3": "",
-                    "RT": "",
-                    "RB": "TURNING_RIGHT",
-                    "R3": "",
-                    "A": "",
-                    "B": "",
-                    "X": "",
-                    "Y": ""
-                }
-            },
-            "controller_config": "default",
-            
-            "mechanical_system": {
-                "starting_angle": 90,
-                "starting_position": {
-                    "x": 0,
-                    "y":0
                 },
                 "imu": 5,
                 "drive": {

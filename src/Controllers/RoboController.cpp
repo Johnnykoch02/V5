@@ -37,7 +37,6 @@ SerialController* RoboController::getSerialController() {
 
 void TerriBull::RoboController::Init() {
     /* TBD                                          <-Fix this file path-> */
-    pros::lcd::set_text(0,"Entering Init");
     this->configParser = new ConfigurationParser("/usd/configuration.json", "Shooter_Big_Bot");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
@@ -47,12 +46,15 @@ void TerriBull::RoboController::Init() {
             logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ ::std::to_string(configParser->getErrCode())));
             // exit(1);
         }
+        this->inputController = this->configParser->getInputControllerConfig(this);
+        if (inputController == nullptr) {
+            exit(1);
+        }
         /* Init Task Manager */
         this->taskManager = new TaskManager(); /* TODO: Needs TaskManager::Init() */
 
         /* Init Serial Controller */
         this->serialController = new SerialController(); /* TODO: Needs TaskManager::Init() */
-
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
@@ -61,7 +63,8 @@ void TerriBull::RoboController::Init() {
         //         new DriveTask(Vector2::cartesianToVector2((this->system->getPosition()).x+50, (this->system->getPosition()).y));
         //     })
         // );
-
+        this->previousTime = pros::millis();
+        this->currentTime = pros::millis();
     }
     else {
         pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
@@ -72,19 +75,18 @@ void TerriBull::RoboController::Init() {
 
 void TerriBull::RoboController::Run() {
     // this->taskManager->run();
-    pros::lcd::set_text(0,"Parsing Status: "+::std::to_string(configParser->getErrCode()) );
+    this->updateTime();
     // this->serialController->update();
     // this->objHandler->update();
-
-    int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);
-    int xInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_X);
-    if (abs(yInput) < 5) yInput = 0;
-    if (abs(xInput)<5) xInput = 0;
-    if (yInput != 0 || xInput != 0) {
-        pros::lcd::set_text(4,"Translation");
-        Vector2 currentPos = system->getPosition();
-      this->system->GoToPosition(xInput, yInput);
-    } else pros::lcd::set_text(4,"No Translation");
+    this->inputController->Update(this->delta());
     pros::delay(10);
-    
+}
+
+void TerriBull::RoboController::updateTime() {
+    this->previousTime = this->currentTime;
+    this->currentTime = pros::millis();
+}
+
+float TerriBull::RoboController::delta() {
+    return (this->currentTime - this->previousTime) / 1000.0f;
 }

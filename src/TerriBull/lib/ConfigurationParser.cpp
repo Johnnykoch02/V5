@@ -28,7 +28,23 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
     }
 
     else return nullptr;
+}
+
+TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboController* roboController) {
+    if (this->pConfigVariables.ControllerConfig.isNull()) {
+        this->errCode = VARIABLE_PARSE_ERROR;
+        return nullptr;
     }
+    Json::String ConfigType = this->pConfigVariables.ControllerConfig.asString();
+    int deadzone = this->pConfigVariables.ControllerDeadzone.asInt();
+
+    /* Controller Configurations that are Currently Supported */
+    if (ConfigType == "AidanJoeShmo") {
+        return new AidanJoeShmo(roboController, deadzone);
+    }
+
+    return nullptr;
+}
 
 TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
     if (this->pConfigVariables.Config.isNull() || this->pConfigVariables.IMUConfig.isNull()) {

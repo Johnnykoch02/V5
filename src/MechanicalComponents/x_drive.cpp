@@ -49,9 +49,7 @@ void X_Drive::setVoltage(float* vals)  {
 
 float* X_Drive::drive(TerriBull::Vector2 pos) {
     /* Theta of desired Modified By our current Look Angle */
-    float* voltages = new float[4];
     float* vals = new float[4];
-
     float angle = pos.theta - (*(this->pCurrentAngle) - 90);
     angle = (angle<0) ? 360.0 + angle : angle;
     int x = int(round(angle/45)) % 8;
@@ -59,9 +57,9 @@ float* X_Drive::drive(TerriBull::Vector2 pos) {
     float pct = 0;
 
     this->currentError = (pos - *(this->pCurrentPos)).r;
-
+    this->sumError+=currentError;
     /* Basic PID Equation */
-    pct = kP*currentError + kI*currentError*currentError + kD*this->dError();
+    pct = kP*currentError + kI*this->sumError + kD*this->dError();
 
 
     // // pros::lcd::set_text(4,::std::to_string(x) );
@@ -88,13 +86,12 @@ float* X_Drive::drive(TerriBull::Vector2 pos) {
         break;
         default:
           // ::pros::lcd::set_text(4, "ERROR" );
-          delete[] voltages;
           return nullptr;
     }
     this->setVoltage(vals);
     this->previousError = this->currentError;
     delete[] vals;
-    return voltages;
+    return nullptr;
 }
 
 void X_Drive::change_orientation(float theta) {
@@ -104,4 +101,11 @@ void X_Drive::change_orientation(float theta) {
 
 
 void X_Drive::reset() {
+    this->pMotorA->move(0);
+    this->pMotorB->move(0);
+    this->pMotorC->move(0);
+    this->pMotorD->move(0);
+    this->currentError = 0;
+    this->sumError = 0;
+    this->previousError = 0;
 }

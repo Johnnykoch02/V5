@@ -51,6 +51,8 @@ namespace TerriBull {
     class Drive;
     /* Main Controller for the Robot */
     class RoboController;
+    /* Takes Controller Input and Controls the Robot */
+    class InputController;
     /* Object Management and Data Information */
     class ObjectHandler;
     /* Game Object Class */
@@ -481,7 +483,7 @@ namespace TerriBull {
     #include "../Controllers/ObjectHandler/ObjectHandler.hpp"
     #include "../Controllers/SerialController/SerialController.hpp"
     #include "../Controllers/RoboController/RoboController.hpp"
-
+    #include "../Controllers/InputController/InputController.hpp"
     #endif
 
 #endif

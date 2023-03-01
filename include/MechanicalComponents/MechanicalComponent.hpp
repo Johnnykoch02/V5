@@ -21,6 +21,7 @@ class TerriBull::MechanicalComponent  {
     //Vector for
     float currentError;
     float previousError;
+    float sumError;
 
     float kP, kD, kI;
 

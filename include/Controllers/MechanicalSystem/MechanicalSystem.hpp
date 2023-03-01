@@ -24,7 +24,7 @@ class TerriBull::MechanicalSystem {
     private:
         ::pros::Imu* pImu;
         TerriBull::Drive * pDrive;
-        TerriBull::Vector2 pPosition;
+        TerriBull::Vector2 * pPosition;
         float * pAngle;
         float pStartingAngle;
 
@@ -33,6 +33,7 @@ class TerriBull::MechanicalSystem {
     MechanicalSystem(int _imu, TerriBull::Drive * _drive);
 
     void GoToPosition(float x, float y);
+    void resetDrive();
     void TurnToAngle(float theta);
 
 
