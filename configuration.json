@@ -15,6 +15,11 @@
                 "drive": {
                     "config": "x_drive",
                     "motor_ports": [1, 2, 3, 4]
+                },
+                "intake": {
+                    "config": "IntakeUni",
+                    "motor_ports": [5],
+                    "max_speed": 100
                 }
             }
         }

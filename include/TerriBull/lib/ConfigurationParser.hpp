@@ -16,13 +16,6 @@
 #include<iostream>
 #include "../../../src/dist/json/json.h"
 #include "../TerriBull.hpp"
-/* Include All Items Needed for Development of System */
-/* Drive */
-#include "../../MechanicalComponents/Drive/configurations/x_drive.hpp"
-
-/* Ctrls*/
-#include "../../Controllers/InputController/Configurations/AidanJoeShmo.hpp"
-/*END INCLUDE*/
 #include <string>
 #include <fstream>
 #include <stdio.h>
@@ -100,6 +93,7 @@ class ConfigurationParser {
         Functions to return Robot Configuration
         */
         TerriBull::Drive* getDriveConfig();
+        TerriBull::Intake* getIntakeConfig();
         TerriBull::MechanicalSystem* getMechanicalSystemConfig();
         TerriBull::InputController* getInputControllerConfig(TerriBull::RoboController* roboController);
 

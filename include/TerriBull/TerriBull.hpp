@@ -21,12 +21,14 @@
 #include <string>
 #include <cmath>
 
+#define MIN(a, b) (((a) < (b))? (a) : (b))
+#define MAX(a, b) (((a) > (b))? (a) : (b))
+
 class ConfigurationParser;
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS
 */
 namespace TerriBull {
-
     /**
      * @brief TerriBull Robotics Utilities and Class Predeclarations
      *
@@ -47,8 +49,12 @@ namespace TerriBull {
     class MechanicalSystem;
     /* Virtual */
     class MechanicalComponent;
-    /* Abstract Class for Drivetrain */
+    /* Abstract Classes for Mechanical Components */
     class Drive;
+    class Expansion;
+    class Intake;
+    class Roller;
+    class Shooter; /*FlyWheel Catapult*/
     /* Main Controller for the Robot */
     class RoboController;
     /* Takes Controller Input and Controls the Robot */
@@ -474,6 +480,7 @@ namespace TerriBull {
     #include "./lib/Vector2.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
+    #include "../MechanicalComponents/Intakes/intake.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
     #include "./lib/Tasking/DriveTasking/DriveTask.hpp"

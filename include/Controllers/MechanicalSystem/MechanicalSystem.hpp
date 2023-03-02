@@ -24,6 +24,10 @@ class TerriBull::MechanicalSystem {
     private:
         ::pros::Imu* pImu;
         TerriBull::Drive * pDrive;
+        TerriBull::Intake * pIntake;
+        TerriBull::Shooter * pShooter;
+        TerriBull::Roller* pRoller;
+        TerriBull::Expansion* pExpansion;
         TerriBull::Vector2 * pPosition;
         float * pAngle;
         float pStartingAngle;
@@ -31,12 +35,6 @@ class TerriBull::MechanicalSystem {
     public:
 
     MechanicalSystem(int _imu, TerriBull::Drive * _drive);
-
-    void GoToPosition(float x, float y);
-    void resetDrive();
-    void TurnToAngle(float theta);
-
-
     float getAngle();
     
     void setStartingAngle(float angle) {
@@ -55,6 +53,26 @@ class TerriBull::MechanicalSystem {
     void update();
 
     /* API TO Mechanical System */
+    int GoToPosition(float x, float y);
+    void resetDrive();
+    int TurnToAngle(float theta);
+
+    int turnOnIntake(int direction);
+    int turnOffIntake();
+
+    /*Setters*/
+    void setIntake(TerriBull::Intake * _intake);
+    void setShooter(TerriBull::Shooter * _shooter);
+    void setRoller(TerriBull::Roller * _roller);
+    void setExpansion(TerriBull::Expansion * _expansion);
+    /*Getters*/
+    TerriBull::Intake * getIntake();
+    TerriBull::Shooter * getShooter();
+    TerriBull::Roller * getRoller();
+    TerriBull::Expansion * getExpansion();
+    TerriBull::Drive * getDrive();
+    
+
 
 };
 

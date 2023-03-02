@@ -11,6 +11,18 @@
  * 
  */
 #include "../../../include/TerriBull/lib/ConfigurationParser.hpp"
+
+/* Include All Items Needed for Development of System */
+/* Drive */
+#include "../../MechanicalComponents/Drive/configurations/tank_drive_std.hpp"
+#include "../../MechanicalComponents/Drive/configurations/x_drive.hpp"
+
+/* Intake */
+#include "../../MechanicalComponents/Intakes/configurations/Intake_Uni.hpp"
+/* Ctrls*/
+#include "../../Controllers/InputController/Configurations/AidanJoeShmo.hpp"
+/*END INCLUDE*/
+
 ConfigurationParser::~ConfigurationParser () {
     pFile->close();
     delete pFile;
@@ -25,6 +37,10 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
     /* Drive Configurations that are Currently Supported */
     if (DriveType == "x_drive") {
         return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt());
+    }
+    if (DriveType == "tank_drive_std") {
+
+        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorPorts[5].asInt());
     }
 
     else return nullptr;
@@ -41,6 +57,22 @@ TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboCo
     /* Controller Configurations that are Currently Supported */
     if (ConfigType == "AidanJoeShmo") {
         return new AidanJoeShmo(roboController, deadzone);
+    }
+
+    return nullptr;
+}
+
+TerriBull::Intake* ConfigurationParser::getIntakeConfig() {
+    
+    Json::Value IntakeConfig = this->pConfigVariables.Config["mechanical_system"]["intake"];
+    Json::String ConfigType = IntakeConfig["config"].asString();
+    if (ConfigType == "") {
+        this->errCode = VARIABLE_PARSE_ERROR;
+        return nullptr;
+    }
+    /* Controller Configurations that are Currently Supported */
+    if (ConfigType == "IntakeUni") {
+        return new Intake_Uni(IntakeConfig["motor_ports"][0].asInt(), IntakeConfig["max_speed"].asInt());
     }
 
     return nullptr;
@@ -78,8 +110,12 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
 
         }
         else if (ref == "intake") {
-
+            TerriBull::Intake* intake = this->getIntakeConfig();
+            if (intake != nullptr) {
+                system->setIntake(intake);
+            }
         }
+
         else if (ref == "lift") {
 
         }

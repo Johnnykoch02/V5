@@ -28,11 +28,12 @@ class X_Drive : public TerriBull::Drive {
     public:
     X_Drive(int portA, int portB, int portC, int portD) : TerriBull::Drive(), pA(portA), pB(portB), pC(portC), pD(portD) {
       this->pType = "X-Drive";
-      this->pMotorA = new pros::Motor(pA);
-      this->pMotorB = new pros::Motor(pB);
-      this->pMotorC = new pros::Motor(pC);
-      this->pMotorD = new pros::Motor(pD);
+      this->pMotorA = new pros::Motor(pA, pros::E_MOTOR_GEARSET_18, false);
+      this->pMotorB = new pros::Motor(pB, pros::E_MOTOR_GEARSET_18, false);
+      this->pMotorC = new pros::Motor(pC, pros::E_MOTOR_GEARSET_18, true);
+      this->pMotorD = new pros::Motor(pD, pros::E_MOTOR_GEARSET_18, true);
       this->setPID(0.5, 0.2, 0.3);
+      this->kPTheta = 0.5;this->kDTheta = 0.2;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorB->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorC->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -40,15 +41,12 @@ class X_Drive : public TerriBull::Drive {
     }
     ~X_Drive();
 
-    float* drive(TerriBull::Vector2 pos);
-    // float dError();
-      
+    int drive(TerriBull::Vector2 pos);
     void reset();
     void resultant_vector() {}
     void tare_encoders()  {}
 
-
-    void change_orientation(float theta);
+    int change_orientation(float theta);
 
     // void resultant_vector();
     // void tare_encoders();
