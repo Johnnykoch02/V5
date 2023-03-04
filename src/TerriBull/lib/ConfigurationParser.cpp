@@ -14,14 +14,14 @@
 
 /* Include All Items Needed for Development of System */
 /* Drive */
-#include "../../MechanicalComponents/Drive/configurations/tank_drive_std.hpp"
-#include "../../MechanicalComponents/Drive/configurations/x_drive.hpp"
+#include "../../../include/MechanicalComponents/Drive/configurations/tank_drive_std.hpp"
+#include "../../../include/MechanicalComponents/Drive/configurations/x_drive.hpp"
 
 /* Intake */
-#include "../../MechanicalComponents/Intakes/configurations/Intake_Uni.hpp"
-#include "../../MechanicalComponents/Intakes/configurations/Intake_Duo.hpp"
+#include "../../../include/MechanicalComponents/Intakes/configurations/Intake_Uni.hpp"
+#include "../../../include/MechanicalComponents/Intakes/configurations/Intake_Duo.hpp"
 /* Ctrls*/
-#include "../../Controllers/InputController/Configurations/AidanJoeShmo.hpp"
+#include "../../../include/Controllers/InputController/Configurations/AidanJoeShmo.hpp"
 /*END INCLUDE*/
 
 ConfigurationParser::~ConfigurationParser () {
