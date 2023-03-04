@@ -18,8 +18,8 @@
 #include "../../../include/MechanicalComponents/Drive/configurations/x_drive.hpp"
 
 /* Intake */
-#include "../../../include/MechanicalComponents/Intakes/configurations/Intake_Uni.hpp"
-#include "../../../include/MechanicalComponents/Intakes/configurations/Intake_Duo.hpp"
+#include "../../../include/MechanicalComponents/Intakes/Configurations/Intake_Uni.hpp"
+#include "../../../include/MechanicalComponents/Intakes/Configurations/Intake_Duo.hpp"
 /* Ctrls*/
 #include "../../../include/Controllers/InputController/Configurations/AidanJoeShmo.hpp"
 /*END INCLUDE*/
