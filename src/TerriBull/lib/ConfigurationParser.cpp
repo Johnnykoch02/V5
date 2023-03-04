@@ -40,7 +40,8 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
         return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt());
     }
     if (DriveType == "tank_drive_std") {
-        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorPorts[5].asInt());
+
+        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorReverse[4].asBool(), this->pConfigVariables.DriveMotorPorts[5].asInt(), this->pConfigVariables.DriveMotorReverse[5].asBool());
     }
 
     else return nullptr;

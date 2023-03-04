@@ -31,6 +31,33 @@
                     "max_speed": 100
                 }
             }
+        },
+        {
+            "name": "Left_Nut",
+            "controller_config": "AidanJoeShmo",
+            "controller_deadzone": 5,
+            "mechanical_system": {
+                "starting_angle": 90,
+                "starting_position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "imu": 11,
+                "drive": {
+                    "config": "tank_drive_std",
+                    "motor_ports": [1, 3, 2, 4, 6, 5],
+                    "reverse_motors": [0, 1, 0, 0, 1, 0]
+                },
+                "roller": {
+                    "config": "RollerDual",
+                    "motor_ports": [6]
+                },
+                "shooter": {
+                    "config": "CatapultZolt",
+                    "motor_ports": [8, 9],
+                    "max_speed": 100
+                }
+            }
         }
     ]
 }

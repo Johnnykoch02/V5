@@ -36,6 +36,7 @@ class ConfigurationParser {
         */
         Json::Value DriveConfig;
         Json::Value DriveMotorPorts;
+        Json::Value DriveMotorReverse;
         /* IMU Sensor */
         Json::Value IMUConfig;
         Json::Value StartingAngle;
@@ -81,6 +82,7 @@ class ConfigurationParser {
             this->pConfigVariables.ControllerDeadzone = this->pConfigVariables.Config["controller_deadzone"];
             this->pConfigVariables.DriveConfig = this->pConfigVariables.Config["mechanical_system"]["drive"]["config"];
             this->pConfigVariables.DriveMotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
+            this->pConfigVariables.DriveMotorReverse = this->pConfigVariables.Config["mechanical_system"]["drive"]["reverse_motors"];
             this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
             this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
             this->pConfigVariables.StartingPos = this->pConfigVariables.Config["mechanical_system"]["starting_position"];

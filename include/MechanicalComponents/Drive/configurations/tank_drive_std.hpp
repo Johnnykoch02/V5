@@ -27,14 +27,14 @@ class Tank_Drive_Std : public TerriBull::Drive {
     void setVoltage(float* vals);
 
     public:
-    Tank_Drive_Std(int portA, int portB, int portC, int portD, int portE, int portF) : TerriBull::Drive(), pA(portA), pB(portB), pC(portC), pD(portD), pE(portE), pF(portF), kPThetaTranslation(0.7) {
+    Tank_Drive_Std(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int portE,bool eReverse, int portF, bool fReverse) : TerriBull::Drive(), pA(portA), pB(portB), pC(portC), pD(portD), pE(portE), pF(portF), kPThetaTranslation(0.7) {
       this->pType = "Tank-Drive-Std";
-      this->pMotorA = new pros::Motor(pA);
-      this->pMotorB = new pros::Motor(pB);
-      this->pMotorC = new pros::Motor(pC);
-      this->pMotorD = new pros::Motor(pD);
-      this->pMotorE = new pros::Motor(pE);
-      this->pMotorF = new pros::Motor(pF);
+      this->pMotorA = new pros::Motor(pA, aReverse);
+      this->pMotorB = new pros::Motor(pB, bReverse);
+      this->pMotorC = new pros::Motor(pC, cReverse);
+      this->pMotorD = new pros::Motor(pD, dReverse);
+      this->pMotorE = new pros::Motor(pE, eReverse);
+      this->pMotorF = new pros::Motor(pF, fReverse);
       this->setPID(2.5, 2.2, 1.3);
       this->kPTheta = 0.5;this->kDTheta = 0.2;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
