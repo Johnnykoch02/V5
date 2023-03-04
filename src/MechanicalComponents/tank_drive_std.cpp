@@ -90,7 +90,39 @@ void Tank_Drive_Std::reset() {
     this->pMotorB->move(0);
     this->pMotorC->move(0);
     this->pMotorD->move(0);
+    this->pMotorE->move(0);
+    this->pMotorF->move(0);
     this->currentError = 0;
     this->sumError = 0;
     this->previousError = 0;
+}
+
+Vector2* Tank_Drive_Std::resultant_vector() {
+    float l1 = this->pMotorA->get_position();
+    float l2 = this->pMotorB->get_position();
+    float l3 = this->pMotorC->get_position();
+    float r1 = this->pMotorD->get_position();
+    float r2 = this->pMotorE->get_position();
+    float r3 = this->pMotorF->get_position();
+    float left = (l1 + l2 + l3) / 3;
+    float right = (r1 + r2 + r3) / 3;
+    int leftDir = fabs(left) / left;
+    int rightDir = fabs(right) / right;
+    float leftAngle = (leftDir > 0) ? *(this->pCurrentAngle) : fmod((180 + leftAngle), 360.0);
+    float rightAngle = (rightDir > 0)? *(this->pCurrentAngle) : fmod((180 + rightAngle), 360.0);
+    Vector2* vecLeft = Vector2::polarToVector2(fabs(left), leftAngle);
+    Vector2* vecRight = Vector2::polarToVector2(fabs(right), rightAngle);
+    Vector2* resultantVector = (*vecLeft + *vecRight) * 0.5;
+    
+    /* Cleanup */
+    this->pMotorA->tare_position();
+    this->pMotorB->tare_position();
+    this->pMotorC->tare_position();
+    this->pMotorD->tare_position();
+    this->pMotorE->tare_position();
+    this->pMotorF->tare_position();
+    delete vecLeft;
+    delete vecRight;
+    
+    return resultantVector;    
 }

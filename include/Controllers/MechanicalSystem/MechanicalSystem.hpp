@@ -48,9 +48,10 @@ class TerriBull::MechanicalSystem {
 
     float getDriveDError() const;
 
-    TerriBull::Vector2 getPosition();
+    TerriBull::Vector2* getPosition();
 
-    void update();
+    void Init();
+    void update(float delta);
 
     /* API TO Mechanical System */
     int GoToPosition(float x, float y);

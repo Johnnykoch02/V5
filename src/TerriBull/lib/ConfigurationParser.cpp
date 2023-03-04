@@ -19,6 +19,7 @@
 
 /* Intake */
 #include "../../MechanicalComponents/Intakes/configurations/Intake_Uni.hpp"
+#include "../../MechanicalComponents/Intakes/configurations/Intake_Duo.hpp"
 /* Ctrls*/
 #include "../../Controllers/InputController/Configurations/AidanJoeShmo.hpp"
 /*END INCLUDE*/
@@ -29,7 +30,7 @@ ConfigurationParser::~ConfigurationParser () {
 }
 
 TerriBull::Drive* ConfigurationParser::getDriveConfig() {
-    if (this->pConfigVariables.DriveConfig.isNull() || this->pConfigVariables.DriveMotorPorts.isNull()) {
+    /*return new X_Drive(1, 2, 3, 4);*/if (this->pConfigVariables.DriveConfig.isNull() || this->pConfigVariables.DriveMotorPorts.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }
@@ -39,7 +40,6 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
         return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt());
     }
     if (DriveType == "tank_drive_std") {
-
         return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorPorts[5].asInt());
     }
 
@@ -47,6 +47,7 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
 }
 
 TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboController* roboController) {
+    // return new AidanJoeShmo(roboController, 5);
     if (this->pConfigVariables.ControllerConfig.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
@@ -63,8 +64,7 @@ TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboCo
 }
 
 TerriBull::Intake* ConfigurationParser::getIntakeConfig() {
-    
-    Json::Value IntakeConfig = this->pConfigVariables.Config["mechanical_system"]["intake"];
+    /*return nullptr;*/Json::Value IntakeConfig = this->pConfigVariables.Config["mechanical_system"]["intake"];
     Json::String ConfigType = IntakeConfig["config"].asString();
     if (ConfigType == "") {
         this->errCode = VARIABLE_PARSE_ERROR;
@@ -73,6 +73,9 @@ TerriBull::Intake* ConfigurationParser::getIntakeConfig() {
     /* Controller Configurations that are Currently Supported */
     if (ConfigType == "IntakeUni") {
         return new Intake_Uni(IntakeConfig["motor_ports"][0].asInt(), IntakeConfig["max_speed"].asInt());
+    }
+    if (ConfigType == "IntakeDuo") {
+        return new Intake_Duo(IntakeConfig["motor_ports"][0].asInt(),IntakeConfig["motor_ports"][1].asInt(), IntakeConfig["max_speed"].asInt());
     }
 
     return nullptr;
@@ -102,7 +105,9 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
     TerriBull::MechanicalSystem* system = new TerriBull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive);
     system->setStartingAngle(this->pConfigVariables.StartingAngle.asFloat());
     system->setStartingPosition(this->pConfigVariables.StartingPos["x"].asFloat(), this->pConfigVariables.StartingPos["y"].asFloat());
-    
+    system->Init();
+    return system;
+
     /* Iterate through Mechanical System Config Member Fields */
     for (auto ref : this->pConfigVariables.Config["mechanical_system"].getMemberNames()) {
         /* This Section is to be Continued */

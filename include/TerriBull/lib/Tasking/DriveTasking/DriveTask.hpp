@@ -15,18 +15,20 @@
 // #include "../Task.hpp"
 #include "../../../TerriBull.hpp"
 
-class DriveTask : public TerriBull::Task {
+class TerriBull::DriveTask : public TerriBull::Task {
+    public: 
+    typedef enum {TRANSLATION, ORIENTATION} DriveType;
+    
     private:
     float approachOrientation;
     TerriBull::Vector2* pos;
-    typedef enum {TRANSLATION, ORIENTATION} DriveType;
     DriveType driveType;
     TerriBull::MechanicalSystem* system;
 
     bool deleteOnCleanup;
 
     public:
-
+    
     DriveType taskType;
     DriveTask(TerriBull::Vector2* pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system);
 

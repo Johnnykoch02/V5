@@ -4,7 +4,7 @@
         {
             "name": "Shooter_Big_Bot",
             "controller_config": "AidanJoeShmo",
-            "controllerP=_deadzone": 5,
+            "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
                 "starting_position": {
@@ -19,6 +19,15 @@
                 "intake": {
                     "config": "IntakeUni",
                     "motor_ports": [5],
+                    "max_speed": 100
+                },
+                "roller": {
+                    "config": "RollerUni",
+                    "motor_ports": [6]
+                },
+                "shooter": {
+                    "config": "ShooterFlyWheelSB",
+                    "motor_ports": [8, 9],
                     "max_speed": 100
                 }
             }

@@ -15,9 +15,14 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake
     /*IMU Setup*/
     this->pImu = new ::pros::Imu(_imu);
     /*Drive Setup*/
-    this->pDrive = _drive;
+    this->pDrive = _drive;    
+    this->update(0);
+}
+
+void MechanicalSystem::Init() {
     this->pDrive->setAnglePtr(this->pAngle);
     this->pDrive->setPosPtr(this->pPosition);
+    
 }
 
 void MechanicalSystem::setStartingPosition(float x, float y){
@@ -32,7 +37,7 @@ float  MechanicalSystem::getDriveDError() const {
     return this->pDrive->dError();
 }
 
-TerriBull::Vector2  MechanicalSystem::getPosition(){
+TerriBull::Vector2*  MechanicalSystem::getPosition() {
     return this->pPosition;
 }
 
@@ -42,11 +47,11 @@ void TerriBull::MechanicalSystem::resetDrive() {
 
 float TerriBull::MechanicalSystem::getAngle() {
   float theta = this->pImu->get_heading(); /*TODO: Change hard Coded 90 to be a parsed variable */
-  *(this->pAngle) = ::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);
+  *(this->pAngle) = 90;//::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);
   return *(this->pAngle);
 }
 
-void TerriBull::MechanicalSystem::update() {
+void TerriBull::MechanicalSystem::update(float delta) {
     this->getAngle();
 }
 

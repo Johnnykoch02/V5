@@ -58,13 +58,14 @@ void TerriBull::RoboController::Init() {
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
-        // this->taskManager->addTaskSet(
-        //     new TaskList({
-        //         new DriveTask(Vector2::cartesianToVector2((this->system->getPosition()).x+50, (this->system->getPosition()).y));
-        //     })
-        // );
+        this->taskManager->addTaskSet(
+            new TaskList({
+                new TerriBull::DriveTask(Vector2::cartesianToVector2((this->system->getPosition())->x+50, (this->system->getPosition())->y), 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+            })
+        );
         this->previousTime = pros::millis();
         this->currentTime = pros::millis();
+        
     }
     else {
         pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
@@ -74,11 +75,19 @@ void TerriBull::RoboController::Init() {
 }
 
 void TerriBull::RoboController::Run() {
-    // this->taskManager->run();
     this->updateTime();
+    this->system->update(this->delta());
+    if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
+        this->taskManager->run();
+    } else {
+        this->inputController->Update(this->delta());
+    }
+    
     // this->serialController->update();
     // this->objHandler->update();
-    this->inputController->Update(this->delta());
+
+
+
     pros::delay(10);
 }
 

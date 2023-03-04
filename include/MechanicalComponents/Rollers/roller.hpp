@@ -16,10 +16,15 @@
 
 
 class TerriBull::Roller : public TerriBull::MechanicalComponent {
+    protected:
+    float sumTime;
+    float currentPos;
     public:
+
     Roller() : TerriBull::MechanicalComponent() {}
 
-    virtual int Expand() {}
+    virtual int Spin(int direction, float time) = 0;
+    virtual int SpinToPos(float pos) = 0;
 };     
 
 #endif // ROLLER_H

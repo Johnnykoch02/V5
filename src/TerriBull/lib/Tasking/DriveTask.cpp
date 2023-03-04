@@ -39,12 +39,11 @@ void DriveTask::update(float delta) {
         switch(driveType) {
             case TRANSLATION:
                 this->system->GoToPosition(this->pos->x, this->pos->y);
-                this->finishedFlag = this->system->getDriveError() < 0.05 && this->system->getDriveDError() < 0.05; /* Some Threshold */
                 break;
             case ORIENTATION:
                 this->system->TurnToAngle(this->approachOrientation);
-                this->finishedFlag = this->system->getDriveError() < 0.05 && this->system->getDriveDError() < 0.05;; /* Some Threshold */
                 break;
         }
+        this->finishedFlag = fabs(this->system->getDriveError()) < 0.5 && fabs(this->system->getDriveDError()) < 0.05; /* Some Threshold */
     }
 }

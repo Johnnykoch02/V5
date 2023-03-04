@@ -31,7 +31,7 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     virtual int drive(Vector2 pos) = 0;
     virtual int change_orientation(float theta) = 0;
     virtual void reset() = 0;
-    virtual void resultant_vector() = 0;
+    virtual Vector2* resultant_vector() = 0;
     virtual void tare_encoders() = 0;
 };     
 

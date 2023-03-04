@@ -28,18 +28,20 @@ class TerriBull::MechanicalComponent  {
     public:
     MechanicalComponent() : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE) {}
  
-    virtual float getError() const final {
-        return currentError;
-    } 
+    virtual float getError() const final { return currentError; } 
+    
     virtual float dError() const final{
         return (this->currentError - this->previousError);
     }
+
+    virtual bool isReset() const final { return this->sumError == 0; }
 
     virtual void setPID(float kP, float kD, float kI) final {
         this->kP = kP;
         this->kD = kD;
         this->kI = kI;
     }
+
 
     virtual ::std::string getType() const final {
         return this->pType;

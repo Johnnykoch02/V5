@@ -42,6 +42,7 @@ namespace TerriBull {
     class TaskManager;
     /* Task Data Container */
     class Task;
+    class DriveTask;
     typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;

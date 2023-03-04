@@ -28,11 +28,11 @@ class TerriBull::Vector2 {
         ~Vector2() {}
         Vector2(const TerriBull::Vector2& v) : x(v.x), y(v.y), r(v.r), theta(v.theta) {}
         Vector2(const TerriBull::Vector2*  v) : x(v->x), y(v->y), r(v->r), theta(v->theta) {}
-        ::TerriBull::Vector2 operator *(float scale) {
+        ::TerriBull::Vector2* operator *(const float scale) {
             Vector2* v = new Vector2();
             v->x = scale * this->x;
             v->y = scale * this->y;
-            v->r = this->r;
+            v->r = ::std::sqrt(v->x*v->x+v->y*v->y);
             v->theta = this->theta;
             return v;
         }

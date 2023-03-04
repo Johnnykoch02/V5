@@ -46,13 +46,9 @@ class Tank_Drive_Std : public TerriBull::Drive {
 
     int drive(TerriBull::Vector2 pos);
     void reset();
-    void resultant_vector() {}
+    Vector2* resultant_vector();
     void tare_encoders()  {}
     int change_orientation(float theta);
-
-    // void resultant_vector();
-    // void tare_encoders();
-    
 
 };
 
