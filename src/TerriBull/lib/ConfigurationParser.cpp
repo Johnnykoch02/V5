@@ -129,6 +129,6 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
         /* TODO: add other system components here */
 
     }
-    pros::lcd::set_text(4, "Created System : ");
+    // pros::lcd::set_text(4, "Created System : ");
     return system;
 }

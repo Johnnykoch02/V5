@@ -49,10 +49,10 @@ int X_Drive::drive(TerriBull::Vector2 pos) {
     
     /* Basic PID Equation */
     this->currentError = (pos - *(this->pCurrentPos)).r;
-    ::pros::lcd::set_text(6, "Drive Error: " + std::to_string(this->pCurrentPos->theta));
+    // ::pros::lcd::set_text(6, "Drive Error: " + std::to_string(this->pCurrentPos->theta));
     this->sumError+=currentError;
     pct = kP*currentError + kI*this->sumError + kD*this->dError();
-    ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pct));
+    // ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pct));
 
     /* X Drive Drives in all 8 directions, pick the direction an apply the right direction modifier */
     switch(x) {

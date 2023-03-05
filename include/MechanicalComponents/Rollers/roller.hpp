@@ -19,12 +19,14 @@ class TerriBull::Roller : public TerriBull::MechanicalComponent {
     protected:
     float sumTime;
     float currentPos;
+    int maxSpeed;
     public:
 
-    Roller() : TerriBull::MechanicalComponent() {}
+    Roller(int maxSpeed) : TerriBull::MechanicalComponent(), maxSpeed(maxSpeed) {}
 
     virtual int Spin(int direction, float time) = 0;
     virtual int SpinToPos(float pos) = 0;
+    virtual void reset() = 0;
 };     
 
 #endif // ROLLER_H

@@ -10,14 +10,14 @@
  * 
  */
 #include "../../../../include/TerriBull/lib/Tasking/DriveTasking/DriveTask.hpp"
-DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : approachOrientation(_orientation), driveType(_driveType) {
+DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation){
     this->pos = pos;
     this->deleteOnCleanup = false;
     this->approachOrientation = _orientation;
     this->system = _system;
 }
 
-DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : approachOrientation(_orientation), driveType(_driveType) {
+DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation){
     this->pos = new TerriBull::Vector2(pos);
     this->deleteOnCleanup = true;
     this->approachOrientation = _orientation;

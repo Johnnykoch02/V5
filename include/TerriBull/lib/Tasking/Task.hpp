@@ -22,11 +22,13 @@ typedef enum TaskTypes {DRIVE, ROLLER, SHOOTER, INTERNAL_VARIABLES} TaskTypes;
     
    private:
    TaskTypes pType;
+   TerriBull::MechanicalSystem* system;
 
    public:
    bool finishedFlag;
    // virtual Task(Task *task) = 0;
    // ~Task();
+   Task(TaskTypes type, TerriBull::MechanicalSystem* system) :pType(type), system(system) {}
    virtual void init() = 0;
    virtual void update(float delta) = 0;
  };

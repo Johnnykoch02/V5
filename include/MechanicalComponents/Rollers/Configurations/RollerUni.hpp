@@ -9,24 +9,25 @@
  * @copyright Copyright (c) 2022
  *
 */
-#ifndef INTAKE_UNI_H
-#define INTAKE_UNI_H
+#ifndef ROLLER_UNI_H
+#define ROLLER_UNI_H
 
 #include "../roller.hpp"
 #include "../../pros/apix.h" 
 
 
-class Intake_Uni : public TerriBull::Intake {
+class Roller_Uni : public TerriBull::Roller {
     protected:
     pros::Motor* pMotorI;
 
     public:
-    Intake_Uni(int i, int _maxSpeed) : TerriBull::Intake(_maxSpeed) {
-        this->pMotorI = new pros::Motor(i);
+    Roller_Uni(int i, bool iReverse, int _maxSpeed), : TerriBull::Roller(_maxSpeed) {
+        this->pMotorI = new pros::Motor(i, iReverse);
     }
 
-    int TurnOn(int dir); // button is held
-    int TurnOff();
+    int Spin(int direction, float time);
+    int SpinToPos(float pos);
+    void reset();
 };     
 
 #endif // INTAKE_H

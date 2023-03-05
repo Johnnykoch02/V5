@@ -24,6 +24,7 @@ class ConfigurationParser {
     ::std::string pFileLocation;
     /* Json Related Parsing Variables */
     ::std::ifstream * pFile;
+    
     Json::Value pRoot;
     typedef enum {NO_ERROR, FILE_NOT_FOUND, FILE_OPEN_ERROR, VARIABLE_PARSE_ERROR} Error;
     uint8_t errCode = 0;

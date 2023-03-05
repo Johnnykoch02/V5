@@ -41,15 +41,12 @@ class TerriBull::MechanicalSystem {
         this->pStartingAngle = angle;
     }
     
+    TerriBull::Vector2* getPosition();
     void setStartingPosition(float x, float y);
 
     /* Tasking Specific */
     float getDriveError() const;
-
     float getDriveDError() const;
-
-    TerriBull::Vector2* getPosition();
-
     void Init();
     void update(float delta);
 
@@ -57,7 +54,6 @@ class TerriBull::MechanicalSystem {
     int GoToPosition(float x, float y);
     void resetDrive();
     int TurnToAngle(float theta);
-
     int turnOnIntake(int direction);
     int turnOffIntake();
 

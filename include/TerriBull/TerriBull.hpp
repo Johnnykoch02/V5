@@ -40,15 +40,16 @@ namespace TerriBull {
     class Vector2;
     /* Manages Tasks for the Robot */
     class TaskManager;
-    /* Task Data Container */
+    /* Task Data Containers */
     class Task;
     class DriveTask;
+    class RollerTask;
     typedef ::std::list<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;
     /* Manages Mechanical Components */
     class MechanicalSystem;
-    /* Virtual */
+    /* Abstract Modifiers Class for Mechanism Control */
     class MechanicalComponent;
     /* Abstract Classes for Mechanical Components */
     class Drive;
@@ -75,6 +76,10 @@ namespace TerriBull {
      * @brief Useful Algorithms and Functions
      */
     extern float const PI;
+    extern int const RED_REVS;
+    extern int const GREEN_REVS;
+    extern int const BLUE_REVS;
+    extern std::map<::std::string, int> GEAR_ENCODER;
 
     extern float DEG2RAD( const float deg );
     extern float RAD2DEG( const float rad );

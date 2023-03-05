@@ -18,13 +18,13 @@ class TerriBull::Intake : public TerriBull::MechanicalComponent {
     protected:
     bool toggled;
     int currentDir;
-    bool maxSpeed;
+    int maxSpeed;
     public:
     Intake(int _maxSpeed) : TerriBull::MechanicalComponent(), maxSpeed(_maxSpeed), currentDir(0) {}
 
     virtual int TurnOn(int dir) = 0; // button is held
     virtual int TurnOff() = 0;
-    
+
 };     
 
 #endif // INTAKE_H
