@@ -48,7 +48,7 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
 }
 
 TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboController* roboController) {
-    // return new AidanJoeShmo(roboController, 5);
+    return new AidanJoeShmo(roboController, 5);
     if (this->pConfigVariables.ControllerConfig.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
@@ -65,7 +65,7 @@ TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboCo
 }
 
 TerriBull::Intake* ConfigurationParser::getIntakeConfig() {
-    /*return nullptr;*/Json::Value IntakeConfig = this->pConfigVariables.Config["mechanical_system"]["intake"];
+    return nullptr;Json::Value IntakeConfig = this->pConfigVariables.Config["mechanical_system"]["intake"];
     Json::String ConfigType = IntakeConfig["config"].asString();
     if (ConfigType == "") {
         this->errCode = VARIABLE_PARSE_ERROR;
