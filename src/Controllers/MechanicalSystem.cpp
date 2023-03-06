@@ -55,12 +55,12 @@ float TerriBull::MechanicalSystem::getAngle() {
 
 void TerriBull::MechanicalSystem::update(float delta) {
     this->getAngle();
-    // std::stringstream s3;
-    // s3 << std::fixed << ::std::setprecision(2);
-    // s3 << "Ang: " <<*this->pAngle << " | Pos: x->" << this->pPosition->x << " y->" << this->pPosition->y;
-    // pros::lcd::set_text(3, s3.str());
+    std::stringstream s3;
+    s3 << std::fixed << ::std::setprecision(2);
+    s3 << "Ang: " <<*(this->pAngle);// << " | Pos: x->" << this->pPosition->x << " y->" << this->pPosition->y;
+    pros::lcd::set_text(3, s3.str());
     // std::stringstream s4;
-    // s4 <<
+
 }
 
 
