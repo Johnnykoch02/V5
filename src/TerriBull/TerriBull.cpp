@@ -20,11 +20,11 @@ namespace TerriBull {
   int const RED_REVS = 300;
   int const GREEN_REVS = 1800;
   int const BLUE_REVS = 900;
-  std::map<std::string, int> GEAR_ENCODER = {
-    {"RED", RED_REVS},
-    {"GREEN", GREEN_REVS},
-    {"BLUE", BLUE_REVS},
-  };
+  // std::map<std::string, int> GEAR_ENCODER = {
+    // {"RED", RED_REVS},
+    // {"GREEN", GREEN_REVS},
+    // {"BLUE", BLUE_REVS},
+  // };
 };
 #endif
 #ifndef __TERRIBULL_GLOBALS__
