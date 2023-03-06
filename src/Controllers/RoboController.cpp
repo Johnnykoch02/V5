@@ -78,7 +78,7 @@ void TerriBull::RoboController::Run() {
     this->updateTime();
     this->system->update(this->delta());
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
-        this->taskManager->run();
+        // this->taskManager->run();
     } else {
         this->inputController->Update(this->delta());
     }
