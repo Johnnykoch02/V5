@@ -17,6 +17,7 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake
     /*IMU Setup*/
     this->pImu = new pros::Imu(_imu);
     this->pImu->tare();
+    pros::delay(1000);
     /*Drive Setup*/
     this->pDrive = _drive;    
     this->update(0);
