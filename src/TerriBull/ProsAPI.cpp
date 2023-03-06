@@ -18,8 +18,7 @@
 // pros::Motor m3(3, pros::E_MOTOR_GEARSET_18, true);
 // pros::Motor m4(4, pros::E_MOTOR_GEARSET_18, true);
 
-pros::Imu mu(11);
-mu.tare();
+
 /*
  *
 */

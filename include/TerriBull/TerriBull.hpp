@@ -84,6 +84,7 @@ namespace TerriBull {
     extern float DEG2RAD( const float deg );
     extern float RAD2DEG( const float rad );
     extern float GetDTheta(float tf, float ti);
+    extern pros::Imu mu;
     
 
     /**
