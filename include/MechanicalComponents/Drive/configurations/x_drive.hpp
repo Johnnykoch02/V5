@@ -26,12 +26,16 @@ class X_Drive : public TerriBull::Drive {
     void setVoltage(float* vals);
 
     public:
-    X_Drive(int portA, int portB, int portC, int portD) : TerriBull::Drive(), pA(portA), pB(portB), pC(portC), pD(portD) {
+    X_Drive(int portA, int portB, int portC, int portD, int gearSet) : TerriBull::Drive(gearSet), pA(portA), pB(portB), pC(portC), pD(portD) {
       this->pType = "X-Drive";
-      this->pMotorA = new pros::Motor(pA, pros::E_MOTOR_GEARSET_18, false);
-      this->pMotorB = new pros::Motor(pB, pros::E_MOTOR_GEARSET_18, false);
-      this->pMotorC = new pros::Motor(pC, pros::E_MOTOR_GEARSET_18, true);
-      this->pMotorD = new pros::Motor(pD, pros::E_MOTOR_GEARSET_18, true);
+      this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, false);
+      this->pMotorB = new pros::Motor(pB, (pros::motor_gearset_e)this->gearSet, false);
+      this->pMotorC = new pros::Motor(pC, (pros::motor_gearset_e)this->gearSet, true);
+      this->pMotorD = new pros::Motor(pD, (pros::motor_gearset_e)this->gearSet, true);
+      this->pMotorA->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorB->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorC->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorD->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->setPID(0.5, 0.2, 0.3);
       this->kPTheta = 0.5;this->kDTheta = 0.2;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);

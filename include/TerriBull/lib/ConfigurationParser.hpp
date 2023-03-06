@@ -24,7 +24,7 @@ class ConfigurationParser {
     ::std::string pFileLocation;
     /* Json Related Parsing Variables */
     ::std::ifstream * pFile;
-    
+
     Json::Value pRoot;
     typedef enum {NO_ERROR, FILE_NOT_FOUND, FILE_OPEN_ERROR, VARIABLE_PARSE_ERROR} Error;
     uint8_t errCode = 0;
@@ -38,6 +38,7 @@ class ConfigurationParser {
         Json::Value DriveConfig;
         Json::Value DriveMotorPorts;
         Json::Value DriveMotorReverse;
+        Json::Value DriveMotorGearset;
         /* IMU Sensor */
         Json::Value IMUConfig;
         Json::Value StartingAngle;
@@ -84,6 +85,7 @@ class ConfigurationParser {
             this->pConfigVariables.DriveConfig = this->pConfigVariables.Config["mechanical_system"]["drive"]["config"];
             this->pConfigVariables.DriveMotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
             this->pConfigVariables.DriveMotorReverse = this->pConfigVariables.Config["mechanical_system"]["drive"]["reverse_motors"];
+            this->pConfigVariables.DriveMotorGearset = this->pConfigVariables.Config["mechanical_system"]["drive"]["gear_ratio"];
             this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
             this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
             this->pConfigVariables.StartingPos = this->pConfigVariables.Config["mechanical_system"]["starting_position"];

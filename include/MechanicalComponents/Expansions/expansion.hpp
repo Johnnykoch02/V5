@@ -17,7 +17,7 @@
 
 class TerriBull::Expansion : public TerriBull::MechanicalComponent {
     public:
-    Expansion() : TerriBull::MechanicalComponent() {}
+    Expansion() : TerriBull::MechanicalComponent(0) {}
 
     virtual int Expand() {}
 };     

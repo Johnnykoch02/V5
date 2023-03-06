@@ -79,7 +79,8 @@ namespace TerriBull {
     extern int const RED_REVS;
     extern int const GREEN_REVS;
     extern int const BLUE_REVS;
-    // extern std::map<::std::string, int> GEAR_ENCODER;
+    extern std::map<::std::string, int> GEAR_ENCODER;
+    extern std::map<int, int> ENCODER_UNIT;
 
     extern float DEG2RAD( const float deg );
     extern float RAD2DEG( const float rad );

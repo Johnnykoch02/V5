@@ -20,7 +20,7 @@ class TerriBull::Shooter : public TerriBull::MechanicalComponent {
     bool toggled;
 
     public:
-    Shooter() : TerriBull::MechanicalComponent() {}
+    Shooter(int gearSet) : TerriBull::MechanicalComponent(gearSet) {}
 
     virtual int TurnOn(int dir) = 0;// button is held
     virtual int TurnOff() = 0;

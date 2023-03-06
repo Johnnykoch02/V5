@@ -21,7 +21,7 @@ class Intake_Uni : public TerriBull::Intake {
     pros::Motor* pMotorI;
 
     public:
-    Intake_Uni(int i, int _maxSpeed) : TerriBull::Intake(_maxSpeed) {
+    Intake_Uni(int i, int _maxSpeed, int gearSet) : TerriBull::Intake(_maxSpeed, gearSet) {
         this->pMotorI = new pros::Motor(i);
     }
 

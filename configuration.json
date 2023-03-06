@@ -14,20 +14,24 @@
                 "imu": 5,
                 "drive": {
                     "config": "x_drive",
-                    "motor_ports": [1, 2, 3, 4]
+                    "motor_ports": [1, 2, 3, 4],
+                    "gear_ratio": "RED"
                 },
                 "intake": {
                     "config": "IntakeUni",
                     "motor_ports": [5],
+                    "gear_ratio": "RED",
                     "max_speed": 100
                 },
                 "roller": {
                     "config": "RollerUni",
-                    "motor_ports": [6]
+                    "motor_ports": [6],
+                    "gear_ratio": "RED"
                 },
                 "shooter": {
                     "config": "ShooterFlyWheelSB",
                     "motor_ports": [8, 9],
+                    "gear_ratio": "RED",
                     "max_speed": 100
                 }
             }
@@ -46,15 +50,18 @@
                 "drive": {
                     "config": "tank_drive_std",
                     "motor_ports": [1, 3, 2, 4, 6, 5],
-                    "reverse_motors": [0, 1, 0, 0, 1, 0]
+                    "reverse_motors": [0, 1, 0, 0, 1, 0],
+                    "gear_ratio": "RED"
                 },
                 "roller": {
                     "config": "RollerDual",
-                    "motor_ports": [6]
+                    "motor_ports": [6],
+                    "gear_ratio": "RED"
                 },
                 "shooter": {
                     "config": "CatapultZolt",
                     "motor_ports": [8, 9],
+                    "gear_ratio": "RED",
                     "max_speed": 100
                 }
             }

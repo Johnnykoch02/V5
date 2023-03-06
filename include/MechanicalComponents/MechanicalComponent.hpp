@@ -23,13 +23,15 @@ class TerriBull::MechanicalComponent  {
     float previousError;
     float sumError;
 
+    int gearSet;
+
     float kP, kD, kI;
 
     public:
-    MechanicalComponent() : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE) {}
+    MechanicalComponent(int gearSet) : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE), gearSet(gearSet) {}
  
     virtual float getError() const final { return currentError; } 
-    
+
     virtual float dError() const final{
         return (this->currentError - this->previousError);
     }

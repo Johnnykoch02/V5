@@ -21,7 +21,7 @@ class Intake_Duo : public TerriBull::Intake {
     pros::Motor* pMotorI,* pMotorJ;
 
     public:
-    Intake_Duo(int i, int j, int _maxSpeed) : TerriBull::Intake(_maxSpeed) {
+    Intake_Duo(int i, int j, int _maxSpeed, int gearSet) : TerriBull::Intake(_maxSpeed, gearSet) {
         this->pMotorI = new pros::Motor(i);
         this->pMotorJ = new pros::Motor(j);
     }

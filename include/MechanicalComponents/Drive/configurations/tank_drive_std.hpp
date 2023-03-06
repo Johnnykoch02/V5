@@ -27,14 +27,20 @@ class Tank_Drive_Std : public TerriBull::Drive {
     void setVoltage(float* vals);
 
     public:
-    Tank_Drive_Std(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int portE,bool eReverse, int portF, bool fReverse) : TerriBull::Drive(), pA(portA), pB(portB), pC(portC), pD(portD), pE(portE), pF(portF), kPThetaTranslation(0.7) {
+    Tank_Drive_Std(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int portE,bool eReverse, int portF, bool fReverse, int gearSet) : TerriBull::Drive(gearSet), pA(portA), pB(portB), pC(portC), pD(portD), pE(portE), pF(portF), kPThetaTranslation(0.7) {
       this->pType = "Tank-Drive-Std";
-      this->pMotorA = new pros::Motor(pA, aReverse);
-      this->pMotorB = new pros::Motor(pB, bReverse);
-      this->pMotorC = new pros::Motor(pC, cReverse);
-      this->pMotorD = new pros::Motor(pD, dReverse);
-      this->pMotorE = new pros::Motor(pE, eReverse);
-      this->pMotorF = new pros::Motor(pF, fReverse);
+      this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, aReverse);
+      this->pMotorB = new pros::Motor(pB, (pros::motor_gearset_e)this->gearSet, bReverse);
+      this->pMotorC = new pros::Motor(pC, (pros::motor_gearset_e)this->gearSet, cReverse);
+      this->pMotorD = new pros::Motor(pD, (pros::motor_gearset_e)this->gearSet, dReverse);
+      this->pMotorE = new pros::Motor(pE, (pros::motor_gearset_e)this->gearSet, eReverse);
+      this->pMotorF = new pros::Motor(pF, (pros::motor_gearset_e)this->gearSet, fReverse);
+      this->pMotorA->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorB->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorC->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorD->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorE->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+      this->pMotorF->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->setPID(2.5, 2.2, 1.3);
       this->kPTheta = 0.5;this->kDTheta = 0.2;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);

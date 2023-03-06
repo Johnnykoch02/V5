@@ -20,7 +20,7 @@ class TerriBull::Intake : public TerriBull::MechanicalComponent {
     int currentDir;
     int maxSpeed;
     public:
-    Intake(int _maxSpeed) : TerriBull::MechanicalComponent(), maxSpeed(_maxSpeed), currentDir(0) {}
+    Intake(int _maxSpeed, int gearSet) : TerriBull::MechanicalComponent(gearSet), maxSpeed(_maxSpeed), currentDir(0) {}
 
     virtual int TurnOn(int dir) = 0; // button is held
     virtual int TurnOff() = 0;

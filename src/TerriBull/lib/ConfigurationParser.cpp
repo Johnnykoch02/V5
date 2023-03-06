@@ -35,13 +35,13 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
         return nullptr;
     }
     Json::String DriveType = this->pConfigVariables.DriveConfig.asString();
+    Json::String gearSet = this->pConfigVariables.DriveMotorGearset.asString();
     /* Drive Configurations that are Currently Supported */
     if (DriveType == "x_drive") {
-        return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt());
+        return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), GEAR_ENCODER[gearSet]);
     }
     if (DriveType == "tank_drive_std") {
-
-        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorReverse[4].asBool(), this->pConfigVariables.DriveMotorPorts[5].asInt(), this->pConfigVariables.DriveMotorReverse[5].asBool());
+        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorReverse[4].asBool(), this->pConfigVariables.DriveMotorPorts[5].asInt(), this->pConfigVariables.DriveMotorReverse[5].asBool(), GEAR_ENCODER[gearSet]);
     }
 
     else return nullptr;
@@ -71,12 +71,13 @@ TerriBull::Intake* ConfigurationParser::getIntakeConfig() {
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }
+    Json::String gearSet = IntakeConfig["gear_ratio"].asString();
     /* Controller Configurations that are Currently Supported */
     if (ConfigType == "IntakeUni") {
-        return new Intake_Uni(IntakeConfig["motor_ports"][0].asInt(), IntakeConfig["max_speed"].asInt());
+        return new Intake_Uni(IntakeConfig["motor_ports"][0].asInt(), IntakeConfig["max_speed"].asInt(), GEAR_ENCODER[gearSet]);
     }
     if (ConfigType == "IntakeDuo") {
-        return new Intake_Duo(IntakeConfig["motor_ports"][0].asInt(),IntakeConfig["motor_ports"][1].asInt(), IntakeConfig["max_speed"].asInt());
+        return new Intake_Duo(IntakeConfig["motor_ports"][0].asInt(),IntakeConfig["motor_ports"][1].asInt(), IntakeConfig["max_speed"].asInt(), GEAR_ENCODER[gearSet]);
     }
 
     return nullptr;

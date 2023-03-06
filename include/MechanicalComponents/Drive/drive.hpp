@@ -25,7 +25,7 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     // Vector2 pPreviousError;
     virtual void setVoltage(float* vals) = 0;
     public:
-    Drive() : TerriBull::MechanicalComponent(), motorPowerThreshold(127), kPTheta(0), kDTheta(0) {}
+    Drive(int gearSet) : TerriBull::MechanicalComponent(gearSet), motorPowerThreshold(127), kPTheta(0), kDTheta(0) {}
     virtual void setAnglePtr(float * ptr) final { this->pCurrentAngle = ptr; }
     virtual void setPosPtr(Vector2* ptr) final { this->pCurrentPos = ptr; }
     virtual int drive(Vector2 pos) = 0;

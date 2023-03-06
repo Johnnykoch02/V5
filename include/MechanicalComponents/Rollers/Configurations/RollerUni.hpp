@@ -25,7 +25,7 @@ class Roller_Uni : public TerriBull::Roller {
         this->pMotorI = new pros::Motor(i, iReverse);
     }
 
-    int Spin(int direction, float time);
+    int Spin(int direction, float time, float delta);
     int SpinToPos(float pos);
     void reset();
 };     

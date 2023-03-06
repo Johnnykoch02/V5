@@ -22,11 +22,11 @@ class TerriBull::Roller : public TerriBull::MechanicalComponent {
     int maxSpeed;
     public:
 
-    Roller(int maxSpeed) : TerriBull::MechanicalComponent(), maxSpeed(maxSpeed) {}
-
-    virtual int Spin(int direction, float time) = 0;
+    Roller(int maxSpeed, int gearSet) : TerriBull::MechanicalComponent(gearSet), maxSpeed(maxSpeed) {}
+    virtual int Spin(int direction, float time, float delta) = 0;
     virtual int SpinToPos(float pos) = 0;
     virtual void reset() = 0;
+    virtual void update() = 0;
 };     
 
 #endif // ROLLER_H
