@@ -18,7 +18,7 @@
 // pros::Motor m3(3, pros::E_MOTOR_GEARSET_18, true);
 // pros::Motor m4(4, pros::E_MOTOR_GEARSET_18, true);
 
-pros::Imu mu(11);
+// pros::Imu mu(11);
 /*
  *
 */
@@ -30,9 +30,9 @@ pros::Imu mu(11);
 //     m4.move(v4);
 // }
 
-pros::Motor m5(1, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor m6(3, pros::E_MOTOR_GEARSET_18, true);
-pros::Motor m7(2, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor m8(4, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor m9(6, pros::E_MOTOR_GEARSET_18, true);
-pros::Motor m10(5, pros::E_MOTOR_GEARSET_18, false);
+// pros::Motor m5(1, pros::E_MOTOR_GEARSET_18, false);
+// pros::Motor m6(3, pros::E_MOTOR_GEARSET_18, true);
+// pros::Motor m7(2, pros::E_MOTOR_GEARSET_18, false);
+// pros::Motor m8(4, pros::E_MOTOR_GEARSET_18, false);
+// pros::Motor m9(6, pros::E_MOTOR_GEARSET_18, true);
+// pros::Motor m10(5, pros::E_MOTOR_GEARSET_18, false);

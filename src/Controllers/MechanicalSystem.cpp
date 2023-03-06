@@ -15,7 +15,8 @@
 MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake(nullptr), pShooter(nullptr), pRoller(nullptr), pExpansion(nullptr) {
     this->pAngle = new float;
     /*IMU Setup*/
-    this->pImu = new ::pros::Imu(_imu);
+    this->pImu = new pros::Imu(_imu);
+    this->pImu->reset();
     /*Drive Setup*/
     this->pDrive = _drive;    
     this->update(0);
