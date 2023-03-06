@@ -22,8 +22,9 @@ class TerriBull::Shooter : public TerriBull::MechanicalComponent {
     public:
     Shooter() : TerriBull::MechanicalComponent() {}
 
-    virtual int TurnOn(int dir) {} // button is held
-    virtual int TurnOff() {}
+    virtual int TurnOn(int dir) = 0;// button is held
+    virtual int TurnOff() = 0;
+    virtual int reset() = 0;
 };     
 
 #endif // SHOOTER_H

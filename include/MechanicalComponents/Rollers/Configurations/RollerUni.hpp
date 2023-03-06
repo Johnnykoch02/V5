@@ -21,7 +21,7 @@ class Roller_Uni : public TerriBull::Roller {
     pros::Motor* pMotorI;
 
     public:
-    Roller_Uni(int i, bool iReverse, int _maxSpeed), : TerriBull::Roller(_maxSpeed) {
+    Roller_Uni(int i, bool iReverse, int _maxSpeed) : Roller(_maxSpeed) {
         this->pMotorI = new pros::Motor(i, iReverse);
     }
 

@@ -15,28 +15,28 @@
 // #include "../Task.hpp"
 #include "../../../TerriBull.hpp"
 
-class TerriBull::RollerTask : public TerriBull::Task {
-    public: 
-    
-    private:
-    float approachOrientation;
-    TerriBull::Vector2* pos;
-
-    
-
-    bool deleteOnCleanup;
-
-    public:
-    
-    RollerTask(TerriBull::Vector2* pos, float _orientation, TerriBull::MechanicalSystem* _system);
-
-    RollerTask(TerriBull::Vector2 pos, float _orientation, TerriBull::MechanicalSystem* _system);
-
-    ~RollerTask();
-
-    void init();
-    void update(float delta);  
-};
+// class TerriBull::RollerTask : public TerriBull::Task {
+    // public: 
+    // 
+    // private:
+    // float approachOrientation;
+    // TerriBull::Vector2* pos;
+// 
+    // 
+// 
+    // bool deleteOnCleanup;
+// 
+    // public:
+    // 
+    // RollerTask(TerriBull::Vector2* pos, float _orientation, TerriBull::MechanicalSystem* _system);
+// 
+    // RollerTask(TerriBull::Vector2 pos, float _orientation, TerriBull::MechanicalSystem* _system);
+// 
+    // ~RollerTask();
+// 
+    // void init();
+    // void update(float delta);  
+// };
 
 
 #endif  /* DRIVETASK_H */
