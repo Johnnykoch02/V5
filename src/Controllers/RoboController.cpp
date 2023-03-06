@@ -58,11 +58,11 @@ void TerriBull::RoboController::Init() {
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
-        this->taskManager->addTaskSet(
-            new TaskList({
-                new TerriBull::DriveTask(Vector2::cartesianToVector2((this->system->getPosition())->x+50, (this->system->getPosition())->y), 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-            })
-        );
+        // this->taskManager->addTaskSet(
+            // new TaskList({
+                // new TerriBull::DriveTask(Vector2::cartesianToVector2((this->system->getPosition())->x+50, (this->system->getPosition())->y), 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+            // })
+        // );
         this->previousTime = pros::millis();
         this->currentTime = pros::millis();
         
@@ -80,7 +80,7 @@ void TerriBull::RoboController::Run() {
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
         // this->taskManager->run();
     } else {
-        this->inputController->Update(this->delta());
+        // this->inputController->Update(this->delta());
     }
     
     // this->serialController->update();
