@@ -48,7 +48,7 @@ void TerriBull::RoboController::Init() {
         }
         this->inputController = this->configParser->getInputControllerConfig(this);
         if (inputController == nullptr) {
-            exit(1);
+            // exit(1);
         }
         /* Init Task Manager */
         this->taskManager = new TaskManager(); /* TODO: Needs TaskManager::Init() */
