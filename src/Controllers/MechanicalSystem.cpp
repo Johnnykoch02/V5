@@ -16,7 +16,7 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake
     this->pAngle = new float;
     /*IMU Setup*/
     this->pImu = new pros::Imu(_imu);
-    this->pImu->reset();
+    this->pImu->tare();
     /*Drive Setup*/
     this->pDrive = _drive;    
     this->update(0);
