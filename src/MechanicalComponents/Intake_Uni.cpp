@@ -12,7 +12,7 @@
 #include "../../include/MechanicalComponents/Intakes/Configurations/Intake_Uni.hpp"
 
 
-int Intake_Uni::TurnOn(int dir) {
+int Intake_Uni::TurnOn(float dir) {
     this->pMotorI->move(this->maxSpeed*dir);
     this->currentDir = dir;
     this->toggled = true;

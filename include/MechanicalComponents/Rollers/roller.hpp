@@ -21,9 +21,11 @@ class TerriBull::Roller : public TerriBull::MechanicalComponent {
     float currentPos;
     int maxSpeed;
     public:
-
-    Roller(int maxSpeed, int gearSet) : TerriBull::MechanicalComponent(gearSet), maxSpeed(maxSpeed) {}
+    bool timeFlag;
+    Roller(int maxSpeed, int gearSet) : TerriBull::MechanicalComponent(gearSet), maxSpeed(maxSpeed), timeFlag(false), currentPos(0) {}
     virtual int Spin(int direction, float time, float delta) = 0;
+    virtual float* posPtr() final { return &currentPos; }
+    virtual float getPos() const final { return currentPos; }    
     virtual int SpinToPos(float pos) = 0;
     virtual void reset() = 0;
     virtual void update() = 0;

@@ -20,10 +20,10 @@ void RoboController::setSystem(MechanicalSystem* system) {
 void RoboController::setSerialController(SerialController* serialController) {
     this->serialController = serialController;
 }
-    /* Getter Methods */
-    // ObjectHandler* getObjHandler() {
-    //     return this->objHandler;
-    // }
+/* Getter Methods */
+// ObjectHandler* getObjHandler() {
+//     return this->objHandler;
+// }
 TaskManager* RoboController::getTaskManager() {
     return this->taskManager;
 }
@@ -46,6 +46,7 @@ void TerriBull::RoboController::Init() {
             logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ ::std::to_string(configParser->getErrCode())));
             // exit(1);
         }
+        this->system->setMotherSystem(this);
         this->inputController = this->configParser->getInputControllerConfig(this);
         if (inputController == nullptr) {
             // exit(1);
@@ -58,11 +59,15 @@ void TerriBull::RoboController::Init() {
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
+        /* TASKS SECTION */
+        Vector2 *dest1 = Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y - 50);
         this->taskManager->addTaskSet(
-            new TaskList({
-                new TerriBull::DriveTask(Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y)+50, 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-            })
+            new TaskList({{
+                new TerriBull::DriveTask(*dest1, 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+                new TerriBull::RollerTask(0.75, 1, this->getSystem())
+            }})
         );
+        delete dest1;
         this->previousTime = pros::millis();
         this->currentTime = pros::millis();
         
@@ -78,7 +83,7 @@ void TerriBull::RoboController::Run() {
     this->updateTime();
     this->system->update(this->delta());
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
-        this->taskManager->run();
+        this->taskManager->run(this->delta());
     } else {
         this->inputController->Update(this->delta());
     }

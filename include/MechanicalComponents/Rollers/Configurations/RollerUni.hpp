@@ -22,7 +22,9 @@ class Roller_Uni : public TerriBull::Roller {
 
     public:
     Roller_Uni(int i, bool iReverse, int _maxSpeed, int gearSet) : Roller(_maxSpeed, gearSet) {
-        this->pMotorI = new pros::Motor(i, iReverse);
+        this->pType = "Roller-Uni";
+        this->pMotorI = new pros::Motor(i, (pros::motor_gearset_e) this->gearSet, iReverse);
+        this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->setPID(4.5, 0.01, 0.8);
     }
 

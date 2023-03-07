@@ -21,14 +21,16 @@ namespace TerriBull {
   int const GREEN_REVS = 900;
   int const BLUE_REVS = 1800;
   std::map<std::string, int> GEAR_ENCODER = {
-    {"RED", pros::E_MOTOR_GEARSET_06},
+    {"RED", pros::E_MOTOR_GEARSET_36},
     {"GREEN", pros::E_MOTOR_GEARSET_18},
-    {"BLUE", pros::E_MOTOR_GEARSET_36},
+    {"BLUE", pros::E_MOTOR_GEARSET_06},
+    {"SpecialFlyWheel", 3},
   };
   std::map<int, int> ENCODER_UNIT {
     {pros::E_MOTOR_GEARSET_06, RED_REVS},
     {pros::E_MOTOR_GEARSET_18, GREEN_REVS},
-    {pros::E_MOTOR_GEARSET_36, BLUE_REVS}
+    {pros::E_MOTOR_GEARSET_36, BLUE_REVS},
+    {3, 10800},/*Speical */
   };
 };
 #endif

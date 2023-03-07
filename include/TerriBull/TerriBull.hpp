@@ -44,7 +44,8 @@ namespace TerriBull {
     class Task;
     class DriveTask;
     class RollerTask;
-    typedef ::std::list<Task*> TaskList;
+    class IntakeTask;
+    typedef ::std::vector<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;
     /* Manages Mechanical Components */
@@ -489,9 +490,13 @@ namespace TerriBull {
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
     #include "../MechanicalComponents/Intakes/intake.hpp"
+    #include "../MechanicalComponents/Rollers/roller.hpp"
+    #include "../MechanicalComponents/Shooters/shooter.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
-    #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+    #include "./lib/Tasking/Types/DriveTask.hpp"
+    #include "./lib/Tasking/Types/RollerTask.hpp"
+    #include "./lib/Tasking/Types/IntakeTask.hpp"
     #include "../Controllers/TaskManager/TaskManager.hpp"
     #include "./lib/ConfigurationParser.hpp"
     #include "./lib/GameObjects/GameObject.hpp"

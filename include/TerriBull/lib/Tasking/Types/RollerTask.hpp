@@ -20,8 +20,14 @@ class TerriBull::RollerTask : public TerriBull::Task {
     typedef enum {POS, TIME} RollerType;
     private:
     float* initialPos;
+    float offset;
+    float targetPos;
+    float time;
+    float direction;
     bool deleteOnCleanup;
     bool needsInitialize;
+    RollerType rollerType;
+
     RollerTask(TerriBull::MechanicalSystem* _system);
     
     public:
@@ -35,7 +41,8 @@ class TerriBull::RollerTask : public TerriBull::Task {
     ~RollerTask();
 
     void init();
-    void update(float delta);  
+    void update(float delta);
+    void terminate();  
 };
 
 

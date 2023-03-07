@@ -45,6 +45,7 @@ TerriBull::RoboController controlSys;
 
 
 void initialize() {
+	pros::lcd::initialize();
 	controlSys.Init();
 }
 

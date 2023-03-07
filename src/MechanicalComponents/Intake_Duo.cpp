@@ -12,7 +12,7 @@
 #include "../../include/MechanicalComponents/Intakes/Configurations/Intake_Duo.hpp"
 
 
-int Intake_Duo::TurnOn(int dir) {
+int Intake_Duo::TurnOn(float dir) {
     this->pMotorI->move(this->maxSpeed*dir);
     this->pMotorJ->move(this->maxSpeed*dir);
     this->currentDir = dir;

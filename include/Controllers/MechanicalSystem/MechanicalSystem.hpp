@@ -22,6 +22,7 @@
 
 class TerriBull::MechanicalSystem {
     private:
+        RoboController* motherSystem;
         ::pros::Imu* pImu;
         TerriBull::Drive * pDrive;
         TerriBull::Intake * pIntake;
@@ -47,17 +48,21 @@ class TerriBull::MechanicalSystem {
     /* Tasking Specific */
     float getDriveError() const;
     float getDriveDError() const;
+    float getRollerError() const;
+    float getRollerDError() const;
     void Init();
     void update(float delta);
-
     /* API TO Mechanical System */
-    int GoToPosition(float x, float y);
+    int GoToPosition(Vector2 pos);
     void resetDrive();
     int TurnToAngle(float theta);
-    int turnOnIntake(int direction);
+    int turnOnIntake(float direction);
     int turnOffIntake();
-
+    int spinRollerTo(float pos);
+    int spinRollerFor(int direction, float time);
+    int resetRoller();
     /*Setters*/
+    void setMotherSystem(RoboController* _motherSystem);
     void setIntake(TerriBull::Intake * _intake);
     void setShooter(TerriBull::Shooter * _shooter);
     void setRoller(TerriBull::Roller * _roller);

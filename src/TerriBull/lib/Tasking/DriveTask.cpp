@@ -9,19 +9,17 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#include "../../../../include/TerriBull/lib/Tasking/DriveTasking/DriveTask.hpp"
-DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation){
+#include "../../../../include/TerriBull/lib/Tasking/Types/DriveTask.hpp"
+DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation), driveType(_driveType){
     this->pos = pos;
     this->deleteOnCleanup = false;
     this->approachOrientation = _orientation;
-    this->system = _system;
 }
 
-DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation){
+DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation), driveType(_driveType) {
     this->pos = new TerriBull::Vector2(pos);
     this->deleteOnCleanup = true;
     this->approachOrientation = _orientation;
-    this->system = _system;
 }
 
 DriveTask::~DriveTask() {
@@ -32,13 +30,14 @@ DriveTask::~DriveTask() {
 
 void DriveTask::init() {
     this->finishedFlag = false;
+    this->system->resetDrive();
 }
 
 void DriveTask::update(float delta) {
     if (!this->finishedFlag) {
         switch(driveType) {
             case TRANSLATION:
-                this->system->GoToPosition(this->pos->x, this->pos->y);
+                this->system->GoToPosition(*(this->pos));
                 break;
             case ORIENTATION:
                 this->system->TurnToAngle(this->approachOrientation);
@@ -46,4 +45,9 @@ void DriveTask::update(float delta) {
         }
         this->finishedFlag = fabs(this->system->getDriveError()) < 0.5 && fabs(this->system->getDriveDError()) < 0.25; /* Some Threshold */
     }
+}
+
+void DriveTask::terminate() {
+    this->terminated = true;
+    this->system->resetDrive();
 }

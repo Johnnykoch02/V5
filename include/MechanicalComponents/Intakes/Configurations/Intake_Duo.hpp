@@ -21,12 +21,14 @@ class Intake_Duo : public TerriBull::Intake {
     pros::Motor* pMotorI,* pMotorJ;
 
     public:
-    Intake_Duo(int i, int j, int _maxSpeed, int gearSet) : TerriBull::Intake(_maxSpeed, gearSet) {
-        this->pMotorI = new pros::Motor(i);
-        this->pMotorJ = new pros::Motor(j);
+    Intake_Duo(int i, bool iReverse, int j, bool jReverse, int _maxSpeed, int gearSet) : TerriBull::Intake(_maxSpeed, gearSet) {
+        this->pType = "Intake-Duo";
+        this->pMotorI = new pros::Motor(i, (pros::motor_gearset_e) this->gearSet, iReverse);
+        this->pMotorJ = new pros::Motor(j, (pros::motor_gearset_e) this->gearSet, jReverse);
+        this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
     }
 
-    int TurnOn(int dir); // button is held
+    int TurnOn(float dir); // button is held
     int TurnOff();
 };     
 

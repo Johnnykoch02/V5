@@ -15,20 +15,27 @@ void AidanJoeShmo::Init() {
 
 void AidanJoeShmo::Update(int delta) {
     /* Drive Input */
-    
     bool drive_engaged = false;
     int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);\
     if (abs(yInput) < deadzone) yInput = 0;
     if (yInput != 0) {
-      yInput/=20;
+      yInput/=5;
       drive_engaged = true;
       // pros::lcd::set_text(4,"Translation");
       Vector2* currentPos = this->roboController->getSystem()->getPosition();
-      Vector2* dPos = Vector2::polarToVector2(yInput, this->roboController->getSystem()->getAngle());
-      Vector2* goalPos = *currentPos + *dPos;
-      this->roboController->getSystem()->GoToPosition(goalPos->x, goalPos->y);
+      int angleMod = (yInput > 0) ? 1 : 0;
+      Vector2* unitPos = currentPos->unit();
+      Vector2* scalePos = *unitPos * yInput;
+      Vector2* goalPos;
+      if (angleMod) {
+        goalPos = *scalePos + *currentPos;
+      } else {
+        goalPos =  *currentPos - *scalePos;
+      }
+      this->roboController->getSystem()->GoToPosition(*goalPos);
+      delete unitPos;
       delete goalPos;
-      delete dPos;
+      delete scalePos;
     }
 
     int turnInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -49,4 +56,27 @@ void AidanJoeShmo::Update(int delta) {
       this->roboController->getSystem()->turnOnIntake(in - out);
     } else this->roboController->getSystem()->turnOffIntake();
 
+    /* Roller */
+    int l1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
+    int r1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+    if (l1 || r1) {
+      float currentPos = this->roboController->getSystem()->getRoller()->getPos();
+      if(this->roboController->getSystem()->spinRollerTo(currentPos + 50*(l1 - r1))) {
+        pros::lcd::set_text(2, "Error with Roller");
+      };
+    } else this->roboController->getSystem()->resetRoller();
+
+    /* Shooter */
+    TerriBull::Shooter* shooter = this->roboController->getSystem()->getShooter();
+    if (shooter->isToggled()) {
+      shooter->Shoot(delta);
+      if (shooter->shotCompleted()) {
+        shooter->reset();
+      }
+    } else {
+      int shoot = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+      if (shoot) {
+        shooter->Shoot(delta);
+      }
+    }
 }

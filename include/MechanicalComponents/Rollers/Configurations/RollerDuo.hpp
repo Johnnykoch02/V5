@@ -4,13 +4,13 @@
  * @brief Roller mechanism for Robots to spin wall Game Piece.
  *
  * @version 0.1
- * @date 2023-03-01
+ * @date 2023-03-06
  *
  * @copyright Copyright (c) 2022
  *
 */
-#ifndef ROLLER_UNI_H
-#define ROLLER_UNI_H
+#ifndef ROLLER_DUO_H
+#define ROLLER_DUO_H
 
 #include "../roller.hpp"
 #include "../../pros/apix.h" 
@@ -23,8 +23,11 @@ class Roller_Duo : public TerriBull::Roller {
 
     public:
     Roller_Duo(int i, bool iReverse, int j, bool jReverse, int _maxSpeed, int gearSet) : Roller(_maxSpeed, gearSet) {
-        this->pMotorI = new pros::Motor(i, iReverse);
-        this->pMotorJ = new pros::Motor(j, jReverse);
+        this->pType = "Roller-Duo";
+        this->pMotorI = new pros::Motor(i, (pros::motor_gearset_e) this->gearSet, iReverse);
+        this->pMotorJ = new pros::Motor(j, (pros::motor_gearset_e) this->gearSet, jReverse);
+        this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+        this->pMotorJ->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->setPID(3.5, 0.01, 0.8);
     }
 

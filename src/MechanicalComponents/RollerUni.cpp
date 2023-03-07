@@ -12,9 +12,9 @@
 #include "../../include/MechanicalComponents/Rollers/Configurations/RollerUni.hpp"
 int Roller_Uni::Spin(int direction, float time, float delta) {
     this->sumTime+=delta;
-    if (!this->sumTime>=time) {
+    if (this->sumTime < time) {
         this->pMotorI->move(direction * this->maxSpeed);
-    }
+    } else timeFlag = true;
     this->update();
     return 0;
 }
@@ -29,6 +29,7 @@ int Roller_Uni::SpinToPos(float pos) {
 }
 
 void Roller_Uni::reset() {
+    this->timeFlag = false;
     this->sumTime = 0;
     this->sumError = 0;
     this->previousError = 0;

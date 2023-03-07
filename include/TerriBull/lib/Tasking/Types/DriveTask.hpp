@@ -23,13 +23,11 @@ class TerriBull::DriveTask : public TerriBull::Task {
     float approachOrientation;
     TerriBull::Vector2* pos;
     DriveType driveType;
-    TerriBull::MechanicalSystem* system;
 
     bool deleteOnCleanup;
 
     public:
     
-    DriveType taskType;
     DriveTask(TerriBull::Vector2* pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system);
 
     DriveTask(TerriBull::Vector2 pos, float _orientation, DriveType _driveType, TerriBull::MechanicalSystem* _system);
@@ -38,6 +36,7 @@ class TerriBull::DriveTask : public TerriBull::Task {
 
     void init();
     void update(float delta);  
+    void terminate();
 };
 
 

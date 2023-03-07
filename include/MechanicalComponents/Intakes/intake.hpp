@@ -17,12 +17,13 @@
 class TerriBull::Intake : public TerriBull::MechanicalComponent {
     protected:
     bool toggled;
-    int currentDir;
+    float currentDir;
     int maxSpeed;
     public:
     Intake(int _maxSpeed, int gearSet) : TerriBull::MechanicalComponent(gearSet), maxSpeed(_maxSpeed), currentDir(0) {}
-
-    virtual int TurnOn(int dir) = 0; // button is held
+    virtual bool isToggled() const final { return this->toggled; }
+    virtual float getDirection() const final { return this->currentDir; }
+    virtual int TurnOn(float dir) = 0; // button is held
     virtual int TurnOff() = 0;
 
 };     

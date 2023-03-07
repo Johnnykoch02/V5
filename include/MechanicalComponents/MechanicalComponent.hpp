@@ -32,10 +32,23 @@ class TerriBull::MechanicalComponent  {
  
     virtual float getError() const final { return currentError; } 
 
+    /**
+     * @brief Gets Current Derror and automatically sets the previous error value to the current error value.
+     * WARNING: this function is not READ-ONLY.
+     * @return float 
+     */
     virtual float dError() final{
         float dError = currentError - previousError;
         this->previousError = currentError;
         return dError;
+    }
+    /**
+     * @brief READONLY: Gets the current derror value.
+     * 
+     * @return float 
+     */
+    virtual float ROdError() const final{
+        return currentError - previousError;
     }
 
     virtual bool isReset() const final { return this->sumError == 0; }

@@ -21,11 +21,13 @@ class Intake_Uni : public TerriBull::Intake {
     pros::Motor* pMotorI;
 
     public:
-    Intake_Uni(int i, int _maxSpeed, int gearSet) : TerriBull::Intake(_maxSpeed, gearSet) {
-        this->pMotorI = new pros::Motor(i);
+    Intake_Uni(int i, bool iReverse, int _maxSpeed, int gearSet) : TerriBull::Intake(_maxSpeed, gearSet) {
+        this->pType = "Intake-Uni";
+        this->pMotorI = new pros::Motor(i, (pros::motor_gearset_e) this->gearSet, iReverse);
+        this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
     }
 
-    int TurnOn(int dir); // button is held
+    int TurnOn(float dir); // button is held
     int TurnOff();
 };     
 

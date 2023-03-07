@@ -39,6 +39,8 @@ class ConfigurationParser {
         Json::Value DriveMotorPorts;
         Json::Value DriveMotorReverse;
         Json::Value DriveMotorGearset;
+        Json::Value DriveConversionFactor;
+        Json::Value DriveWheelRadius;
         /* IMU Sensor */
         Json::Value IMUConfig;
         Json::Value StartingAngle;
@@ -74,7 +76,7 @@ class ConfigurationParser {
                     this->pConfigVariables.Config = this->pRoot["configurations"][i];
                 }
             }
-            pros::lcd::set_text(1, "Parsed Config: " + this->pConfigVariables.Config["name"].asString());
+            pros::lcd::set_text(0, "Parsed Config: " + this->pConfigVariables.Config["name"].asString());
             if (this->pConfigVariables.Config["name"].asString() == "") {
                 this->errCode = VARIABLE_PARSE_ERROR;
                 return;
@@ -86,10 +88,13 @@ class ConfigurationParser {
             this->pConfigVariables.DriveMotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
             this->pConfigVariables.DriveMotorReverse = this->pConfigVariables.Config["mechanical_system"]["drive"]["reverse_motors"];
             this->pConfigVariables.DriveMotorGearset = this->pConfigVariables.Config["mechanical_system"]["drive"]["gear_ratio"];
+            this->pConfigVariables.DriveConversionFactor = this->pConfigVariables.Config["mechanical_system"]["drive"]["cf"];
+            this->pConfigVariables.DriveWheelRadius = this->pConfigVariables.Config["mechanical_system"]["drive"]["radius"];
+
             this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
             this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
             this->pConfigVariables.StartingPos = this->pConfigVariables.Config["mechanical_system"]["starting_position"];
-            pros::lcd::set_text(2, "Parsed DriveType: " + this->pConfigVariables.DriveConfig.asString());
+            pros::lcd::set_text(1, "Parsed DriveType: " + this->pConfigVariables.DriveConfig.asString());
             // pros::lcd::set_text(3, "Parsed Start Pos: " + std::to_string(this->pConfigVariables.StartingPos["x"].asFloat()) + " " + std::to_string(this->pConfigVariables.StartingPos["y"].asFloat()));
             // pros::lcd::set_text(4, "Parsed Start Angle: " + std::to_string(this->pConfigVariables.StartingAngle.asFloat()));
         }
@@ -99,6 +104,8 @@ class ConfigurationParser {
         */
         TerriBull::Drive* getDriveConfig();
         TerriBull::Intake* getIntakeConfig();
+        TerriBull::Roller* getRollerConfig();
+        TerriBull::Shooter* getShooterConfig();
         TerriBull::MechanicalSystem* getMechanicalSystemConfig();
         TerriBull::InputController* getInputControllerConfig(TerriBull::RoboController* roboController);
 
