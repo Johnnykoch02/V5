@@ -29,7 +29,7 @@ class TerriBull::MechanicalSystem {
         TerriBull::Roller* pRoller;
         TerriBull::Expansion* pExpansion;
         TerriBull::Vector2 * pPosition;
-        float * pAngle;
+        double * pAngle;
         float pStartingAngle;
 
     public:

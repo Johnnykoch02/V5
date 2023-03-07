@@ -37,7 +37,7 @@ SerialController* RoboController::getSerialController() {
 
 void TerriBull::RoboController::Init() {
     /* TBD                                          <-Fix this file path-> */
-    this->configParser = new ConfigurationParser("/usd/configuration.json", "Shooter_Big_Bot");
+    this->configParser = new ConfigurationParser("/usd/configuration.json", "Left_Nut");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
         this->system = this->configParser->getMechanicalSystemConfig();
@@ -58,11 +58,11 @@ void TerriBull::RoboController::Init() {
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
-        // this->taskManager->addTaskSet(
-            // new TaskList({
-                // new TerriBull::DriveTask(Vector2::cartesianToVector2((this->system->getPosition())->x+50, (this->system->getPosition())->y), 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-            // })
-        // );
+        this->taskManager->addTaskSet(
+            new TaskList({
+                new TerriBull::DriveTask(Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y)+50, 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+            })
+        );
         this->previousTime = pros::millis();
         this->currentTime = pros::millis();
         
@@ -78,17 +78,15 @@ void TerriBull::RoboController::Run() {
     this->updateTime();
     this->system->update(this->delta());
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
-        // this->taskManager->run();
+        this->taskManager->run();
     } else {
-        // this->inputController->Update(this->delta());
+        this->inputController->Update(this->delta());
     }
     
     // this->serialController->update();
     // this->objHandler->update();
 
-
-
-    pros::delay(10);
+    pros::delay(25);
 }
 
 void TerriBull::RoboController::updateTime() {

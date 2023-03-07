@@ -36,8 +36,8 @@ class X_Drive : public TerriBull::Drive {
       this->pMotorB->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->pMotorC->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->pMotorD->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
-      this->setPID(0.5, 0.2, 0.3);
-      this->kPTheta = 0.5;this->kDTheta = 0.2;
+      this->setPID(1.5, 0.2, 0.3);
+      this->kPTheta = 1.5; this->kDTheta = 0.2;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorB->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorC->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);

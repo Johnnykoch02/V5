@@ -13,21 +13,20 @@
 #include <sstream>
 #include <iomanip>
 MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake(nullptr), pShooter(nullptr), pRoller(nullptr), pExpansion(nullptr) {
-    this->pAngle = new float;
+    this->pAngle = new double;
     /*IMU Setup*/
     this->pImu = new pros::Imu(_imu);
     this->pImu->tare();
     mu.tare();
-    pros::delay(1000);
+    pros::delay(2000);
     /*Drive Setup*/
     this->pDrive = _drive;    
-    this->update(0);
+    // this->update(0);
 }
 
 void MechanicalSystem::Init() {
     this->pDrive->setAnglePtr(this->pAngle);
     this->pDrive->setPosPtr(this->pPosition);
-
 }
 
 void MechanicalSystem::setStartingPosition(float x, float y){
@@ -51,7 +50,7 @@ void TerriBull::MechanicalSystem::resetDrive() {
 }
 
 float TerriBull::MechanicalSystem::getAngle() {
-  float theta = this->pImu->get_heading(); /*TODO: Change hard Coded 90 to be a parsed variable */
+  float theta = mu.get_heading(); 
   *(this->pAngle) = ::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);//90;//
   return *(this->pAngle);
 }
@@ -59,10 +58,15 @@ float TerriBull::MechanicalSystem::getAngle() {
 void TerriBull::MechanicalSystem::update(float delta) {
     this->getAngle();
     std::stringstream s3;
-    s3 << std::fixed << ::std::setprecision(2);
-    s3 << "Ang: " << this->pImu->get_heading();// << " | Pos: x->" << this->pPosition->x << " y->" << this->pPosition->y;
+    s3 << std::fixed << ::std::setprecision(1);
+    s3 << "Ang:" << *(this->pAngle) << "|Pos:x->" << this->pPosition->x << "y->" << this->pPosition->y;
     pros::lcd::set_text(3, s3.str());
     // std::stringstream s4;
+
+    Vector2* dP = this->pDrive->resultant_vector();
+    this->pPosition->x += dP->x;
+    this->pPosition->y += dP->y;
+    delete dP;
 
 }
 

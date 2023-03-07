@@ -17,25 +17,26 @@ void AidanJoeShmo::Update(int delta) {
     /* Drive Input */
     
     bool drive_engaged = false;
-    int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);
-    int xInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_X);
+    int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);\
     if (abs(yInput) < deadzone) yInput = 0;
-    if (abs(xInput)<deadzone) xInput = 0;
-    if (yInput != 0 || xInput != 0) {
+    if (yInput != 0) {
+      yInput/=20;
       drive_engaged = true;
       // pros::lcd::set_text(4,"Translation");
       Vector2* currentPos = this->roboController->getSystem()->getPosition();
-      Vector2* goalPos = Vector2::cartesianToVector2(currentPos->x + xInput, currentPos->y + yInput);
+      Vector2* dPos = Vector2::polarToVector2(yInput, this->roboController->getSystem()->getAngle());
+      Vector2* goalPos = *currentPos + *dPos;
       this->roboController->getSystem()->GoToPosition(goalPos->x, goalPos->y);
       delete goalPos;
+      delete dPos;
     }
 
     int turnInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_RIGHT_X);
     if (abs(turnInput) < deadzone) turnInput = 0;
     if (turnInput != 0) {
       drive_engaged = true;
-      pros::lcd::set_text(4,"Turn");
-      turnInput /= 1.3;
+      
+      turnInput /= 5;
       float angle = fmod((this->roboController->getSystem()->getAngle() - turnInput), 360);
       this->roboController->getSystem()->TurnToAngle(angle);
     }

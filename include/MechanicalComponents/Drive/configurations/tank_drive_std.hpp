@@ -27,7 +27,7 @@ class Tank_Drive_Std : public TerriBull::Drive {
     void setVoltage(float* vals);
 
     public:
-    Tank_Drive_Std(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int portE,bool eReverse, int portF, bool fReverse, int gearSet) : TerriBull::Drive(gearSet), pA(portA), pB(portB), pC(portC), pD(portD), pE(portE), pF(portF), kPThetaTranslation(0.7) {
+    Tank_Drive_Std(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int portE,bool eReverse, int portF, bool fReverse, int gearSet) : TerriBull::Drive(gearSet), pA(portA), pB(portB), pC(portC), pD(portD), pE(portE), pF(portF), kPThetaTranslation(0.5) {
       this->pType = "Tank-Drive-Std";
       this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, aReverse);
       this->pMotorB = new pros::Motor(pB, (pros::motor_gearset_e)this->gearSet, bReverse);
@@ -41,8 +41,8 @@ class Tank_Drive_Std : public TerriBull::Drive {
       this->pMotorD->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->pMotorE->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->pMotorF->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
-      this->setPID(2.5, 2.2, 1.3);
-      this->kPTheta = 0.5;this->kDTheta = 0.2;
+      this->setPID(8.5, 0.01, 2.5);
+      this->kPTheta = 2.5; this->kDTheta = 0.8;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorB->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorC->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);

@@ -20,10 +20,10 @@
 
 
 // namespace BULL2_XD {
-	pros::Motor pMotorA (1, pros::E_MOTOR_GEARSET_18, false);
-	pros::Motor pMotorB (2, pros::E_MOTOR_GEARSET_18, false);
-	pros::Motor pMotorC (3, pros::E_MOTOR_GEARSET_18, true);
-	pros::Motor pMotorD (4, pros::E_MOTOR_GEARSET_18, true);
+	// pros::Motor pMotorA (1, pros::E_MOTOR_GEARSET_18, false);
+	// pros::Motor pMotorB (2, pros::E_MOTOR_GEARSET_18, false);
+	// pros::Motor pMotorC (3, pros::E_MOTOR_GEARSET_18, true);
+	// pros::Motor pMotorD (4, pros::E_MOTOR_GEARSET_18, true);
 // };
 
 void on_center_button() {
@@ -40,20 +40,17 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+TerriBull::RoboController controlSys;
 
 
 
 void initialize() {
-	pros::lcd::initialize();
+	controlSys.Init();
 }
 
 
 void autonomous() {
-	TerriBull::RoboController controlSys;
-	pros::lcd::print(1, "Running Auton");
-	controlSys.Init();
 	while (true) {
-		// pros::lcd::clear();	
 		controlSys.Run();
     }
 }
@@ -61,20 +58,7 @@ void autonomous() {
 
 
 void opcontrol() {
-	autonomous();
-	
-	// ::pros::Motor left_mtr(1);
-	// ::pros::Motor right_mtr(2);
-
-	// while (true) {
-	// 	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-	// 	                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-	// 	                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-	// 	int left = master.get_analog(ANALOG_LEFT_Y);
-	// 	int right = master.get_analog(ANALOG_RIGHT_Y);
-
-	// 	left_mtr = left;
-	// 	right_mtr = right;
-	// 	pros::delay(20);
-	// }
+	while (true) {
+		controlSys.Run();
+    }
 }

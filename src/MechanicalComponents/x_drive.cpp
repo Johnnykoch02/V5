@@ -48,7 +48,8 @@ int X_Drive::drive(TerriBull::Vector2 pos) {
     float pct = 0;
     
     /* Basic PID Equation */
-    this->currentError = (pos - *(this->pCurrentPos)).r;
+    Vector2* dP = pos - *(this->pCurrentPos);
+    this->currentError = dP->r;
     // ::pros::lcd::set_text(6, "Drive Error: " + std::to_string(this->pCurrentPos->theta));
     this->sumError+=currentError;
     pct = kP*currentError + kI*this->sumError + kD*this->dError();
@@ -81,8 +82,8 @@ int X_Drive::drive(TerriBull::Vector2 pos) {
           return -1;
     }
     this->setVoltage(vals);
-    this->previousError = this->currentError;
     delete[] vals;
+    delete dP;
     return 0;
 }
 

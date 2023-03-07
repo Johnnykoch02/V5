@@ -41,16 +41,16 @@ class TerriBull::Vector2 {
             return this->x * that.x + this->y * that.y + this->y;
         } 
 
-        TerriBull::Vector2 operator +(const TerriBull::Vector2& that) {
+        TerriBull::Vector2* operator +(const TerriBull::Vector2& that) {
            float x = this->x + that.x;
            float y = this->y + that.y;
            return TerriBull::Vector2::cartesianToVector2( x, y);
         }
         
-        TerriBull::Vector2 operator -(const TerriBull::Vector2& that) {
+        TerriBull::Vector2* operator -(const TerriBull::Vector2& that) {
            float x = this->x - that.x;
            float y = this->y - that.y;
-           return TerriBull::Vector2::cartesianToVector2( x, y);
+           return TerriBull::Vector2::cartesianToVector2(x, y);
         }
 
         bool operator ==(TerriBull::Vector2 const & that) const {

@@ -32,13 +32,15 @@ class TerriBull::MechanicalComponent  {
  
     virtual float getError() const final { return currentError; } 
 
-    virtual float dError() const final{
-        return (this->currentError - this->previousError);
+    virtual float dError() final{
+        float dError = currentError - previousError;
+        this->previousError = currentError;
+        return dError;
     }
 
     virtual bool isReset() const final { return this->sumError == 0; }
 
-    virtual void setPID(float kP, float kD, float kI) final {
+    virtual void setPID(float kP, float kI, float kD) final {
         this->kP = kP;
         this->kD = kD;
         this->kI = kI;

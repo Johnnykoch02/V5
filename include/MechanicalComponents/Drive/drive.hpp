@@ -16,7 +16,7 @@
 
 class TerriBull::Drive : public TerriBull::MechanicalComponent {
     protected:
-    float * pCurrentAngle;
+    double * pCurrentAngle;
     Vector2* pCurrentPos;
     Vector2 pPreviousPos;
     float motorPowerThreshold; /* Should be tested */
@@ -26,7 +26,7 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     virtual void setVoltage(float* vals) = 0;
     public:
     Drive(int gearSet) : TerriBull::MechanicalComponent(gearSet), motorPowerThreshold(127), kPTheta(0), kDTheta(0) {}
-    virtual void setAnglePtr(float * ptr) final { this->pCurrentAngle = ptr; }
+    virtual void setAnglePtr(double * ptr) final { this->pCurrentAngle = ptr; }
     virtual void setPosPtr(Vector2* ptr) final { this->pCurrentPos = ptr; }
     virtual int drive(Vector2 pos) = 0;
     virtual int change_orientation(float theta) = 0;
