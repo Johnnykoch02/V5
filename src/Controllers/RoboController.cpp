@@ -60,14 +60,29 @@ void TerriBull::RoboController::Init() {
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
         /* TASKS SECTION */
-        Vector2 *dest1 = Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y - 50);
+        Vector2 *dest1 = Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y - 10);
         this->taskManager->addTaskSet(
             new TaskList({{
-                new TerriBull::DriveTask(*dest1, 0, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-                new TerriBull::RollerTask(0.75, 1, this->getSystem())
+                new TerriBull::DriveTask(*dest1, 0, false, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
             }})
         );
+        Vector2 *dest2 = Vector2::cartesianToVector2(dest1->x + 10, dest1->y);
+        this->taskManager->addTaskSet(
+            new TaskList({{
+                new TerriBull::DriveTask(*dest2, 420, true, TerriBull::DriveTask::ORIENTATION, this->getSystem()),
+                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+            }})
+        );
+        this->taskManager->addTaskSet(
+            new TaskList({{
+                new TerriBull::DriveTask(*dest2, 0, true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+            }})
+        );
+
         delete dest1;
+        delete dest2;
         this->previousTime = pros::millis();
         this->currentTime = pros::millis();
         
@@ -101,4 +116,9 @@ void TerriBull::RoboController::updateTime() {
 
 float TerriBull::RoboController::delta() {
     return (this->currentTime - this->previousTime) / 1000.0f;
+}
+
+int TerriBull::RoboController::ClearTasks() {
+    this->taskManager->ClearAllTasks();
+    return 0;
 }

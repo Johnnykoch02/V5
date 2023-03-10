@@ -18,7 +18,7 @@ class AidanJoeShmo : public TerriBull::InputController {
     public:
     AidanJoeShmo(TerriBull::RoboController* RoboController, int deadzone) : TerriBull::InputController(RoboController, deadzone) {}
     void Init();
-    void Update(int delta);
+    void Update(float delta);
 };
 
 #endif

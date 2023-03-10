@@ -26,13 +26,7 @@
 	// pros::Motor pMotorD (4, pros::E_MOTOR_GEARSET_18, true);
 // };
 
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-	} else {
-	}
-}
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -43,17 +37,23 @@ void on_center_button() {
 TerriBull::RoboController controlSys;
 
 
+void on_center_button() {
+	controlSys.ClearTasks();
+	// pros::delay(100);
+	// controlSys.getSystem()->resetDrive();
+}
 
 void initialize() {
 	pros::lcd::initialize();
 	controlSys.Init();
+	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 
 void autonomous() {
 	while (true) {
 		controlSys.Run();
-    }
+	}
 }
 
 

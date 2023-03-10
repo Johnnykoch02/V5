@@ -23,9 +23,9 @@ class X_Drive : public TerriBull::Drive {
     int pA, pB, pC, pD;
     pros::Motor* pMotorA, *pMotorB, *pMotorC, *pMotorD;
     protected:
-    void setVoltage(float* vals);
 
     public:
+    void setVoltage(float* vals);
     X_Drive(int portA, int portB, int portC, int portD, int gearSet, float conversion, float radius) : TerriBull::Drive(gearSet, conversion, radius), pA(portA), pB(portB), pC(portC), pD(portD) {
       this->pType = "X-Drive";
       this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, false);
@@ -45,12 +45,12 @@ class X_Drive : public TerriBull::Drive {
     }
     ~X_Drive();
 
-    int drive(TerriBull::Vector2 pos);
+    int drive(TerriBull::Vector2 pos, float delta);
     void reset();
     Vector2* resultant_vector() {return nullptr; }
     void tare_encoders()  {}
 
-    int change_orientation(float theta);
+    int change_orientation(float theta, float delta);
 
 };
 

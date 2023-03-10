@@ -39,19 +39,19 @@ void RollerTask::init() {
 }
 
 void RollerTask::update(float delta) {
-    pros::lcd::set_text(7, "Roller Tasks...");
+    // pros::lcd::set_text(7, "Roller Tasks...");
     if (!this->finishedFlag) {
         switch(rollerType) {
             case TIME:
                 this->system->spinRollerFor(this->direction, this->time);
-                this->finishedFlag = this->system->getRoller()->timeFlag;
+                this->finishedFlag = this->system->isRollerCompleted();
                 break;
             case POS:
                 this->system->spinRollerTo(this->targetPos);
                 this->finishedFlag = fabs(this->system->getRollerError()) < 0.2 && fabs(this->system->getRollerDError()) < 0.5;
                 break;
         }
-    } if(this->finishedFlag) pros::lcd::set_text(7, "Roller Task Finished.");
+    } if(this->finishedFlag) ;
 }
 
 void RollerTask::terminate() {

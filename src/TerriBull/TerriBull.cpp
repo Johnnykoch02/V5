@@ -52,7 +52,7 @@ namespace TerriBull {
     }
     float RAD2DEG( const float rad )
     {
-    	return rad * 180/PI;
+    	return (float)fmod(rad * 180/PI, 360);
     }
 
     float GetDTheta(float tf, float ti) {

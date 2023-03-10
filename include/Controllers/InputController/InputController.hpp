@@ -21,7 +21,7 @@ class TerriBull::InputController {
     public:
         InputController(RoboController* roboController, int deadzone) : roboController(roboController), deadzone(deadzone) {}
         virtual void Init() {}
-        virtual void Update(int delta) {}
+        virtual void Update(float delta) {}
 
 };
 

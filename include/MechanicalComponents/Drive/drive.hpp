@@ -25,13 +25,13 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     float kPTheta, kDTheta;
     // Vector2 pCurrentError;
     // Vector2 pPreviousError;
-    virtual void setVoltage(float* vals) = 0;
     public:
     Drive(int gearSet, float _conversionFactor, float _wheelRadius) : TerriBull::MechanicalComponent(gearSet), motorPowerThreshold(127), kPTheta(0), kDTheta(0), conversionFactor(_conversionFactor), wheelRadius(_wheelRadius) {}
+    virtual void setVoltage(float* vals) = 0;
     virtual void setAnglePtr(double * ptr) final { this->pCurrentAngle = ptr; }
     virtual void setPosPtr(Vector2* ptr) final { this->pCurrentPos = ptr; }
-    virtual int drive(Vector2 pos) = 0;
-    virtual int change_orientation(float theta) = 0;
+    virtual int drive(Vector2 pos, float delta) = 0;
+    virtual int change_orientation(float theta, float delta) = 0;
     virtual void reset() = 0;
     virtual Vector2* resultant_vector() = 0;
     virtual void tare_encoders() = 0;

@@ -30,5 +30,5 @@ void IntakeTask::update(float delta) {
 }
 
 void IntakeTask::terminate() {
-
+    this->terminated = true;
 }

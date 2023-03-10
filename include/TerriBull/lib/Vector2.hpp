@@ -29,12 +29,9 @@ class TerriBull::Vector2 {
         Vector2(const TerriBull::Vector2& v) : x(v.x), y(v.y), r(v.r), theta(v.theta) {}
         Vector2(const TerriBull::Vector2*  v) : x(v->x), y(v->y), r(v->r), theta(v->theta) {}
         ::TerriBull::Vector2* operator *(const float scale) {
-            Vector2* v = new Vector2();
-            v->x = scale * this->x;
-            v->y = scale * this->y;
-            v->r = ::std::sqrt(v->x*v->x+v->y*v->y);
-            v->theta = this->theta;
-            return v;
+            float x = scale * this->x;
+            float y = scale * this->y;
+            return Vector2::cartesianToVector2(x, y);
         }
 
         float operator *(Vector2 const & that) {
@@ -65,9 +62,10 @@ class TerriBull::Vector2 {
             v->x = x;
             v->y = y;
             v->r = ::std::sqrt(x*x+y*y);
-            v->theta = ::std::fmod(RAD2DEG(atan2(y, x)), 360.0);
+            v->theta = atan2(y, x);
             return v;
         }
+        /* */
         static TerriBull::Vector2* polarToVector2(float r, float theta) {
             Vector2* v = new Vector2();
             v->x = r*cos(theta);

@@ -23,11 +23,13 @@ class Tank_Drive_Quad : public TerriBull::Drive {
     int pA, pB, pC, pD;
     pros::Motor* pMotorA, *pMotorB, *pMotorC, *pMotorD;
     float kPThetaTranslation;
+    int targetDirection;
+
     protected:
-    void setVoltage(float* vals);
 
     public:
-    Tank_Drive_Quad(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int gearSet, float conversion, float radius) : TerriBull::Drive(gearSet, conversion, radius), pA(portA), pB(portB), pC(portC), pD(portD), kPThetaTranslation(0.2) {
+    void setVoltage(float* vals);
+    Tank_Drive_Quad(int portA, bool aReverse, int portB, bool bReverse, int portC, bool cReverse, int portD, bool dReverse, int gearSet, float conversion, float radius) : targetDirection(0), TerriBull::Drive(gearSet, conversion, radius), pA(portA), pB(portB), pC(portC), pD(portD), kPThetaTranslation(0.2) {
       this->pType = "Tank-Drive-Quad";
       this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, aReverse);
       this->pMotorB = new pros::Motor(pB, (pros::motor_gearset_e)this->gearSet, bReverse);
@@ -46,7 +48,7 @@ class Tank_Drive_Quad : public TerriBull::Drive {
     }
     ~Tank_Drive_Quad();
 
-    int drive(TerriBull::Vector2 pos);
+    int drive(TerriBull::Vector2 pos, float delta);
     void reset();
     Vector2* resultant_vector();
     void tare_encoders()  {
@@ -55,7 +57,7 @@ class Tank_Drive_Quad : public TerriBull::Drive {
       this->pMotorC->tare_position();
       this->pMotorD->tare_position();
     }
-    int change_orientation(float theta);
+    int change_orientation(float theta, float delta);
 
 };
 

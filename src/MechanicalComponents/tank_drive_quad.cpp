@@ -36,29 +36,44 @@ void Tank_Drive_Quad::setVoltage(float* vals)  {
     this->pMotorD->move(rb);
 }
 
-int Tank_Drive_Quad::drive(TerriBull::Vector2 pos) {
+int Tank_Drive_Quad::drive(TerriBull::Vector2 pos, float delta) {
     /* Theta of desired Modified By our current Look Angle */
-    float* vals = new float[4];
+    float* vals = new float[6];
     float pct = 0;
     Vector2* dP = (pos - *(this->pCurrentPos));
-    // float difToZero = fabs(GetDTheta(*(this->pCurrentAngle), RAD2DEG(dP->theta)));
-    // float difToBack = fabs(GetDTheta(fmod(*(this->pCurrentAngle) + 180, 360), RAD2DEG(dP->theta)));
-    // float difToZero = fabs(RAD2DEG(dP->theta) - 90);
-    // float difToBack = fabs(RAD2DEG(dP->theta) - 270);
-    int errorMod = (dP->theta > 215 && dP->theta < 345)? -1 : 1;
+    float difToZero = fabs(GetDTheta(RAD2DEG(dP->theta), *(this->pCurrentAngle)));
+    float difToBack = fabs(GetDTheta(RAD2DEG(dP->theta), fmod(*(this->pCurrentAngle)+ 180, 360)));
+    int errorMod = (difToZero < difToBack) ? 1 : -1;
+    if (dP->r > errorMod) targetDirection = errorMod;
     this->currentError = dP->r * errorMod; /* First Part: Absolute Displacement, Second Part: Positive or Negative */
     this->sumError+=currentError;
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(1);
-    s3 << "Err: "<< this->currentError << " Mod: " << errorMod << "|" << dP->theta << " " << dP->r;
+    s3 << "Err: "<< this->currentError << " Mod: " << errorMod << "|" << RAD2DEG(dP->theta) << " " << dP->r;
     pros::lcd::set_text(4,s3.str());
     /* Basic PID Equation */
-    pct = kP*currentError + kI*this->sumError + kD*this->dError();
-    pct*=errorMod;
-    float offTrack = GetDTheta(dP->theta, *(this->pCurrentAngle)) * dP->r;
-    int dir = fabs(offTrack)/offTrack;
-    float pL = pct + MIN(fabs(this->kPThetaTranslation*offTrack), 25) * dir * errorMod;
-    float pR = pct - MIN(fabs(this->kPThetaTranslation*offTrack), 25) * dir * errorMod;
+    pct = kP*currentError + kI*this->sumError + kD*this->dError() / delta;
+
+    if (fabs(pct) >  127) {/* Clmp Pwr to 127 */
+        pct = 127 * fabs(pct) / pct;
+    }
+    float pL = pct;
+    float pR = pct;
+    int angleMod = (errorMod > 0 ) ? 0 : 180;
+    float offTrack = GetDTheta(RAD2DEG(dP->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360));
+    if (fabs(dP->r) > 3) {
+        int dir = fabs(offTrack)/offTrack;
+        pL *= 0.95;
+        pR *= 0.95;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
+    }
+    else if (fabs(dP->r) > 1.0 && offTrack > 90) {
+        this->change_orientation(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
+        delete[] vals;
+        delete dP;
+        return 0;
+    }
     vals[0] = pL;
     vals[1] = pL;
     vals[2] = pR;
@@ -69,7 +84,7 @@ int Tank_Drive_Quad::drive(TerriBull::Vector2 pos) {
     return 0;
 }
 
-int Tank_Drive_Quad::change_orientation(float theta) {
+int Tank_Drive_Quad::change_orientation(float theta, float delta) {
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;

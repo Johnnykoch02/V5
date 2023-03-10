@@ -38,7 +38,7 @@ void X_Drive::setVoltage(float* vals)  {
 
 }
 
-int X_Drive::drive(TerriBull::Vector2 pos) {
+int X_Drive::drive(TerriBull::Vector2 pos, float delta) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[4];
     float angle = pos.theta - *(this->pCurrentAngle);
@@ -87,7 +87,7 @@ int X_Drive::drive(TerriBull::Vector2 pos) {
     return 0;
 }
 
-int X_Drive::change_orientation(float theta) {
+int X_Drive::change_orientation(float theta, float delta) {
   float* vals = new float[4];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   ::pros::lcd::set_text(6, "Theta Error: " + std::to_string(this->currentError));

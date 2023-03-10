@@ -16,7 +16,7 @@
 
  #include "../../TerriBull.hpp"
 
-typedef enum TaskTypes {DRIVE, ROLLER, INTAKE, SHOOTER, INTERNAL_VARIABLES} TaskTypes;
+typedef enum TaskTypes {DRIVE, ROLLER, INTAKE, SHOOTER, TIME, INTERNAL_VARIABLES} TaskTypes;
 
  class TerriBull::Task {
     

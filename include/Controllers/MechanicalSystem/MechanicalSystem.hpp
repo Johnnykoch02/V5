@@ -50,6 +50,9 @@ class TerriBull::MechanicalSystem {
     float getDriveDError() const;
     float getRollerError() const;
     float getRollerDError() const;
+    bool isShotCompleted() const;
+    bool isRollerCompleted() const;
+    
     void Init();
     void update(float delta);
     /* API TO Mechanical System */
@@ -61,6 +64,8 @@ class TerriBull::MechanicalSystem {
     int spinRollerTo(float pos);
     int spinRollerFor(int direction, float time);
     int resetRoller();
+    int ShootDisk();
+    int resetShooter();
     /*Setters*/
     void setMotherSystem(RoboController* _motherSystem);
     void setIntake(TerriBull::Intake * _intake);

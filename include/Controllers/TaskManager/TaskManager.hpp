@@ -28,15 +28,21 @@ class TerriBull::TaskManager {
 private:
     TerriBull::TaskList *currentTaskSet;
     TerriBull::PriorityQueue<TerriBull::TaskList> tasks;
+    int tasksCompleted;
     // ::std::vector<Expression*> Expressions;
 public:
-    TaskManager() {
+    TaskManager() : tasksCompleted(0) {
         currentTaskSet = nullptr;
         this->tasks = TerriBull::PriorityQueue<TerriBull::TaskList>();
     }
     void ClearAllTasks() {
         this->tasks.deque_all();
-        delete this->currentTaskSet;
+        if (this->currentTaskSet!= nullptr) {
+            for ( auto tsk : *(this->currentTaskSet) ) {
+                    delete tsk;
+            }
+            delete this->currentTaskSet;
+        }
         this->currentTaskSet = nullptr;
     }
     void addTaskSet(TaskList *tasks) {
@@ -50,7 +56,7 @@ public:
     void run(int delta) {
         if (this->currentTaskSet != nullptr)
         { /* Update and chek our current task*/
-        // pros::lcd::set_text(7, "Running Tasks...");
+        pros::lcd::set_text(7, "Task Number: " + std::to_string(this->tasksCompleted+1));
             int finishedTasks = 0, totalTasks = 0;
             for ( auto tsk : *(this->currentTaskSet)) {
                 totalTasks++;
@@ -66,6 +72,7 @@ public:
                 }
                 delete this->currentTaskSet;
                 this->currentTaskSet = nullptr;
+                this->tasksCompleted++;
             }
         }
         else if (tasks.isEmpty() == false)

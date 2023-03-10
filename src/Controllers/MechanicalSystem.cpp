@@ -32,6 +32,7 @@ void MechanicalSystem::setStartingPosition(float x, float y){
     this->pPosition = TerriBull::Vector2::cartesianToVector2(x, y);
 }
 
+/* Tasking Specific */
 float  MechanicalSystem::getDriveError() const {
     return this->pDrive->getError();
 
@@ -44,9 +45,20 @@ float  MechanicalSystem::getRollerError() const {
     if (this->pRoller != nullptr) return this->pRoller->getError();
     return 0;
 }
+
 float  MechanicalSystem::getRollerDError() const {
     if (this->pRoller != nullptr) return this->pDrive->ROdError();
     return 0;
+}
+
+bool MechanicalSystem::isShotCompleted() const {
+    if (this->pShooter!= nullptr) return this->pShooter->shotCompleted();
+    return true;
+}
+
+bool MechanicalSystem::isRollerCompleted() const {
+    if (this->pShooter!= nullptr) return this->pRoller->timeFlag;
+    return true;
 }
 
 TerriBull::Vector2*  MechanicalSystem::getPosition() {
@@ -79,22 +91,21 @@ void TerriBull::MechanicalSystem::update(float delta) {
 
 /* MECHANICAL SYSTEM API FUNCTIONS */
 int TerriBull::MechanicalSystem::GoToPosition(Vector2 pos) {
-    int returnCode = this->pDrive->drive(pos);
-    return returnCode;
+    return this->pDrive->drive(pos, this->motherSystem->delta());
 }
 
 int TerriBull::MechanicalSystem::TurnToAngle(float theta) {
-     return this->pDrive->change_orientation(theta);
+     return this->pDrive->change_orientation(theta, this->motherSystem->delta());
 }
 
 int TerriBull::MechanicalSystem::turnOnIntake(float direction) {
-    if (this->pIntake!= nullptr) {
+    if (this->pIntake != nullptr) {
         return this->pIntake->TurnOn(direction);
     } return -1; 
 }
 
 int TerriBull::MechanicalSystem::turnOffIntake() {
-    if (this->pIntake!= nullptr) {
+    if (this->pIntake != nullptr) {
         return this->pIntake->TurnOff();
     } return -1;
 }
@@ -112,9 +123,21 @@ int TerriBull::MechanicalSystem::spinRollerFor(int direction, float time) {
 }
 
 int TerriBull::MechanicalSystem::resetRoller() {
-    if (this->pRoller!= nullptr) {
+    if (this->pRoller != nullptr) {
         this->pRoller->reset();
         return 0;
+    } return -1;
+}
+
+int TerriBull::MechanicalSystem::ShootDisk() {
+    if (this->pShooter != nullptr) {
+        return this->pShooter->Shoot(this->motherSystem->delta());
+    } return -1;
+}
+
+int TerriBull::MechanicalSystem::resetShooter() {
+    if (this->pShooter != nullptr) {
+        return this->pShooter->reset();
     } return -1;
 }
 

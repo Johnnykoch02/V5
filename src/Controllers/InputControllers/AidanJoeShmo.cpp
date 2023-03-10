@@ -13,25 +13,19 @@ void AidanJoeShmo::Init() {
 
 }
 
-void AidanJoeShmo::Update(int delta) {
-    /* Drive Input */
+void AidanJoeShmo::Update(float delta) {
+    /* Drive */
     bool drive_engaged = false;
-    int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);\
+    int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);
     if (abs(yInput) < deadzone) yInput = 0;
     if (yInput != 0) {
       yInput/=5;
       drive_engaged = true;
-      // pros::lcd::set_text(4,"Translation");
       Vector2* currentPos = this->roboController->getSystem()->getPosition();
       int angleMod = (yInput > 0) ? 1 : 0;
       Vector2* unitPos = currentPos->unit();
       Vector2* scalePos = *unitPos * yInput;
-      Vector2* goalPos;
-      if (angleMod) {
-        goalPos = *scalePos + *currentPos;
-      } else {
-        goalPos =  *currentPos - *scalePos;
-      }
+      Vector2* goalPos = *scalePos - *currentPos;
       this->roboController->getSystem()->GoToPosition(*goalPos);
       delete unitPos;
       delete goalPos;

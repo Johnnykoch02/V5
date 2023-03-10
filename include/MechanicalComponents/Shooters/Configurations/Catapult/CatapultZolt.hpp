@@ -19,10 +19,11 @@ class CatapultZolt : public TerriBull::Shooter {
     protected:
     pros::Motor *pMotorX, *pMotorY;
     pros::ADIDigitalIn *limitSwitch;
+    bool engagedOne; float cntNoVal; float sumTime;
     int x, y;
 
     public:
-    CatapultZolt(int _x, bool xReverse, int _y, int yReverse, char limitSwitchPort, int gearSet) : Shooter(gearSet), x(_x), y(_y) {
+    CatapultZolt(int _x, bool xReverse, int _y, int yReverse, char limitSwitchPort, int gearSet) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0) {
         this->pType = "Catapult-Zolt";
         this->pMotorX = new pros::Motor(x, xReverse);
         this->pMotorY = new pros::Motor(y, yReverse);
