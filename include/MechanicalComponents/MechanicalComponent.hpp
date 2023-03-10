@@ -23,23 +23,42 @@ class TerriBull::MechanicalComponent  {
     float previousError;
     float sumError;
 
+    int gearSet;
+
     float kP, kD, kI;
 
     public:
-    MechanicalComponent() : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE) {}
+    MechanicalComponent(int gearSet) : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE), gearSet(gearSet) {}
  
-    virtual float getError() const final {
-        return currentError;
-    } 
-    virtual float dError() const final{
-        return (this->currentError - this->previousError);
+    virtual float getError() const final { return currentError; } 
+
+    /**
+     * @brief Gets Current Derror and automatically sets the previous error value to the current error value.
+     * WARNING: this function is not READ-ONLY.
+     * @return float 
+     */
+    virtual float dError() final{
+        float dError = currentError - previousError;
+        this->previousError = currentError;
+        return dError;
+    }
+    /**
+     * @brief READONLY: Gets the current derror value.
+     * 
+     * @return float 
+     */
+    virtual float ROdError() const final{
+        return currentError - previousError;
     }
 
-    void setPID(float kP, float kD, float kI) {
+    virtual bool isReset() const final { return this->sumError == 0; }
+
+    virtual void setPID(float kP, float kI, float kD) final {
         this->kP = kP;
         this->kD = kD;
         this->kI = kI;
     }
+
 
     virtual ::std::string getType() const final {
         return this->pType;

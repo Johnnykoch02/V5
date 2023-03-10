@@ -20,10 +20,10 @@ void RoboController::setSystem(MechanicalSystem* system) {
 void RoboController::setSerialController(SerialController* serialController) {
     this->serialController = serialController;
 }
-    /* Getter Methods */
-    // ObjectHandler* getObjHandler() {
-    //     return this->objHandler;
-    // }
+/* Getter Methods */
+// ObjectHandler* getObjHandler() {
+//     return this->objHandler;
+// }
 TaskManager* RoboController::getTaskManager() {
     return this->taskManager;
 }
@@ -37,7 +37,7 @@ SerialController* RoboController::getSerialController() {
 
 void TerriBull::RoboController::Init() {
     /* TBD                                          <-Fix this file path-> */
-    this->configParser = new ConfigurationParser("/usd/configuration.json", "Shooter_Big_Bot");
+    this->configParser = new ConfigurationParser("/usd/configuration.json", "Left_Nut");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
         this->system = this->configParser->getMechanicalSystemConfig();
@@ -46,9 +46,10 @@ void TerriBull::RoboController::Init() {
             logger.logError(("Configuration Parsing Failed on loading in System, Error Code: "+ ::std::to_string(configParser->getErrCode())));
             // exit(1);
         }
+        this->system->setMotherSystem(this);
         this->inputController = this->configParser->getInputControllerConfig(this);
         if (inputController == nullptr) {
-            exit(1);
+            // exit(1);
         }
         /* Init Task Manager */
         this->taskManager = new TaskManager(); /* TODO: Needs TaskManager::Init() */
@@ -58,13 +59,33 @@ void TerriBull::RoboController::Init() {
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
-        // this->taskManager->addTaskSet(
-        //     new TaskList({
-        //         new DriveTask(Vector2::cartesianToVector2((this->system->getPosition()).x+50, (this->system->getPosition()).y));
-        //     })
-        // );
+        /* TASKS SECTION */
+        Vector2 *dest1 = Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y - 10);
+        this->taskManager->addTaskSet(
+            new TaskList({{
+                new TerriBull::DriveTask(*dest1, 0, false, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+            }})
+        );
+        Vector2 *dest2 = Vector2::cartesianToVector2(dest1->x + 10, dest1->y);
+        this->taskManager->addTaskSet(
+            new TaskList({{
+                new TerriBull::DriveTask(*dest2, 420, true, TerriBull::DriveTask::ORIENTATION, this->getSystem()),
+                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+            }})
+        );
+        this->taskManager->addTaskSet(
+            new TaskList({{
+                new TerriBull::DriveTask(*dest2, 0, true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+            }})
+        );
+
+        delete dest1;
+        delete dest2;
         this->previousTime = pros::millis();
         this->currentTime = pros::millis();
+        
     }
     else {
         pros::lcd::set_text(0,"Parsing Error: "+::std::to_string(configParser->getErrCode()) );
@@ -74,12 +95,18 @@ void TerriBull::RoboController::Init() {
 }
 
 void TerriBull::RoboController::Run() {
-    // this->taskManager->run();
     this->updateTime();
+    this->system->update(this->delta());
+    if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
+        this->taskManager->run(this->delta());
+    } else {
+        this->inputController->Update(this->delta());
+    }
+    
     // this->serialController->update();
     // this->objHandler->update();
-    this->inputController->Update(this->delta());
-    pros::delay(10);
+
+    pros::delay(25);
 }
 
 void TerriBull::RoboController::updateTime() {
@@ -89,4 +116,9 @@ void TerriBull::RoboController::updateTime() {
 
 float TerriBull::RoboController::delta() {
     return (this->currentTime - this->previousTime) / 1000.0f;
+}
+
+int TerriBull::RoboController::ClearTasks() {
+    this->taskManager->ClearAllTasks();
+    return 0;
 }

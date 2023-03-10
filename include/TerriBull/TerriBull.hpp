@@ -21,12 +21,14 @@
 #include <string>
 #include <cmath>
 
+#define MIN(a, b) (((a) < (b))? (a) : (b))
+#define MAX(a, b) (((a) > (b))? (a) : (b))
+
 class ConfigurationParser;
 /**
  * @brief TerriBull Robotics V5 VEX Library Built on-top of PROS
 */
 namespace TerriBull {
-
     /**
      * @brief TerriBull Robotics Utilities and Class Predeclarations
      *
@@ -38,17 +40,26 @@ namespace TerriBull {
     class Vector2;
     /* Manages Tasks for the Robot */
     class TaskManager;
-    /* Task Data Container */
+    /* Task Data Containers */
     class Task;
-    typedef ::std::list<Task*> TaskList;
+    class DriveTask;
+    class RollerTask;
+    class IntakeTask;
+    class ShooterTask;
+    class TimeTask;
+    typedef ::std::vector<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;
     /* Manages Mechanical Components */
     class MechanicalSystem;
-    /* Virtual */
+    /* Abstract Modifiers Class for Mechanism Control */
     class MechanicalComponent;
-    /* Abstract Class for Drivetrain */
+    /* Abstract Classes for Mechanical Components */
     class Drive;
+    class Expansion;
+    class Intake;
+    class Roller;
+    class Shooter; /*FlyWheel Catapult*/
     /* Main Controller for the Robot */
     class RoboController;
     /* Takes Controller Input and Controls the Robot */
@@ -68,10 +79,16 @@ namespace TerriBull {
      * @brief Useful Algorithms and Functions
      */
     extern float const PI;
+    extern int const RED_REVS;
+    extern int const GREEN_REVS;
+    extern int const BLUE_REVS;
+    extern std::map<::std::string, int> GEAR_ENCODER;
+    extern std::map<int, int> ENCODER_UNIT;
 
     extern float DEG2RAD( const float deg );
     extern float RAD2DEG( const float rad );
     extern float GetDTheta(float tf, float ti);
+    extern pros::Imu mu;
     
 
     /**
@@ -474,9 +491,16 @@ namespace TerriBull {
     #include "./lib/Vector2.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
+    #include "../MechanicalComponents/Intakes/intake.hpp"
+    #include "../MechanicalComponents/Rollers/roller.hpp"
+    #include "../MechanicalComponents/Shooters/shooter.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
-    #include "./lib/Tasking/DriveTasking/DriveTask.hpp"
+    #include "./lib/Tasking/Types/DriveTask.hpp"
+    #include "./lib/Tasking/Types/RollerTask.hpp"
+    #include "./lib/Tasking/Types/IntakeTask.hpp"
+    #include "./lib/Tasking/Types/ShooterTask.hpp"
+    #include "./lib/Tasking/Types/TimeTask.hpp"
     #include "../Controllers/TaskManager/TaskManager.hpp"
     #include "./lib/ConfigurationParser.hpp"
     #include "./lib/GameObjects/GameObject.hpp"

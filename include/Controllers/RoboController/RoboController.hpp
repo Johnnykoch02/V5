@@ -58,6 +58,7 @@ class TerriBull::RoboController {
     float delta();
     void Run();
     void Stop();
+    int ClearTasks();
 };
 
 #endif

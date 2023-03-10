@@ -4,17 +4,119 @@
         {
             "name": "Shooter_Big_Bot",
             "controller_config": "AidanJoeShmo",
-            "controllerP=_deadzone": 5,
+            "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
                 "starting_position": {
                     "x": 0,
                     "y": 0
                 },
-                "imu": 5,
+                "imu": 11,
                 "drive": {
                     "config": "x_drive",
-                    "motor_ports": [1, 2, 3, 4]
+                    "motor_ports": [1, 2, 3, 4],
+                    "gear_ratio": "RED",
+                    "cf": 1.0,
+                    "radius": 1.0
+                },
+                "intake": {
+                    "config": "IntakeUni",
+                    "motor_ports": [5],
+                    "reverse_motors": [0],
+                    "gear_ratio": "RED",
+                    "max_speed": 100
+                },
+                "roller": {
+                    "config": "RollerUni",
+                    "motor_ports": [19],
+                    "reverse_motors": [0],
+                    "gear_ratio": "GREEN",
+                    "max_speed": 120
+                },
+                "shooter": {
+                    "config": "ShooterFlyWheelSB",
+                    "motor_ports": [8, 9],
+                    "reverse_motors": [0, 0],
+                    "gear_ratio": "RED",
+                    "max_speed": 100
+                }
+            }
+        },
+        {
+            "name": "Left_Nut",
+            "controller_config": "AidanJoeShmo",
+            "controller_deadzone": 5,
+            "mechanical_system": {
+                "starting_angle": 90,
+                "starting_position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "imu": 11,
+                "drive": {
+                    "config": "tank_drive_std",
+                    "motor_ports": [4, 5, 6, 1, 2, 3],
+                    "reverse_motors": [1, 1, 0, 0, 0, 1],
+                    "gear_ratio": "BLUE",
+                    "cf": 0.667,
+                    "radius": 2.0
+                },
+                "roller": {
+                    "config": "RollerDuo",
+                    "motor_ports": [19, 20],
+                    "reverse_motors": [0, 1],
+                    "gear_ratio": "GREEN",
+                    "max_speed": 120
+                },
+                "shooter": {
+                    "config": "CatapultZolt",
+                    "motor_ports": [9, 10],
+                    "reverse_motors": [1, 0],
+                    "limit_port": "H",
+                    "gear_ratio": "RED",
+                    "max_speed": 100
+                }
+            }
+        },
+        {
+            "name": "TinyBull",
+            "controller_config": "RyanIsTank",
+            "controller_deadzone": 5,
+            "mechanical_system": {
+                "starting_angle": 90,
+                "starting_position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "imu": 11,
+                "drive": {
+                    "config": "tank_drive_std",
+                    "motor_ports": [4, 5, 6, 1, 2, 3],
+                    "reverse_motors": [1, 1, 0, 0, 0, 1],
+                    "gear_ratio": "BLUE",
+                    "cf": 0.667,
+                    "radius": 1.5
+                },
+                "intake": {
+                    "config": "IntakeUni",
+                    "motor_ports": [5],
+                    "reverse_motors": [0],
+                    "gear_ratio": "GREEN",
+                    "max_speed": 120
+                },
+                "roller": {
+                    "config": "RollerUni",
+                    "motor_ports": [19],
+                    "reverse_motors": [0],
+                    "gear_ratio": "GREEN",
+                    "max_speed": 120
+                },
+                "shooter": {
+                    "config": "ShooterFlyWheelSB",
+                    "motor_ports": [8, 9],
+                    "reverse_motors": [0, 0],
+                    "gear_ratio": "SpecialFlyWheel",
+                    "max_speed": 127
                 }
             }
         }

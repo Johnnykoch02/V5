@@ -28,29 +28,26 @@ class TerriBull::Vector2 {
         ~Vector2() {}
         Vector2(const TerriBull::Vector2& v) : x(v.x), y(v.y), r(v.r), theta(v.theta) {}
         Vector2(const TerriBull::Vector2*  v) : x(v->x), y(v->y), r(v->r), theta(v->theta) {}
-        ::TerriBull::Vector2 operator *(float scale) {
-            Vector2* v = new Vector2();
-            v->x = scale * this->x;
-            v->y = scale * this->y;
-            v->r = this->r;
-            v->theta = this->theta;
-            return v;
+        ::TerriBull::Vector2* operator *(const float scale) {
+            float x = scale * this->x;
+            float y = scale * this->y;
+            return Vector2::cartesianToVector2(x, y);
         }
 
         float operator *(Vector2 const & that) {
             return this->x * that.x + this->y * that.y + this->y;
         } 
 
-        TerriBull::Vector2 operator +(const TerriBull::Vector2& that) {
+        TerriBull::Vector2* operator +(const TerriBull::Vector2& that) {
            float x = this->x + that.x;
            float y = this->y + that.y;
            return TerriBull::Vector2::cartesianToVector2( x, y);
         }
         
-        TerriBull::Vector2 operator -(const TerriBull::Vector2& that) {
+        TerriBull::Vector2* operator -(const TerriBull::Vector2& that) {
            float x = this->x - that.x;
            float y = this->y - that.y;
-           return TerriBull::Vector2::cartesianToVector2( x, y);
+           return TerriBull::Vector2::cartesianToVector2(x, y);
         }
 
         bool operator ==(TerriBull::Vector2 const & that) const {
@@ -65,9 +62,10 @@ class TerriBull::Vector2 {
             v->x = x;
             v->y = y;
             v->r = ::std::sqrt(x*x+y*y);
-            v->theta = ::std::fmod(RAD2DEG(atan2(y, x)), 360.0);
+            v->theta = atan2(y, x);
             return v;
         }
+        /* */
         static TerriBull::Vector2* polarToVector2(float r, float theta) {
             Vector2* v = new Vector2();
             v->x = r*cos(theta);

@@ -17,6 +17,21 @@
 namespace TerriBull {
   int const MAX_VOLTAGE = 127;
   float const PI =  3.14159;
+  int const RED_REVS = 300;
+  int const GREEN_REVS = 900;
+  int const BLUE_REVS = 1800;
+  std::map<std::string, int> GEAR_ENCODER = {
+    {"RED", pros::E_MOTOR_GEARSET_36},
+    {"GREEN", pros::E_MOTOR_GEARSET_18},
+    {"BLUE", pros::E_MOTOR_GEARSET_06},
+    {"SpecialFlyWheel", 3},
+  };
+  std::map<int, int> ENCODER_UNIT {
+    {pros::E_MOTOR_GEARSET_06, RED_REVS},
+    {pros::E_MOTOR_GEARSET_18, GREEN_REVS},
+    {pros::E_MOTOR_GEARSET_36, BLUE_REVS},
+    {3, 10800},/*Speical */
+  };
 };
 #endif
 #ifndef __TERRIBULL_GLOBALS__
@@ -24,6 +39,8 @@ namespace TerriBull {
 namespace TerriBull {
 Logger logger("/usd/logfile.log"); /* Global Logger */
 ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
+pros::Imu mu(11);
+
 };
 #endif
 #ifndef __TERRIBULL_FUNCTIONS__
@@ -35,7 +52,7 @@ namespace TerriBull {
     }
     float RAD2DEG( const float rad )
     {
-    	return rad * 180/PI;
+    	return (float)fmod(rad * 180/PI, 360);
     }
 
     float GetDTheta(float tf, float ti) {

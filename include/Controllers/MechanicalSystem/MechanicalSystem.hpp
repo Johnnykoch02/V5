@@ -22,39 +22,64 @@
 
 class TerriBull::MechanicalSystem {
     private:
+        RoboController* motherSystem;
         ::pros::Imu* pImu;
         TerriBull::Drive * pDrive;
+        TerriBull::Intake * pIntake;
+        TerriBull::Shooter * pShooter;
+        TerriBull::Roller* pRoller;
+        TerriBull::Expansion* pExpansion;
         TerriBull::Vector2 * pPosition;
-        float * pAngle;
+        double * pAngle;
         float pStartingAngle;
 
     public:
 
     MechanicalSystem(int _imu, TerriBull::Drive * _drive);
-
-    void GoToPosition(float x, float y);
-    void resetDrive();
-    void TurnToAngle(float theta);
-
-
     float getAngle();
     
     void setStartingAngle(float angle) {
         this->pStartingAngle = angle;
     }
     
+    TerriBull::Vector2* getPosition();
     void setStartingPosition(float x, float y);
 
     /* Tasking Specific */
     float getDriveError() const;
-
     float getDriveDError() const;
-
-    TerriBull::Vector2 getPosition();
-
-    void update();
-
+    float getRollerError() const;
+    float getRollerDError() const;
+    bool isShotCompleted() const;
+    bool isRollerCompleted() const;
+    
+    void Init();
+    void update(float delta);
     /* API TO Mechanical System */
+    int GoToPosition(Vector2 pos);
+    void resetDrive();
+    int TurnToAngle(float theta);
+    int turnOnIntake(float direction);
+    int turnOffIntake();
+    int spinRollerTo(float pos);
+    int spinRollerFor(int direction, float time);
+    int resetRoller();
+    int ShootDisk();
+    int resetShooter();
+    /*Setters*/
+    void setMotherSystem(RoboController* _motherSystem);
+    void setIntake(TerriBull::Intake * _intake);
+    void setShooter(TerriBull::Shooter * _shooter);
+    void setRoller(TerriBull::Roller * _roller);
+    void setExpansion(TerriBull::Expansion * _expansion);
+    /*Getters*/
+    TerriBull::Intake * getIntake();
+    TerriBull::Shooter * getShooter();
+    TerriBull::Roller * getRoller();
+    TerriBull::Expansion * getExpansion();
+    TerriBull::Drive * getDrive();
+    
+
 
 };
 

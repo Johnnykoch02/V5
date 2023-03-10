@@ -11,15 +11,6 @@
  */
 #include "../../include/MechanicalComponents/Drive/configurations/x_drive.hpp"
 
-// X_Drive::X_Drive(int portA, int portB, int portC, int portD) : TerriBull::Drive() {
-
-//     // this->setPID(0.5, 0.2, 0.3);
-//     // pMotorA.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-//     // pMotorB.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-//     // pMotorC.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-//     // pMotorD.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-// }
-
 X_Drive::~X_Drive() {
     delete this->pMotorA;
     delete this->pMotorB;
@@ -47,22 +38,24 @@ void X_Drive::setVoltage(float* vals)  {
 
 }
 
-float* X_Drive::drive(TerriBull::Vector2 pos) {
+int X_Drive::drive(TerriBull::Vector2 pos, float delta) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[4];
-    float angle = pos.theta - (*(this->pCurrentAngle) - 90);
+    float angle = pos.theta - *(this->pCurrentAngle);
     angle = (angle<0) ? 360.0 + angle : angle;
     int x = int(round(angle/45)) % 8;
     int dir = 0;
     float pct = 0;
-
-    this->currentError = (pos - *(this->pCurrentPos)).r;
-    this->sumError+=currentError;
+    
     /* Basic PID Equation */
+    Vector2* dP = pos - *(this->pCurrentPos);
+    this->currentError = dP->r;
+    // ::pros::lcd::set_text(6, "Drive Error: " + std::to_string(this->pCurrentPos->theta));
+    this->sumError+=currentError;
     pct = kP*currentError + kI*this->sumError + kD*this->dError();
+    // ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pct));
 
-
-    // // pros::lcd::set_text(4,::std::to_string(x) );
+    /* X Drive Drives in all 8 directions, pick the direction an apply the right direction modifier */
     switch(x) {
       case 0:
       case 4:
@@ -85,20 +78,31 @@ float* X_Drive::drive(TerriBull::Vector2 pos) {
         vals[0] = 0; vals[1] = -pct*dir; vals[2] = -pct*dir; vals[3] = 0;
         break;
         default:
-          // ::pros::lcd::set_text(4, "ERROR" );
-          return nullptr;
+          delete[] vals;
+          return -1;
     }
     this->setVoltage(vals);
-    this->previousError = this->currentError;
     delete[] vals;
-    return nullptr;
+    delete dP;
+    return 0;
 }
 
-void X_Drive::change_orientation(float theta) {
+int X_Drive::change_orientation(float theta, float delta) {
+  float* vals = new float[4];
+  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+  ::pros::lcd::set_text(6, "Theta Error: " + std::to_string(this->currentError));
+  this->sumError += this->currentError;
+  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError();
+  ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pwr));
+  vals[0] = -pwr * fabs(this->currentError)/this->currentError;
+  vals[1] = 0; 
+  vals[2] = pwr * fabs(this->currentError)/this->currentError;
+  vals[3] = 0;
+  this->setVoltage(vals);
 
+  delete[] vals;
+  return 0;
 }
-
-
 
 void X_Drive::reset() {
     this->pMotorA->move(0);
