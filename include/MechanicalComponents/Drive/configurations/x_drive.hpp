@@ -26,7 +26,7 @@ class X_Drive : public TerriBull::Drive {
 
     public:
     void setVoltage(float* vals);
-    X_Drive(int portA, int portB, int portC, int portD, int gearSet, float conversion, float radius) : TerriBull::Drive(gearSet, conversion, radius), pA(portA), pB(portB), pC(portC), pD(portD) {
+    X_Drive(int portA, int portB, int portC, int portD, int gearSet, float conversion, float radius, float kP_Pos, float KI_Pos, float KD_Pos, float kP_Theta, float kI_Theta, float kD_Theta) : TerriBull::Drive(gearSet, conversion, radius, 127, kP_Pos, KI_Pos, KD_Pos, kP_Theta, kI_Theta, kD_Theta), pA(portA), pB(portB), pC(portC), pD(portD) {
       this->pType = "X-Drive";
       this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, false);
       this->pMotorB = new pros::Motor(pB, (pros::motor_gearset_e)this->gearSet, false);
@@ -36,8 +36,6 @@ class X_Drive : public TerriBull::Drive {
       this->pMotorB->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->pMotorC->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
       this->pMotorD->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
-      this->setPID(1.5, 0.2, 0.3);
-      this->kPTheta = 1.5; this->kDTheta = 0.2;
       pMotorA->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorB->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorC->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -47,8 +45,13 @@ class X_Drive : public TerriBull::Drive {
 
     int drive(TerriBull::Vector2 pos, float delta);
     void reset();
-    Vector2* resultant_vector() {return nullptr; }
-    void tare_encoders()  {}
+    Vector2* resultant_vector();
+    void tare_encoders()  {
+      this->pMotorA->tare_position();
+      this->pMotorB->tare_position();
+      this->pMotorC->tare_position();
+      this->pMotorD->tare_position();
+    }
 
     int change_orientation(float theta, float delta);
 

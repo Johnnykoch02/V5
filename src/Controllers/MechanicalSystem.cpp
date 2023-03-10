@@ -56,6 +56,11 @@ bool MechanicalSystem::isShotCompleted() const {
     return true;
 }
 
+bool MechanicalSystem::isShooterLoaded() const {
+    if (this->pShooter!= nullptr) return this->pShooter->isLoaded();
+    return true;
+}
+
 bool MechanicalSystem::isRollerCompleted() const {
     if (this->pShooter!= nullptr) return this->pRoller->timeFlag;
     return true;
@@ -132,6 +137,12 @@ int TerriBull::MechanicalSystem::resetRoller() {
 int TerriBull::MechanicalSystem::ShootDisk() {
     if (this->pShooter != nullptr) {
         return this->pShooter->Shoot(this->motherSystem->delta());
+    } return -1;
+}
+
+int TerriBull::MechanicalSystem::loadShooter() {
+    if (this->pShooter != nullptr) {
+        return this->pShooter->Load(this->motherSystem->delta());
     } return -1;
 }
 

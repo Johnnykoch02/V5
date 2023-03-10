@@ -36,8 +36,8 @@ SerialController* RoboController::getSerialController() {
 
 
 void TerriBull::RoboController::Init() {
-    /* TBD                                          <-Fix this file path-> */
-    this->configParser = new ConfigurationParser("/usd/configuration.json", "Left_Nut");
+    /*                                                  * Config File *   * Config Type *       */
+    this->configParser = new ConfigurationParser("/usd/configuration.json", "Big_Boy");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
         this->system = this->configParser->getMechanicalSystemConfig();
@@ -52,14 +52,14 @@ void TerriBull::RoboController::Init() {
             // exit(1);
         }
         /* Init Task Manager */
-        this->taskManager = new TaskManager(); /* TODO: Needs TaskManager::Init() */
-
+        this->taskManager = new TaskManager();
         /* Init Serial Controller */
-        this->serialController = new SerialController(); /* TODO: Needs TaskManager::Init() */
+        this->serialController = new SerialController(); /* TODO: Needs SerialController::Init() */
         /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
         /* TASKS SECTION */
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::VariableTask(this->system->getDrive()->getRefMaxSpeed(), new float(60), VariableTask::FLOAT, this->getSystem())}));
         Vector2 *dest1 = Vector2::cartesianToVector2((this->system->getPosition())->x, (this->system->getPosition())->y - 10);
         this->taskManager->addTaskSet(
             new TaskList({{
@@ -68,12 +68,17 @@ void TerriBull::RoboController::Init() {
             }})
         );
         Vector2 *dest2 = Vector2::cartesianToVector2(dest1->x + 10, dest1->y);
+
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
+
         this->taskManager->addTaskSet(
             new TaskList({{
                 new TerriBull::DriveTask(*dest2, 420, true, TerriBull::DriveTask::ORIENTATION, this->getSystem()),
                 // new TerriBull::RollerTask(0.75, 1, this->getSystem())
             }})
         );
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
+
         this->taskManager->addTaskSet(
             new TaskList({{
                 new TerriBull::DriveTask(*dest2, 0, true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),

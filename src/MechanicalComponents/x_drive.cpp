@@ -10,7 +10,8 @@
  * 
  */
 #include "../../include/MechanicalComponents/Drive/configurations/x_drive.hpp"
-
+#include <sstream>
+#include <iomanip>
 X_Drive::~X_Drive() {
     delete this->pMotorA;
     delete this->pMotorB;
@@ -21,16 +22,14 @@ X_Drive::~X_Drive() {
 void X_Drive::setVoltage(float* vals)  {
 /* Less than some threshold */ 
     float lt = vals[0];float lb = vals[1];float rt = vals[2];float rb = vals[3];
-    if (fabs(lt) < motorPowerThreshold && fabs(rt) < motorPowerThreshold && 
-        fabs(lb) < motorPowerThreshold && fabs(rb) < motorPowerThreshold) {
-      lt = lb = rt = rb = 0;
-    }
-    else {
-    }
-    if (fabs(lt) > motorPowerThreshold) lt = motorPowerThreshold * fabs(lt) / lt;
-    if (fabs(rt) > motorPowerThreshold) rt = motorPowerThreshold * fabs(rt) / rt;
-    if (fabs(lb) > motorPowerThreshold) lb = motorPowerThreshold * fabs(lb) / lb;
-    if (fabs(rb) > motorPowerThreshold) rb = motorPowerThreshold * fabs(rb) / rb;
+    if (fabs(lt) > this->maxSpeed) lt = this->maxSpeed * fabs(lt) / lt;
+    if (fabs(rt) > this->maxSpeed) rt = this->maxSpeed * fabs(rt) / rt;
+    if (fabs(lb) > this->maxSpeed) lb = this->maxSpeed * fabs(lb) / lb;
+    if (fabs(rb) > this->maxSpeed) rb = this->maxSpeed * fabs(rb) / rb;
+    std::stringstream s3;
+    s3 << std::fixed << ::std::setprecision(1);
+     s3 << "pWRS: " << lt << " " << lb << " " << rt << " " << rb;
+    pros::lcd::set_text(6,s3.str());
     this->pMotorA->move(lt);
     this->pMotorB->move(lb);
     this->pMotorC->move(rt);
@@ -41,19 +40,22 @@ void X_Drive::setVoltage(float* vals)  {
 int X_Drive::drive(TerriBull::Vector2 pos, float delta) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[4];
-    float angle = pos.theta - *(this->pCurrentAngle);
-    angle = (angle<0) ? 360.0 + angle : angle;
+    Vector2* dP = (pos - *(this->pCurrentPos));
+    double angle = fmod((RAD2DEG(dP->theta) + (*(this->pCurrentAngle)- 90)) , 360.0);
+    angle = (angle < 0)? angle + 360.0 : angle;
     int x = int(round(angle/45)) % 8;
     int dir = 0;
     float pct = 0;
     
     /* Basic PID Equation */
-    Vector2* dP = pos - *(this->pCurrentPos);
     this->currentError = dP->r;
     // ::pros::lcd::set_text(6, "Drive Error: " + std::to_string(this->pCurrentPos->theta));
     this->sumError+=currentError;
-    pct = kP*currentError + kI*this->sumError + kD*this->dError();
-    // ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pct));
+    pct = kP*this->currentError + kI*this->sumError + kD*this->dError() / delta;
+    std::stringstream s3;
+    s3 << std::fixed << ::std::setprecision(1);
+     s3 << "Err: "<< this->currentError <<  "|" << x <<" " << angle;
+    pros::lcd::set_text(4,s3.str());
 
     /* X Drive Drives in all 8 directions, pick the direction an apply the right direction modifier */
     switch(x) {
@@ -78,6 +80,7 @@ int X_Drive::drive(TerriBull::Vector2 pos, float delta) {
         vals[0] = 0; vals[1] = -pct*dir; vals[2] = -pct*dir; vals[3] = 0;
         break;
         default:
+        // pros::lcd::set_text(4,"DEFAULT");
           delete[] vals;
           return -1;
     }
@@ -96,8 +99,8 @@ int X_Drive::change_orientation(float theta, float delta) {
   ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pwr));
   vals[0] = -pwr * fabs(this->currentError)/this->currentError;
   vals[1] = 0; 
-  vals[2] = pwr * fabs(this->currentError)/this->currentError;
-  vals[3] = 0;
+  vals[2] = 0;
+  vals[3] = pwr * fabs(this->currentError)/this->currentError;
   this->setVoltage(vals);
 
   delete[] vals;
@@ -113,3 +116,29 @@ void X_Drive::reset() {
     this->sumError = 0;
     this->previousError = 0;
 }
+
+Vector2* X_Drive::resultant_vector() {
+  // return Vector2::cartesianToVector2(0, 0);
+    float l1 = this->pMotorA->get_position();
+    float l2 = this->pMotorB->get_position();
+    float r1 = this->pMotorC->get_position();
+    float r2 = this->pMotorD->get_position();
+    float left = ((l1 + r2) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float right = ((l2 + r1) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    
+    int leftDir = fabs(left) / left;
+    int rightDir = fabs(right) / right;
+    float leftAngle = (leftDir > 0) ? fmod((-45 + *(this->pCurrentAngle)), 360.0) : fmod((135 + *(this->pCurrentAngle)), 360.0);
+    float rightAngle = (rightDir > 0)? fmod((45 + *(this->pCurrentAngle)), 360.0) : fmod((225 + *(this->pCurrentAngle)), 360.0);
+    Vector2* vecLeft = Vector2::polarToVector2(fabs(left), DEG2RAD(leftAngle));
+    Vector2* vecRight = Vector2::polarToVector2(fabs(right), DEG2RAD(rightAngle));
+    Vector2* vecUnNormalized = *vecLeft + *vecRight;
+    // Vector2* resultantVector = *vecUnNormalized * 0.5;
+    
+    /* Cleanup */
+    this->tare_encoders();
+    delete vecLeft;
+    delete vecRight;
+    return vecUnNormalized;    
+}
+

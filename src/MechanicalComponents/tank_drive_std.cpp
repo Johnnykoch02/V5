@@ -24,12 +24,12 @@ Tank_Drive_Std::~Tank_Drive_Std() {
 void Tank_Drive_Std::setVoltage(float* vals)  {
 /* Less than some threshold */ 
     float lt = vals[0]; float lm = vals[1];float lb = vals[2]; float rt = vals[3]; float rm = vals[4]; float rb = vals[5];
-    if (fabs(lt) > motorPowerThreshold) lt = motorPowerThreshold * fabs(lt) / lt;
-    if (fabs(rt) > motorPowerThreshold) rt = motorPowerThreshold * fabs(rt) / rt;
-    if (fabs(lm) > motorPowerThreshold) lm = motorPowerThreshold * fabs(lm) / lm;
-    if (fabs(rm) > motorPowerThreshold) rm = motorPowerThreshold * fabs(rm) / rm;
-    if (fabs(lb) > motorPowerThreshold) lb = motorPowerThreshold * fabs(lb) / lb;
-    if (fabs(rb) > motorPowerThreshold) rb = motorPowerThreshold * fabs(rb) / rb;
+    if (fabs(lt) > this->maxSpeed) lt = this->maxSpeed * fabs(lt) / lt;
+    if (fabs(rt) > this->maxSpeed) rt = this->maxSpeed * fabs(rt) / rt;
+    if (fabs(lm) > this->maxSpeed) lm = this->maxSpeed * fabs(lm) / lm;
+    if (fabs(rm) > this->maxSpeed) rm = this->maxSpeed * fabs(rm) / rm;
+    if (fabs(lb) > this->maxSpeed) lb = this->maxSpeed * fabs(lb) / lb;
+    if (fabs(rb) > this->maxSpeed) rb = this->maxSpeed * fabs(rb) / rb;
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(2);
     s3 << "Left: "<< lm << " Right: " << rm;
@@ -60,8 +60,8 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
     /* Basic PID Equation */
     pct = kP*currentError + kI*this->sumError + kD*this->dError() / delta;
 
-    if (fabs(pct) >  127) {/* Clmp Pwr to 127 */
-        pct = 127 * fabs(pct) / pct;
+    if (fabs(pct) >  this->maxSpeed) {/* Clmp Pwr to this->maxSpeed */
+        pct = this->maxSpeed * fabs(pct) / pct;
     }
     float pL = pct;
     float pR = pct;
@@ -75,7 +75,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
         pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
     }
     else if (fabs(dP->r) > 1.0 && offTrack > 90) {
-        this->change_orientation(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
+        this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
         delete[] vals;
         delete dP;
         return 0;
@@ -98,7 +98,7 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
-  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError() / delta;
+  float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
   std::stringstream s3;
   s3 << std::fixed << ::std::setprecision(1);
   s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
@@ -112,6 +112,25 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
   this->setVoltage(vals);
   delete[] vals;
   return 0;
+}
+
+void Tank_Drive_Std::maneuverAngle(float theta, float delta) {
+  float* vals = new float[6];
+  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+  this->sumError += this->currentError;
+  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError() / delta;
+  std::stringstream s3;
+  s3 << std::fixed << ::std::setprecision(1);
+  s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
+  pros::lcd::set_text(4,s3.str());
+  vals[0] = -pwr;
+  vals[1] = -pwr;
+  vals[2] = -pwr;
+  vals[3] = pwr;
+  vals[4] = pwr;
+  vals[5] = pwr;
+  this->setVoltage(vals);
+  delete[] vals;
 }
 
 void Tank_Drive_Std::reset() {

@@ -47,6 +47,7 @@ namespace TerriBull {
     class IntakeTask;
     class ShooterTask;
     class TimeTask;
+    class VariableTask;
     typedef ::std::vector<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;
@@ -501,6 +502,7 @@ namespace TerriBull {
     #include "./lib/Tasking/Types/IntakeTask.hpp"
     #include "./lib/Tasking/Types/ShooterTask.hpp"
     #include "./lib/Tasking/Types/TimeTask.hpp"
+    #include "./lib/Tasking/Types/VariableTask.hpp"
     #include "../Controllers/TaskManager/TaskManager.hpp"
     #include "./lib/ConfigurationParser.hpp"
     #include "./lib/GameObjects/GameObject.hpp"

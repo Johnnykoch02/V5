@@ -18,16 +18,20 @@
 class TerriBull::Shooter : public TerriBull::MechanicalComponent {
     protected:
     bool toggled;
+    bool loaded;
     bool shotComplete;
 
     public:
-    Shooter(int gearSet) : TerriBull::MechanicalComponent(gearSet), toggled(false), shotComplete(false) {}
+    Shooter(int gearSet) : TerriBull::MechanicalComponent(gearSet), toggled(false), shotComplete(false), loaded(false) {}
 
     virtual int Shoot(float delta) = 0;// button is held
     virtual int turnOn() = 0;
+    virtual int Load(float delta) = 0;
     virtual int reset() = 0;
     virtual bool shotCompleted() = 0;
     virtual bool isToggled() const final { return toggled; }
+    virtual bool isLoaded() const final { return loaded; }
+    virtual bool* getLoadedPtr() { return &loaded; }
 };     
 
 #endif // SHOOTER_H

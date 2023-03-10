@@ -10,7 +10,7 @@
  * 
  */
 #include "../../../../include/TerriBull/lib/Tasking/Types/ShooterTask.hpp"
-ShooterTask::ShooterTask(TerriBull::MechanicalSystem* _system) : Task(SHOOTER, _system) {}
+ShooterTask::ShooterTask(ShooterType _shooterType, TerriBull::MechanicalSystem* _system) : Task(SHOOTER, _system), shooterType(_shooterType) {}
 
 ShooterTask::~ShooterTask() {}
 
@@ -21,13 +21,20 @@ void ShooterTask::init() {
 
 void ShooterTask::update(float delta) {
     if (!this->finishedFlag) {
-        this->system->ShootDisk();
-        this->finishedFlag = this->system->isShotCompleted();
+    switch (this->shooterType) {
+        case LOAD:
+            this->system->loadShooter();
+            this->finishedFlag = this->system->isShooterLoaded();
+            break;
+        case SHOOT:
+            this->system->ShootDisk();
+            this->finishedFlag = this->system->isShotCompleted();
+        }
     }
-    if(this->finishedFlag) ;
+    
 }
 
 void ShooterTask::terminate() {
     this->terminated = true;
-    this->system->resetRoller();
+    this->system->resetShooter();
 }
