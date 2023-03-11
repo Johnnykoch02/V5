@@ -10,8 +10,12 @@
  * 
  */
 #include "../../../../include/TerriBull/lib/Tasking/Types/DriveTask.hpp"
+
+
+DriveTask::DriveTask(TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), needsInitialize(false) {}
+
 /* Make Orientation 420 to Have it auto Calculate. */
-DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation), driveType(_driveType), calculateOnInit(false), reversed(reversed) {
+DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation), driveType(_driveType), calculateOnInit(false), reversed(reversed), needsInitialize(false) {
     this->pos = pos;
     this->deleteOnCleanup = false;
     this->approachOrientation = _orientation;
@@ -22,7 +26,7 @@ DriveTask::DriveTask(TerriBull::Vector2* pos, float _orientation, bool reversed,
 }
 
 /* Make Orientation 420 to Have it auto Calculate based on the position provided. */
-DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation), driveType(_driveType), calculateOnInit(false), reversed(reversed) {
+DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system) : Task(DRIVE, _system), approachOrientation(_orientation), driveType(_driveType), calculateOnInit(false), reversed(reversed), needsInitialize(false) {
     this->pos = new TerriBull::Vector2(pos);
     this->deleteOnCleanup = true;
     if (_orientation == 420) {
@@ -33,7 +37,17 @@ DriveTask::DriveTask(TerriBull::Vector2 pos, float _orientation, bool reversed, 
 DriveTask::~DriveTask() {
     if (this->deleteOnCleanup) {
         delete this->pos;
+        delete this->offset;
     }
+}
+
+DriveTask* DriveTask::DynamicInitialize(Vector2* offset, DriveType driveType, TerriBull::MechanicalSystem* system) {
+    DriveTask* task = new DriveTask(system);
+    task->deleteOnCleanup = false;
+    task->needsInitialize = true;
+    task->offset = offset;
+    task->driveType = driveType;
+    return task;
 }
 
 void DriveTask::init() {
@@ -44,6 +58,16 @@ void DriveTask::init() {
         Vector2* dPos = *(this->pos) - *(this->system->getPosition());
         this->approachOrientation = fmod(RAD2DEG(dPos->theta) + angleMod, 360);
         delete dPos;
+    }
+    if (this->needsInitialize) {
+        this->pos = *(this->system->getPosition()) + *this->offset;
+        this->deleteOnCleanup = true;
+        switch(this->driveType) {
+            case TRANSLATION:
+                break;
+            case ORIENTATION:
+                this->approachOrientation = RAD2DEG(this->pos->theta);
+        }
     }
 }
 

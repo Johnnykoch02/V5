@@ -24,15 +24,19 @@ class TerriBull::DriveTask : public TerriBull::Task {
     TerriBull::Vector2* pos;
     DriveType driveType;
 
+    TerriBull::Vector2* offset;
     bool calculateOnInit;
+    bool needsInitialize;
     bool deleteOnCleanup;
     bool reversed;
 
+    DriveTask(TerriBull::MechanicalSystem* _system);
     public:
     
     DriveTask(TerriBull::Vector2* pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system);
-
     DriveTask(TerriBull::Vector2 pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system);
+
+    static DriveTask* DynamicInitialize(Vector2* offset, DriveType driveType, TerriBull::MechanicalSystem* system);
 
     ~DriveTask();
 
