@@ -41,8 +41,9 @@ DriveTask::~DriveTask() {
     }
 }
 
-DriveTask* DriveTask::DynamicInitialize(Vector2* offset, DriveType driveType, TerriBull::MechanicalSystem* system) {
+DriveTask* DriveTask::DynamicInitialize(Vector2* offset, bool reversed, DriveType driveType, TerriBull::MechanicalSystem* system) {
     DriveTask* task = new DriveTask(system);
+    task->reversed = reversed;
     task->deleteOnCleanup = false;
     task->needsInitialize = true;
     task->offset = offset;
@@ -61,13 +62,15 @@ void DriveTask::init() {
     }
     if (this->needsInitialize) {
         this->pos = *(this->system->getPosition()) + *this->offset;
+        Vector2* dPos = *(this->pos) - *(this->system->getPosition());
         this->deleteOnCleanup = true;
         switch(this->driveType) {
             case TRANSLATION:
                 break;
             case ORIENTATION:
-                this->approachOrientation = RAD2DEG(this->pos->theta);
-        }
+                float angleMod = (this->reversed) ? 180 : 0;
+                this->approachOrientation = fmod(RAD2DEG(dPos->theta) + angleMod, 360);
+        } delete dPos;
     }
 }
 

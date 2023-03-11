@@ -36,7 +36,7 @@ class TerriBull::DriveTask : public TerriBull::Task {
     DriveTask(TerriBull::Vector2* pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system);
     DriveTask(TerriBull::Vector2 pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system);
 
-    static DriveTask* DynamicInitialize(Vector2* offset, DriveType driveType, TerriBull::MechanicalSystem* system);
+    static DriveTask* DynamicInitialize(Vector2* offset, bool reversed, DriveType driveType, TerriBull::MechanicalSystem* system);
 
     ~DriveTask();
 
