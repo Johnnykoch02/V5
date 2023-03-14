@@ -21,18 +21,18 @@ void RyanIsTank::Update(float delta) {
     int rInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_RIGHT_Y);
     if (abs(lInput) < deadzone) lInput = 0;
     if (abs(rInput) < deadzone) rInput = 0;
-    float voltages[] = {0, 0, 0, 0};
+    float voltages[] = {0, 0, 0, 0, 0, 0};
     if (lInput != 0) {
       drive_engaged = true;
       lInput/=10.7;
       float lV = lInput*fabs(lInput);
-      voltages[0] = lV; voltages[1] = lV;
+      voltages[0] = lV; voltages[1] = lV; voltages[2] = lV;
     }
     if (rInput != 0) {
       drive_engaged = true;
       rInput/=10.7;
       float rV = rInput*fabs(rInput);
-      voltages[0] = rV; voltages[1] = rV;
+      voltages[3] = rV; voltages[4] = rV; voltages[5] = rV;
     }
 
     if (drive_engaged) this->roboController->getSystem()->getDrive()->setVoltage(voltages);

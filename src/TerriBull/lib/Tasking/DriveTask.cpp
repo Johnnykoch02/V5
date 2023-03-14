@@ -55,6 +55,7 @@ void DriveTask::init() {
     this->finishedFlag = false;
     this->system->resetDrive();
     if (this->calculateOnInit) {
+        this->pos = *(this->system->getPosition()) + *this->offset;
         float angleMod = (this->reversed) ? 180 : 0;
         Vector2* dPos = *(this->pos) - *(this->system->getPosition());
         this->approachOrientation = fmod(RAD2DEG(dPos->theta) + angleMod, 360);
@@ -78,12 +79,12 @@ void DriveTask::update(float delta) {
     if (!this->finishedFlag) {
         switch(driveType) {
             case TRANSLATION:
-                this->system->GoToPosition(*(this->pos));
-                this->finishedFlag = fabs(this->system->getDriveError()) < 0.8 && fabs(this->system->getDriveDError()) < 0.25; /* Some Threshold */
+                this->system->GoToPosition(*(this->pos)); /*TODO: Test Delta Value  */
+                this->finishedFlag = fabs(this->system->getDriveError()) < 0.35 && (fabs(this->system->getDriveDError()) / delta) < 0.25; 
                 break;
             case ORIENTATION:
                 this->system->TurnToAngle(this->approachOrientation);
-                this->finishedFlag = fabs(this->system->getDriveError()) < 0.5 && fabs(this->system->getDriveDError()) < 0.01; /* Some Threshold */
+                this->finishedFlag = fabs(this->system->getDriveError()) < 0.5 && (fabs(this->system->getDriveDError()) / delta) < 0.1; 
                 break;
         }
         
