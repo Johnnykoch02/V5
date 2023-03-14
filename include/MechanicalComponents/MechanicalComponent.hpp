@@ -34,7 +34,7 @@ class TerriBull::MechanicalComponent  {
 
     /**
      * @brief Gets Current Derror and automatically sets the previous error value to the current error value.
-     * WARNING: this function is not READ-ONLY.
+     * WARNING: this function is not READONLY
      * @return float 
      */
     virtual float dError() final{

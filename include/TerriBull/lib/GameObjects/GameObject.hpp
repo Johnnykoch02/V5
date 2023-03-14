@@ -45,7 +45,7 @@ class TerriBull::GameObject {
         return new Vector2(this->pos);
     }
 
-    virtual void getPosPtr() final { return this->pos; }
+    virtual Vector2* getPosPtr() final { return this->pos; }
     
 
     virtual bool checkID(byte identifier) final { 

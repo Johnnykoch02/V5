@@ -31,7 +31,7 @@ class Roller : public TerriBull::GameObject {
         
     }
     public:
-    Roller(Vector2 pos, byte identifier) :GameObject(pos, identifier, ROLLER, 6, 1) { }
+    Roller(Vector2* pos, byte identifier) : GameObject(pos, identifier, ROLLER, 6, 1) { }
     
     bool isInContact() {
         return pIsInContact;

@@ -31,7 +31,7 @@ class Goal : public TerriBull::GameObject {
         
     }
     public:
-    Goal(Vector2 pos, byte identifier) :GameObject(pos, identifier, GOAL, 8, 8) { }
+    Goal(Vector2* pos, byte identifier) :GameObject(pos, identifier, GOAL, 8, 8) { }
     
     float getDTheta() {
         return pDTheta;
@@ -40,7 +40,7 @@ class Goal : public TerriBull::GameObject {
     void setDTheta(float pDTheta) {
         this->pDTheta = pDTheta;
     }
-    
+
 };
 
 #endif

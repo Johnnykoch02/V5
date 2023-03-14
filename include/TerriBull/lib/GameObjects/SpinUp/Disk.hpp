@@ -24,7 +24,7 @@ class Disk : public TerriBull::GameObject {
     ~Disk() {
         
     }
-    Disk(Vector2 pos, byte identifier) :GameObject(pos, identifier, DISK, 5, 5) { }
+    Disk(Vector2* pos, byte identifier) :GameObject(pos, identifier, DISK, 5, 5) { }
 
 };
 
