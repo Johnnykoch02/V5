@@ -71,8 +71,8 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
         int dir = fabs(offTrack)/offTrack;
         pL *= 0.92;
         pR *= 0.92;
-        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir;
-        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
     }
 
     else if (fabs(dP->r) > 0.5 && offTrack > 15) {
