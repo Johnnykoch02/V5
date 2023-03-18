@@ -17,7 +17,7 @@
 #include <string>
 
 
-class Roller : public TerriBull::GameObject {
+class Roller : public TerriBull::GameObject { /*TODO: Change name not to conflict with Mech-Sys Roller*/
     public:
     typedef enum {
             RED, BLUE, NEUTRAL
