@@ -81,7 +81,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
         return 0;
     }
     else if (fabs(dP->r) > 0.5 && offTrack > 15) {
-        this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
+        this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta, dP->r, errorMod);
         delete[] vals;
         delete dP;
         return 0;
@@ -121,21 +121,36 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
   return 0;
 }
 
-void Tank_Drive_Std::maneuverAngle(float theta, float delta) {
+void Tank_Drive_Std::maneuverAngle(float theta, float delta, float r, int errorMod) {
+  float Kr = 0.16;
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
-  float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
+  float pwr = r*Kr*(this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta);
+  float thirdPwr = -pwr*0.333;
   std::stringstream s3;
   s3 << std::fixed << ::std::setprecision(1);
   s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
   pros::lcd::set_text(4,s3.str());
-  vals[0] = -pwr;
-  vals[1] = -pwr;
-  vals[2] = -pwr;
-  vals[3] = pwr;
-  vals[4] = pwr;
-  vals[5] = pwr;
+  float lPwr = 0 , rPwr = 0;
+  if (errorMod > 0) {
+    lPwr = MAX(0, pwr);
+    rPwr = MIN(pwr, 0);
+    lPwr = (lPwr == 0) ? thirdPwr : lPwr;
+    rPwr = (rPwr == 0)? thirdPwr : rPwr;
+  }
+  else if (errorMod < 0) {
+    lPwr = MIN(pwr, 0);
+    rPwr = MAX(0, pwr);
+    lPwr = (lPwr == 0)? thirdPwr : lPwr;
+    rPwr = (rPwr == 0)? thirdPwr : rPwr;
+  }
+  vals[0] = lPwr;
+  vals[1] = lPwr;
+  vals[2] = lPwr;
+  vals[3] = rPwr;
+  vals[4] = rPwr;
+  vals[5] = rPwr;
   this->setVoltage(vals);
   delete[] vals;
 }

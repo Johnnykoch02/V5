@@ -65,7 +65,7 @@ class Tank_Drive_Std : public TerriBull::Drive {
       this->pMotorF->tare_position();
     }
     int change_orientation(float theta, float delta);
-    void maneuverAngle(float theta, float delta);
+    void maneuverAngle(float theta, float delta, float r, int errorMod);
 
 };
 
