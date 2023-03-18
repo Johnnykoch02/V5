@@ -69,18 +69,18 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
     float offTrack = GetDTheta(RAD2DEG(dP->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360));
     if (fabs(dP->r) > 4) {
         int dir = fabs(offTrack)/offTrack;
-        pL *= 0.85;
-        pR *= 0.85;
-        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.15* pct)) * dir * errorMod;
-        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.15* pct)) * dir * errorMod;
+        pL *= 0.9;
+        pR *= 0.9;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir;
     }
     
     else if(dP->r > 2) { 
         int dir = fabs(offTrack)/offTrack;
         pL *= 0.5;
         pR *= 0.5;
-        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.25* pct)) * dir * errorMod;
-        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.25* pct)) * dir * errorMod;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.25* pct)) * dir;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.25* pct)) * dir;
     }
 
     else if (fabs(dP->r) > 0.5 && offTrack > 25) {
