@@ -74,7 +74,12 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
         pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
         pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
     }
-
+    else if (fabs(dP->r) > 0.5 && offTrack > 35) {
+        this->change_orientation(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
+        delete[] vals;
+        delete dP;
+        return 0;
+    }
     else if (fabs(dP->r) > 0.5 && offTrack > 15) {
         this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
         delete[] vals;
