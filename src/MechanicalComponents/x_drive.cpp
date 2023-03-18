@@ -123,8 +123,8 @@ Vector2* X_Drive::resultant_vector() {
     float l2 = this->pMotorB->get_position();
     float r1 = this->pMotorC->get_position();
     float r2 = this->pMotorD->get_position();
-    float left = ((l1 + r2) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
-    float right = ((l2 + r1) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float left = ((l1 + r2) / 2) * 2 * PI * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float right = ((l2 + r1) / 2) * 2 * PI * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
     
     int leftDir = fabs(left) / left;
     int rightDir = fabs(right) / right;

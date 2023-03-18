@@ -136,8 +136,8 @@ Vector2* Tank_Drive_Quad::resultant_vector() {
     float l2 = this->pMotorB->get_position();
     float r1 = this->pMotorC->get_position();
     float r2 = this->pMotorD->get_position();
-    float left = ((l1 + l2) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
-    float right = ((r1 + r2) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float left = ((l1 + l2) / 2) * 2 * PI  * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float right = ((r1 + r2) / 2) * 2 * PI * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
     int leftDir = fabs(left) / left;
     int rightDir = fabs(right) / right;
     float leftAngle = (leftDir > 0) ? *(this->pCurrentAngle) : fmod((180 + *(this->pCurrentAngle)), 360.0);
