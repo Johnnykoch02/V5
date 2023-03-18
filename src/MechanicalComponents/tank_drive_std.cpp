@@ -122,13 +122,12 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
 }
 
 void Tank_Drive_Std::maneuverAngle(float theta, float delta, float r, int errorMod) {
-  float Kr = 0.12;
+   float Kr = 0.28;
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
-  float pwr = r*Kr*(this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta);
-  pwr*=0.8;
-  float thirdPwr = -pwr*0.1;
+  float pwr = r*Kr*(this->kPTheta * this->currentError + this->kDTheta * this->dError() / delta);
+  float thirdPwr = -pwr*0.3;
   std::stringstream s3;
   s3 << std::fixed << ::std::setprecision(1);
   s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
