@@ -122,7 +122,7 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
 }
 
 void Tank_Drive_Std::maneuverAngle(float theta, float delta, float r, int errorMod) {
-   float Kr = 0.28;
+   float Kr = 0.028;
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
