@@ -37,7 +37,7 @@ SerialController* RoboController::getSerialController() {
 
 void TerriBull::RoboController::Init() {
     /*                                                  * Config File *   * Config Type *       */
-    this->configParser = new ConfigurationParser("/usd/configuration.json", "Big_Boy");
+    this->configParser = new ConfigurationParser("/usd/configuration.json", "TinyBull");
     if ( this->configParser->success()) {
         /* Init Mech Sys */
         this->system = this->configParser->getMechanicalSystemConfig();
