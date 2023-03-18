@@ -48,7 +48,7 @@ void RollerTask::update(float delta) {
                 break;
             case POS:
                 this->system->spinRollerTo(this->targetPos);
-                this->finishedFlag = fabs(this->system->getRollerError()) < 0.2 && fabs(this->system->getRollerDError()) < 0.5;
+                this->finishedFlag = fabs(this->system->getRollerError()) < 2 && fabs(this->system->getRollerDError()) < 0.5;
                 break;
         }
     } if(this->finishedFlag) ;

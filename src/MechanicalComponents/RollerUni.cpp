@@ -38,6 +38,6 @@ void Roller_Uni::reset() {
 
 void Roller_Uni::update() {
     float dPos = this->pMotorI->get_position();
-    this->currentPos += dPos * (2*PI) / ENCODER_UNIT[this->gearSet];
+    this->currentPos += 100 * dPos * (2*PI) / ENCODER_UNIT[this->gearSet];
     this->pMotorI->tare_position();
 }
