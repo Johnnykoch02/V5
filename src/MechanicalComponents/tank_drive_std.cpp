@@ -71,8 +71,8 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
         int dir = fabs(offTrack)/offTrack;
         pL *= 0.92;
         pR *= 0.92;
-        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
-        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.15* pct)) * dir * errorMod;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.15* pct)) * dir * errorMod;
     }
     else if (fabs(dP->r) > 0.5 && offTrack > 35) {
         this->change_orientation(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
@@ -80,7 +80,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
         delete dP;
         return 0;
     }
-    else if (fabs(dP->r) > 0.5 && offTrack > 15) {
+    else if (fabs(dP->r) > 0.5 && offTrack > 10) {
         this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta, dP->r, errorMod);
         delete[] vals;
         delete dP;
@@ -122,12 +122,13 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
 }
 
 void Tank_Drive_Std::maneuverAngle(float theta, float delta, float r, int errorMod) {
-  float Kr = 0.16;
+  float Kr = 0.12;
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
   float pwr = r*Kr*(this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta);
-  float thirdPwr = -pwr*0.333;
+  pwr*=0.8;
+  float thirdPwr = -pwr*0.1;
   std::stringstream s3;
   s3 << std::fixed << ::std::setprecision(1);
   s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
