@@ -95,13 +95,13 @@
                 "imu": 11,
                 "drive": {
                     "config": "tank_drive_std",
-                    "motor_ports": [4, 5, 6, 1, 2, 3],
-                    "reverse_motors": [1, 1, 0, 0, 0, 1],
+                    "motor_ports": [1, 2, 3, 8, 9, 10],
+                    "reverse_motors": [1, 0, 1, 0, 1, 0],
                     "gear_ratio": "BLUE",
-                    "cf": 0.667,
+                    "cf": 0.83375,
                     "radius": 1.5,
-                    "k_pos": [8.5, 1.95, 0.8],
-                    "k_theta": [0.95, 0.08, 0.15]
+                    "k_pos": [1.2, 0.0001, 0.2],
+                    "k_theta": [3.5, 0.002, 0.4]
                 },
                 "intake": {
                     "config": "IntakeUni",

@@ -84,7 +84,7 @@ void DriveTask::update(float delta) {
                 break;
             case ORIENTATION:
                 this->system->TurnToAngle(this->approachOrientation);
-                this->finishedFlag = fabs(this->system->getDriveError()) < 0.3 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
+                this->finishedFlag = fabs(this->system->getDriveError()) < 0.38 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
                 break;
         }
         
