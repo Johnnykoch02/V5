@@ -10,12 +10,14 @@
  * 
  */
 #include "../../include/Controllers/SerialController/SerialController.hpp"
-TerriBull::SerialController::SerialController() {
+TerriBull::SerialController::SerialController()
+{
     ::pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
 }
 
-void TerriBull::SerialController::update() { 
-	readBuffer();
+void TerriBull::SerialController::update()
+{ 
+	this->readBuffer();
 }
 
 bool TerriBull::SerialController::compareBuffer(vector<char> buffer1, int start, int end, char* buffer2) {
@@ -40,9 +42,9 @@ void TerriBull::SerialController::readBuffer()
         int lchar = __next_packet[packet_length-1];
         if (packet_length - 1 < lchar)
         {
-            if (packet_length >= header_length){
+            if (packet_length >= __header_length){
                 __next_packet.push_back(_int);
-                if (this->compareBuffer(__next_packet, packet_length-footer_length, packet_length, __end_of_transmission))
+                if (this->compareBuffer(__next_packet, packet_length-__footer_length, packet_length, __end_of_transmission))
                 {
                     DeserializePacket();
                     __next_packet.clear();
@@ -190,12 +192,26 @@ void TerriBull::SerialController::ExchangeTags()
 
 int TerriBull::SerialController::RegisterCallback(char *tag_name, PacketCallback callback)
 {
-    
+    bool found = (std::find(CallTags.begin(), CallTags.end(), tag_name) != CallTags.end());
+    if (!found)
+    {
+        CallTags.push_back((*tag_name));
+        Callbacks.push_back(callback);
+    }
+    else
+    {
+        throw new exception;
+    }
 }
 
 void TerriBull::SerialController::DeserializePacket()
 {
-    // __next_packet
+    PacketCallback __function = Callbacks[__next_packet[__header_length]];
+    int pSize = sizeof(__next_packet);
+    int end = pSize - __footer_length;
+    char* buffer[end];
+    memcpy( &buffer[0], &__next_packet[__header_length], end );
+    __function((*buffer), 0, end);
 }
 
 

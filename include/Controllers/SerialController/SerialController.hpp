@@ -26,10 +26,12 @@ class TerriBull::SerialController {
     vector<char> __next_packet;
     char __packet_header[4] { (char)115, (char)111, (char)117, (char)116 };
     char __end_of_transmission[4] { (char)11, (char)11, (char)10, (char)0 };
-    int header_length = sizeof(__packet_header) + 1;
-    int footer_length = sizeof(__end_of_transmission);
+    int __header_length = sizeof(__packet_header) + 1;
+    int __footer_length = sizeof(__end_of_transmission);
+    vector<PacketCallback> Callbacks;
+    vector<char> CallTags;
+
     bool compareBuffer(vector<char> buffer1, int start, int end, char* buffer2);
-    std::list<PacketCallback> Callbacks;
     
 
     public:
