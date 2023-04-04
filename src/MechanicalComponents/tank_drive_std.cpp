@@ -23,6 +23,7 @@ Tank_Drive_Std::~Tank_Drive_Std() {
 
 void Tank_Drive_Std::setVoltage(float* vals)  {
 /* Less than some threshold */ 
+    /*TODO: Implement VoltageRegulator Class that Registers each of these voltages as a */
     float lt = vals[0]; float lm = vals[1];float lb = vals[2]; float rt = vals[3]; float rm = vals[4]; float rb = vals[5];
     if (fabs(lt) > this->maxSpeed) lt = this->maxSpeed * fabs(lt) / lt;
     if (fabs(rt) > this->maxSpeed) rt = this->maxSpeed * fabs(rt) / rt;

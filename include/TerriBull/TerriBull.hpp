@@ -69,7 +69,8 @@ namespace TerriBull {
     class ObjectHandler;
     /* Game Object Class */
     class GameObject;
-
+    /*Subsystem Tools*/    
+    class VoltageRegulator;
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
 

@@ -1,6 +1,6 @@
 /**
  * @file SerialController.hpp
- * @author John Koch jkoch21@usf.edu
+ * @author John Koch jkoch21@usf.edu, Bill Gate <Email Redacted>
  * @brief Manages Serial communication between the V5 and other devices
  *     
  * @version 0.1

@@ -1,10 +1,10 @@
 /**
  * @file SerialController.cpp
- * @author John Koch jkoch21@usf.edu
+ * @author John Koch jkoch21@usf.edu, Bill Gate <Email Redacted>
  * @brief Manages Serial communication between the V5 and other devices
  *     
  * @version 0.1
- * @date 2023-02-28
+ * @date 2023-03-28
  * 
  * @copyright Copyright (c) 2022
  * 
@@ -192,7 +192,7 @@ void TerriBull::SerialController::ExchangeTags()
 
 int TerriBull::SerialController::RegisterCallback(char *tag_name, PacketCallback callback)
 {
-    bool found = (std::find(CallTags.begin(), CallTags.end(), tag_name) != CallTags.end());
+    bool found = (std::find(CallTags.begin(), CallTags.end(), *tag_name) != CallTags.end());
     if (!found)
     {
         CallTags.push_back((*tag_name));
@@ -202,6 +202,7 @@ int TerriBull::SerialController::RegisterCallback(char *tag_name, PacketCallback
     {
         throw new exception;
     }
+    return 0;
 }
 
 void TerriBull::SerialController::DeserializePacket()

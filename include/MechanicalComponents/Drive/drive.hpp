@@ -24,8 +24,12 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     Vector2 pPreviousPos;
     float motorPowerThreshold; /* Should be tested */
     float kPTheta, kITheta, kDTheta;
-    // Vector2 pCurrentError;
-    // Vector2 pPreviousError;
+
+    /* TASK SPECIFIC VALUES */
+    bool pNeedsAngleCorrection;
+    bool pUseVoltageRegulator;
+    VoltageRegulator* pVoltageRegulator;
+    
     public:
     Drive(int gearSet, float _conversionFactor, float _wheelRadius, float maxSpeed, float kP_Pos, float KI_Pos, float KD_Pos, float kP_Theta, float kI_Theta, float kD_Theta) : TerriBull::MechanicalComponent(gearSet), motorPowerThreshold(127), maxSpeed(127), conversionFactor(_conversionFactor), wheelRadius(_wheelRadius), kPTheta(kP_Theta), kITheta(kI_Theta), kDTheta(kD_Theta) {
         this->kP = kP_Pos;

@@ -51,6 +51,10 @@ DriveTask* DriveTask::DynamicInitialize(Vector2* offset, bool reversed, DriveTyp
     return task;
 }
 
+DriveTask* DriveTask::GoToObject(TerriBull::GameObject* object, bool reversed,TerriBull::MechanicalSystem* system) {
+    return nullptr;
+}
+
 void DriveTask::init() {
     this->finishedFlag = false;
     this->system->resetDrive();
@@ -82,6 +86,8 @@ void DriveTask::update(float delta) {
                 this->system->GoToPosition(*(this->pos)); /*TODO: Test Delta Value  */
                 this->finishedFlag = fabs(this->system->getDriveError()) < 0.35 && (fabs(this->system->getDriveDError()) / delta) < 0.25; 
                 break;
+
+
             case ORIENTATION:
                 this->system->TurnToAngle(this->approachOrientation);
                 this->finishedFlag = fabs(this->system->getDriveError()) < 0.38 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
