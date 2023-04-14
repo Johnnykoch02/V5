@@ -19,7 +19,7 @@ int Roller_Uni::Spin(int direction, float time, float delta) {
     return 0;
 }
 
-int Roller_Uni::SpinToPos(float pos) {
+int Roller_Uni::SpinToPos(float pos) {/* TODO: Fix this */
     this->currentError = pos - this->currentPos;
     this->sumError += this->currentError;
     float pwr = kP*this->currentError + kI*this->sumError + kD*this->dError();
@@ -38,6 +38,6 @@ void Roller_Uni::reset() {
 
 void Roller_Uni::update() {
     float dPos = this->pMotorI->get_position();
-    this->currentPos += dPos * (2*PI) / ENCODER_UNIT[this->gearSet];
+    this->currentPos += 25 * dPos * (2*PI) / ENCODER_UNIT[this->gearSet];
     this->pMotorI->tare_position();
 }

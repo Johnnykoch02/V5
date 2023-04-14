@@ -23,13 +23,16 @@ Tank_Drive_Std::~Tank_Drive_Std() {
 
 void Tank_Drive_Std::setVoltage(float* vals)  {
 /* Less than some threshold */ 
+    /*TODO: Implement VoltageRegulator Class that Registers each of these voltages as a */
+    if (fabs(vals[0]) > this->maxSpeed) vals[0] = this->maxSpeed * fabs(vals[0]) / vals[0];
+    if (fabs(vals[3]) > this->maxSpeed) vals[3] = this->maxSpeed * fabs(vals[3]) / vals[3];
+    if (fabs(vals[1]) > this->maxSpeed) vals[1] = this->maxSpeed * fabs(vals[1]) / vals[1];
+    if (fabs(vals[4]) > this->maxSpeed) vals[4] = this->maxSpeed * fabs(vals[4]) / vals[4];
+    if (fabs(vals[2]) > this->maxSpeed) vals[2] = this->maxSpeed * fabs(vals[2]) / vals[2];
+    if (fabs(vals[5]) > this->maxSpeed) vals[5] = this->maxSpeed * fabs(vals[5]) / vals[5];
+    if (this->pUseVoltageRegulator) vals = this->pVoltageRegulator->getRegulatedVoltages(vals);
     float lt = vals[0]; float lm = vals[1];float lb = vals[2]; float rt = vals[3]; float rm = vals[4]; float rb = vals[5];
-    if (fabs(lt) > motorPowerThreshold) lt = motorPowerThreshold * fabs(lt) / lt;
-    if (fabs(rt) > motorPowerThreshold) rt = motorPowerThreshold * fabs(rt) / rt;
-    if (fabs(lm) > motorPowerThreshold) lm = motorPowerThreshold * fabs(lm) / lm;
-    if (fabs(rm) > motorPowerThreshold) rm = motorPowerThreshold * fabs(rm) / rm;
-    if (fabs(lb) > motorPowerThreshold) lb = motorPowerThreshold * fabs(lb) / lb;
-    if (fabs(rb) > motorPowerThreshold) rb = motorPowerThreshold * fabs(rb) / rb;
+
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(2);
     s3 << "Left: "<< lm << " Right: " << rm;
@@ -42,45 +45,64 @@ void Tank_Drive_Std::setVoltage(float* vals)  {
     this->pMotorF->move(rb);
 }
 
-int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
+int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[6];
     float pct = 0;
-    Vector2* dP = (pos - *(this->pCurrentPos));
-    float difToZero = fabs(GetDTheta(RAD2DEG(dP->theta), *(this->pCurrentAngle)));
-    float difToBack = fabs(GetDTheta(RAD2DEG(dP->theta), fmod(*(this->pCurrentAngle)+ 180, 360)));
-    int errorMod = (difToZero < difToBack) ? 1 : -1;
-    if (dP->r > errorMod) targetDirection = errorMod;
-    this->currentError = dP->r * errorMod; /* First Part: Absolute Displacement, Second Part: Positive or Negative */
+    Vector2* v_to_goal = (v_f - *(this->pCurrentPos));
+    Vector2* v_i_to_goal = (v_f - v_i);
+    Vector2* v_i_to_bot = (*(this->pCurrentPos) - v_i);
+    int8_t rev = (reverse)? -1 : 1;
+    /* Overshooting: Bot traveled further than distance, and the Vectors of displacement are somewhat in the same direction */
+    int8_t errorMod = (v_i_to_goal->r < v_i_to_bot->r && *(v_i_to_goal) * *( v_i_to_bot) > 0.5) ? 1 : -1;
+    // if (v_to_goal->r > errorMod) targetDirection = errorMod;
+    this->currentError = v_to_goal->r * errorMod; /* First Part: Absolute Displacement, Second Part: Positive or Negative */
     this->sumError+=currentError;
+    this->sumError = std::clamp(this->sumError, -200.0f, 200.0f);
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(1);
-    s3 << "Err: "<< this->currentError << " Mod: " << errorMod << "|" << RAD2DEG(dP->theta) << " " << dP->r;
+    s3 << "Err: "<< this->currentError << " Mod: " << errorMod << "|" << RAD2DEG(v_to_goal->theta) << " " << v_to_goal->r;
     pros::lcd::set_text(4,s3.str());
     /* Basic PID Equation */
     pct = kP*currentError + kI*this->sumError + kD*this->dError() / delta;
-
-    if (fabs(pct) >  127) {/* Clmp Pwr to 127 */
-        pct = 127 * fabs(pct) / pct;
+    if (fabs(pct) >  this->maxSpeed) {/* Clmp Pwr to this->maxSpeed */
+        pct = this->maxSpeed * fabs(pct) / pct;
     }
-    float pL = pct;
-    float pR = pct;
-    int angleMod = (errorMod > 0 ) ? 0 : 180;
-    float offTrack = GetDTheta(RAD2DEG(dP->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360));
-    if (fabs(dP->r) > 3) {
-        int dir = fabs(offTrack)/offTrack;
-        pL *= 0.95;
-        pR *= 0.95;
-        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
-        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
-    }
-    else if (fabs(dP->r) > 1.0 && offTrack > 90) {
-        this->change_orientation(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
-        delete[] vals;
-        delete dP;
+    float pL = pct*rev;
+    float pR = pct*rev;
+    int angleMod = (rev > 0) ? 0 : 180;
+    float offTrack = GetDTheta(RAD2DEG(v_to_goal->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360))*v_to_goal->r;
+    if (fabs(v_to_goal->r) > 6.0 && offTrack > 65 ) {
+        this->pNeedsAngleCorrection = true;
+        float resetVoltages[] = {0, 0, 0, 0, 0, 0};
+        this->setVoltage(resetVoltages);
+        delete v_to_goal;
+        delete v_i_to_goal;
+        delete v_i_to_bot;
         return 0;
     }
-
+    else if (fabs(v_to_goal->r) > 3) {
+        int dir = fabs(offTrack)/offTrack;
+        pL *= 0.78;
+        pR *= 0.78;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod * rev;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod * rev;
+    }
+    // else if (fabs(v_to_goal->r) > 0.5 && fabs(offTrack) > 15) {
+    //     this->pNeedsAngleCorrection = true;
+    //     float resetVoltages[] = {0, 0, 0, 0, 0, 0};
+    //     this->setVoltage(resetVoltages);
+    //     delete v_to_goal;
+    //     delete v_i_to_goal;
+    //     delete v_i_to_bot;
+    //     return 0;
+    // }
+    // else if (fabs(dP->r) > 0.5 && offTrack > 10) {
+    //     this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta, dP->r, errorMod);
+    //     delete[] vals;
+    //     delete dP;
+    //     return 0;
+    // }
     vals[0] = pL;
     vals[1] = pL;
     vals[2] = pL;
@@ -90,7 +112,9 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 pos, float delta) {
     vals[5] = pR;
     this->setVoltage(vals);
     delete[] vals;
-    delete dP;    
+    delete v_to_goal;
+    delete v_i_to_goal;
+    delete v_i_to_bot;   
     return 0;
 }
 
@@ -98,7 +122,7 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
-  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError() / delta;
+  float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
   std::stringstream s3;
   s3 << std::fixed << ::std::setprecision(1);
   s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
@@ -114,6 +138,40 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
   return 0;
 }
 
+void Tank_Drive_Std::maneuverAngle(float theta, float delta, float r, int errorMod) {
+   float Kr = 0.028;
+  float* vals = new float[6];
+  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+  this->sumError += this->currentError;
+  float pwr = r*Kr*(this->kPTheta * this->currentError + this->kDTheta * this->dError() / delta);
+  float thirdPwr = -pwr*0.3;
+  std::stringstream s3;
+  s3 << std::fixed << ::std::setprecision(1);
+  s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
+  pros::lcd::set_text(4,s3.str());
+  float lPwr = 0 , rPwr = 0;
+  if (errorMod > 0) {
+    lPwr = MAX(0, pwr);
+    rPwr = MIN(pwr, 0);
+    lPwr = (lPwr == 0) ? thirdPwr : lPwr;
+    rPwr = (rPwr == 0)? thirdPwr : rPwr;
+  }
+  else if (errorMod < 0) {
+    lPwr = MIN(pwr, 0);
+    rPwr = MAX(0, pwr);
+    lPwr = (lPwr == 0)? thirdPwr : lPwr;
+    rPwr = (rPwr == 0)? thirdPwr : rPwr;
+  }
+  vals[0] = lPwr;
+  vals[1] = lPwr;
+  vals[2] = lPwr;
+  vals[3] = rPwr;
+  vals[4] = rPwr;
+  vals[5] = rPwr;
+  this->setVoltage(vals);
+  delete[] vals;
+}
+
 void Tank_Drive_Std::reset() {
     this->pMotorA->move(0);
     this->pMotorB->move(0);
@@ -124,6 +182,10 @@ void Tank_Drive_Std::reset() {
     this->currentError = 0;
     this->sumError = 0;
     this->previousError = 0;
+    this->pNeedsAngleCorrection = false;
+    if (this->pUseVoltageRegulator) {
+        this->pVoltageRegulator->ResetGradients();
+    }
 }
 
 Vector2* Tank_Drive_Std::resultant_vector() {
@@ -133,8 +195,8 @@ Vector2* Tank_Drive_Std::resultant_vector() {
     float r1 = this->pMotorD->get_position();
     float r2 = this->pMotorE->get_position();
     float r3 = this->pMotorF->get_position();
-    float left = ((l1 + l2 + l3) / 3) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
-    float right = ((r1 + r2 + r3) / 3) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float left = ((l1 + l2 + l3) / 3) * 2 * PI * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float right = ((r1 + r2 + r3) / 3) * 2 * PI  * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
     int leftDir = fabs(left) / left;
     int rightDir = fabs(right) / right;
     float leftAngle = (leftDir > 0) ? *(this->pCurrentAngle) : fmod((180 + *(this->pCurrentAngle)), 360.0);

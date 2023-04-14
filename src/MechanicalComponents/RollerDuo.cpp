@@ -48,6 +48,6 @@ void Roller_Duo::reset() {
 
 void Roller_Duo::update() {
     float dPos = (this->pMotorI->get_position() + this->pMotorJ->get_position()) / 2;
-    this->currentPos += dPos * (2*PI) / ENCODER_UNIT[this->gearSet];
+    this->currentPos += 100 * dPos * (2*PI) / ENCODER_UNIT[this->gearSet];
     this->pMotorI->tare_position();
 }

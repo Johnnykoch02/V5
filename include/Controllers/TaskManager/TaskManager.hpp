@@ -53,7 +53,7 @@ public:
 
     }
 
-    void run(int delta) {
+    void run(float delta) {
         if (this->currentTaskSet != nullptr)
         { /* Update and chek our current task*/
         pros::lcd::set_text(7, "Task Number: " + std::to_string(this->tasksCompleted+1));

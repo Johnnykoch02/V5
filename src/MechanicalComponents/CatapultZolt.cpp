@@ -16,7 +16,7 @@ int CatapultZolt::Shoot(float delta) {
     this->sumTime+=delta;
     pros::lcd::set_text(6, ""+ std::to_string(this->sumTime));
     if (!this->shotComplete) {
-        if (this->sumTime > 1.5) {
+        if (this->sumTime > 0) {
             if (this->limitSwitch->get_new_press()) {
                 this->engagedOne = true;
                 this->cntNoVal = 0;
@@ -26,16 +26,37 @@ int CatapultZolt::Shoot(float delta) {
             if (this->engagedOne) {
                 pros::lcd::set_text(6, ""+ std::to_string(this->limitSwitch->get_value()));
                 if (this->limitSwitch->get_value() == 0) this->cntNoVal+=delta;
-                else this->cntNoVal = 0;
-                shotComplete = this->cntNoVal > 0.5;
+                // else this->cntNoVal = 0;
+                shotComplete = this->cntNoVal > 0.2;
+                if (shotComplete){ this->loaded = false; this->toggled = false;}
             }
-        }
-        else {
-            this->pMotorX->move(-100);
-            this->pMotorY->move(-100);   
-        }        
+        }     
     }
     return 0;
+}
+
+int CatapultZolt::Load(float delta) {
+    toggled = true;
+    this->sumTime+=delta;
+    this->currentError = 0.3 - this->currentPos;
+    float pwr = 120;
+    this->pMotorX->move(pwr);
+    this->pMotorY->move(pwr);
+    this->loaded = fabs(this->currentError) <  0.1 || this->limitSwitch->get_value();
+    
+    pros::lcd::set_text(4, ""+std::to_string(this->currentError));
+    if (this->loaded) {
+        this->pMotorX->move(0);
+        this->pMotorY->move(0);
+        this->toggled = false;
+    }
+    if (this->pMotorX->get_torque() > 0.15) {
+        float dP = (this->pMotorX->get_position() + this->pMotorY->get_position()) / (2 * ENCODER_UNIT[this->gearSet]);
+        this->currentPos +=dP;
+        this->pMotorX->tare_position();
+        this->pMotorY->tare_position();
+    }
+    return 0;   
 }
 int CatapultZolt::turnOn() {
     return 0;
@@ -46,8 +67,11 @@ int CatapultZolt::reset() {
     this->engagedOne = false;
     this->cntNoVal = 0;
     this->sumTime = 0;
+    if(!loaded) this->currentPos = 0;
     this->pMotorX->move(0);
     this->pMotorY->move(0);
+    this->pMotorX->tare_position();
+    this->pMotorY->tare_position();
     return 0;
 }
 bool CatapultZolt::shotCompleted() {

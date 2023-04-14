@@ -41,6 +41,7 @@ Logger logger("/usd/logfile.log"); /* Global Logger */
 ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
 pros::Imu mu(11);
 
+
 };
 #endif
 #ifndef __TERRIBULL_FUNCTIONS__

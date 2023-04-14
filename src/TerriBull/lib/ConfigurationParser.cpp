@@ -28,9 +28,15 @@
 
 /* Shooter */
 #include "../../../include/MechanicalComponents/Shooters/Configurations/Catapult/CatapultZolt.hpp"
+#include "../../../include/MechanicalComponents/Shooters/Configurations/FlyWheel/FlyWheelSB.hpp"
+#include "../../../include/MechanicalComponents/Shooters/Magazines/Magazine.hpp"
 
 /* Ctrls*/
 #include "../../../include/Controllers/InputController/Configurations/AidanJoeShmo.hpp"
+#include "../../../include/Controllers/InputController/Configurations/DanTheMan.hpp"
+#include "../../../include/Controllers/InputController/Configurations/NateIsTank.hpp"
+#include "../../../include/Controllers/InputController/Configurations/RyanIsTank.hpp"
+
 /*END INCLUDE*/
 
 ConfigurationParser::~ConfigurationParser () {
@@ -45,15 +51,16 @@ TerriBull::Drive* ConfigurationParser::getDriveConfig() {
     }
     Json::String DriveType = this->pConfigVariables.DriveConfig.asString();
     Json::String gearSet = this->pConfigVariables.DriveMotorGearset.asString();
+    
     /* Drive Configurations that are Currently Supported */
     if (DriveType == "x_drive") {
-        return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat());
+        return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat(), this->pConfigVariables.DriveKPos[0].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKTheta[0].asFloat(), this->pConfigVariables.DriveKTheta[1].asFloat(), this->pConfigVariables.DriveKTheta[2].asFloat());
     }
     if (DriveType == "tank_drive_std") {
-        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorReverse[4].asBool(), this->pConfigVariables.DriveMotorPorts[5].asInt(), this->pConfigVariables.DriveMotorReverse[5].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat());
+        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorReverse[4].asBool(), this->pConfigVariables.DriveMotorPorts[5].asInt(), this->pConfigVariables.DriveMotorReverse[5].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat(), this->pConfigVariables.DriveKPos[0].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKTheta[0].asFloat(), this->pConfigVariables.DriveKTheta[1].asFloat(), this->pConfigVariables.DriveKTheta[2].asFloat());
     }
     if (DriveType == "tank_drive_quad") {
-        return new Tank_Drive_Quad(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat());
+        return new Tank_Drive_Quad(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat(), this->pConfigVariables.DriveKPos[0].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKTheta[0].asFloat(), this->pConfigVariables.DriveKTheta[1].asFloat(), this->pConfigVariables.DriveKTheta[2].asFloat());
     }
     else return nullptr;
 }
@@ -71,7 +78,15 @@ TerriBull::InputController* ConfigurationParser::getInputControllerConfig(RoboCo
     if (ConfigType == "AidanJoeShmo") {
         return new AidanJoeShmo(roboController, deadzone);
     }
-
+    if (ConfigType == "DanTheMan") {
+        return new DanTheMan(roboController, deadzone);
+    }
+    if (ConfigType == "NateIsTank") {
+        return new NateIsTank(roboController, deadzone);
+    }
+    if (ConfigType == "RyanIsTank") {
+        return new RyanIsTank(roboController, deadzone);
+    }
     return nullptr;
 }
 
@@ -112,7 +127,7 @@ TerriBull::Roller* ConfigurationParser::getRollerConfig() {
     return nullptr;
 }
 
-TerriBull::Shooter* ConfigurationParser::getShooterConfig() {
+TerriBull::Shooter* ConfigurationParser::getShooterConfig(TerriBull::MechanicalSystem* _system) {
     Json::Value ShooterConfig = this->pConfigVariables.Config["mechanical_system"]["shooter"];
     if (ShooterConfig.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;
@@ -123,6 +138,16 @@ TerriBull::Shooter* ConfigurationParser::getShooterConfig() {
     /* Controller Configurations that are Currently Supported */
     if (ConfigType == "CatapultZolt") {
         return new CatapultZolt(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), ShooterConfig["limit_port"].asString()[0], GEAR_ENCODER[gearSet]);
+    }
+    else if (ConfigType == "ShooterFlyWheelSB") {
+        /* Parse for the Magazine as well*/
+        Json::Value MagazineConfig = this->pConfigVariables.Config["mechanical_system"]["magazine"];
+        bool* increment_bools = new bool[2];
+        bool* decrement_bools = new bool[2];
+        increment_bools[0] = MagazineConfig["inc_default"][0].asBool(); increment_bools[1] = MagazineConfig["inc_default"][1].asBool();
+        decrement_bools[0] = MagazineConfig["dec_default"][0].asBool(); decrement_bools[1] = MagazineConfig["dec_default"][1].asBool();
+        Magazine* mag = new Magazine(MagazineConfig["incPorts"].asString(), increment_bools, MagazineConfig["decPorts"].asString(), decrement_bools);
+        return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), mag, GEAR_ENCODER[gearSet], _system);
     }
     return nullptr;
 }
@@ -168,7 +193,7 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
         }
 
         else if (ref == "shooter") {
-            TerriBull::Shooter* shooter = this->getShooterConfig();
+            TerriBull::Shooter* shooter = this->getShooterConfig(system);
             if (shooter!= nullptr) {
                 system->setShooter(shooter);
             }

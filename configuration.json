@@ -1,9 +1,9 @@
 {
-    "version": "0.1.1",
+    "version": "0.2.0",
     "configurations": [
         {
-            "name": "Shooter_Big_Bot",
-            "controller_config": "AidanJoeShmo",
+            "name": "Big_Boy",
+            "controller_config": "DanTheMan",
             "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
@@ -17,7 +17,9 @@
                     "motor_ports": [1, 2, 3, 4],
                     "gear_ratio": "RED",
                     "cf": 1.0,
-                    "radius": 1.0
+                    "radius": 1.0,
+                    "k_pos": [8.5, 1.95, 0.8],
+                    "k_theta": [0.95, 0.08, 0.15]
                 },
                 "intake": {
                     "config": "IntakeUni",
@@ -59,7 +61,9 @@
                     "reverse_motors": [1, 1, 0, 0, 0, 1],
                     "gear_ratio": "BLUE",
                     "cf": 0.667,
-                    "radius": 2.0
+                    "radius": 2.0,
+                    "k_pos": [8.5, 1.95, 0.8],
+                    "k_theta": [0.95, 0.08, 0.15]
                 },
                 "roller": {
                     "config": "RollerDuo",
@@ -91,11 +95,13 @@
                 "imu": 11,
                 "drive": {
                     "config": "tank_drive_std",
-                    "motor_ports": [4, 5, 6, 1, 2, 3],
-                    "reverse_motors": [1, 1, 0, 0, 0, 1],
+                    "motor_ports": [1, 2, 3, 8, 9, 10],
+                    "reverse_motors": [1, 0, 1, 0, 1, 0],
                     "gear_ratio": "BLUE",
-                    "cf": 0.667,
-                    "radius": 1.5
+                    "cf": 0.83375,
+                    "radius": 1.5,
+                    "k_pos": [1.2, 0.0001, 0.2],
+                    "k_theta": [3.5, 0.002, 0.4]
                 },
                 "intake": {
                     "config": "IntakeUni",
@@ -117,6 +123,49 @@
                     "reverse_motors": [0, 0],
                     "gear_ratio": "SpecialFlyWheel",
                     "max_speed": 127
+                },
+                "magazine": {
+                    "incPorts": "AB",
+                    "inc_default": [true, true],
+                    "decPorts": "CD",
+                    "dec_default": [false, false]
+                }
+            }
+        },
+        {
+            "name": "Rocky",
+            "controller_config": "NateIsTank",
+            "controller_deadzone": 5,
+            "mechanical_system": {
+                "starting_angle": 90,
+                "starting_position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "imu": 11,
+                "drive": {
+                    "config": "tank_drive_quad",
+                    "motor_ports": [4, 5, 6, 1, 2, 3],
+                    "reverse_motors": [1, 1, 0, 0, 0, 1],
+                    "gear_ratio": "BLUE",
+                    "cf": 1,
+                    "radius": 4.0,
+                    "k_pos": [8.5, 1.95, 0.8],
+                    "k_theta": [0.95, 0.05, 0.15]
+                },
+                "intake": {
+                    "config": "IntakeUni",
+                    "motor_ports": [5],
+                    "reverse_motors": [0],
+                    "gear_ratio": "GREEN",
+                    "max_speed": 120
+                },
+                "roller": {
+                    "config": "RollerUni",
+                    "motor_ports": [19],
+                    "reverse_motors": [0],
+                    "gear_ratio": "GREEN",
+                    "max_speed": 120
                 }
             }
         }

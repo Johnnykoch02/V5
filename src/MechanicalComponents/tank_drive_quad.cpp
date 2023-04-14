@@ -22,10 +22,10 @@ Tank_Drive_Quad::~Tank_Drive_Quad() {
 void Tank_Drive_Quad::setVoltage(float* vals)  {
 /* Less than some threshold */ 
     float lt = vals[0]; float lb = vals[1];float rt = vals[2]; float rb = vals[3];
-    if (fabs(lt) > motorPowerThreshold) lt = motorPowerThreshold * fabs(lt) / lt;
-    if (fabs(rt) > motorPowerThreshold) rt = motorPowerThreshold * fabs(rt) / rt;
-    if (fabs(lb) > motorPowerThreshold) lb = motorPowerThreshold * fabs(lb) / lb;
-    if (fabs(rb) > motorPowerThreshold) rb = motorPowerThreshold * fabs(rb) / rb;
+    if (fabs(lt) > this->maxSpeed) lt = this->maxSpeed * fabs(lt) / lt;
+    if (fabs(rt) > this->maxSpeed) rt = this->maxSpeed * fabs(rt) / rt;
+    if (fabs(lb) > this->maxSpeed) lb = this->maxSpeed * fabs(lb) / lb;
+    if (fabs(rb) > this->maxSpeed) rb = this->maxSpeed * fabs(rb) / rb;
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(2);
     s3 << "Left: "<< lt << " Right: " << rt;
@@ -36,11 +36,11 @@ void Tank_Drive_Quad::setVoltage(float* vals)  {
     this->pMotorD->move(rb);
 }
 
-int Tank_Drive_Quad::drive(TerriBull::Vector2 pos, float delta) {
+int Tank_Drive_Quad::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[6];
     float pct = 0;
-    Vector2* dP = (pos - *(this->pCurrentPos));
+    Vector2* dP = (v_f - *(this->pCurrentPos));
     float difToZero = fabs(GetDTheta(RAD2DEG(dP->theta), *(this->pCurrentAngle)));
     float difToBack = fabs(GetDTheta(RAD2DEG(dP->theta), fmod(*(this->pCurrentAngle)+ 180, 360)));
     int errorMod = (difToZero < difToBack) ? 1 : -1;
@@ -54,8 +54,8 @@ int Tank_Drive_Quad::drive(TerriBull::Vector2 pos, float delta) {
     /* Basic PID Equation */
     pct = kP*currentError + kI*this->sumError + kD*this->dError() / delta;
 
-    if (fabs(pct) >  127) {/* Clmp Pwr to 127 */
-        pct = 127 * fabs(pct) / pct;
+    if (fabs(pct) >  this->maxSpeed) {/* Clmp Pwr to 127 */
+        pct = this->maxSpeed * fabs(pct) / pct;
     }
     float pL = pct;
     float pR = pct;
@@ -69,7 +69,7 @@ int Tank_Drive_Quad::drive(TerriBull::Vector2 pos, float delta) {
         pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.1* pct)) * dir * errorMod;
     }
     else if (fabs(dP->r) > 1.0 && offTrack > 90) {
-        this->change_orientation(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
+        this->maneuverAngle(fmod(RAD2DEG(dP->theta) + angleMod, 360), delta);
         delete[] vals;
         delete dP;
         return 0;
@@ -88,7 +88,7 @@ int Tank_Drive_Quad::change_orientation(float theta, float delta) {
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
-  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError();
+  float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
   std::stringstream s3;
   s3 << std::fixed << ::std::setprecision(1);
   s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
@@ -102,6 +102,23 @@ int Tank_Drive_Quad::change_orientation(float theta, float delta) {
   this->setVoltage(vals);
   delete[] vals;
   return 0;
+}
+
+void Tank_Drive_Quad::maneuverAngle(float theta, float delta) {
+  float* vals = new float[4];
+  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+  this->sumError += this->currentError;
+  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError() / delta;
+  std::stringstream s3;
+  s3 << std::fixed << ::std::setprecision(1);
+  s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
+  pros::lcd::set_text(4,s3.str());
+  vals[0] = -pwr;
+  vals[1] = -pwr;
+  vals[2] = pwr;
+  vals[3] = pwr;
+  this->setVoltage(vals);
+  delete[] vals;
 }
 
 void Tank_Drive_Quad::reset() {
@@ -119,8 +136,8 @@ Vector2* Tank_Drive_Quad::resultant_vector() {
     float l2 = this->pMotorB->get_position();
     float r1 = this->pMotorC->get_position();
     float r2 = this->pMotorD->get_position();
-    float left = ((l1 + l2) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
-    float right = ((r1 + r2) / 2) * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float left = ((l1 + l2) / 2) * 2 * PI  * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
+    float right = ((r1 + r2) / 2) * 2 * PI * this->wheelRadius * this->conversionFactor / ENCODER_UNIT[this->gearSet]; /* Assuming Radius of wheel is 5 */
     int leftDir = fabs(left) / left;
     int rightDir = fabs(right) / right;
     float leftAngle = (leftDir > 0) ? *(this->pCurrentAngle) : fmod((180 + *(this->pCurrentAngle)), 360.0);

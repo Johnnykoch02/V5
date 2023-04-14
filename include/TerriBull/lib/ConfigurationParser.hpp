@@ -41,6 +41,8 @@ class ConfigurationParser {
         Json::Value DriveMotorGearset;
         Json::Value DriveConversionFactor;
         Json::Value DriveWheelRadius;
+        Json::Value DriveKPos;
+        Json::Value DriveKTheta;
         /* IMU Sensor */
         Json::Value IMUConfig;
         Json::Value StartingAngle;
@@ -90,6 +92,8 @@ class ConfigurationParser {
             this->pConfigVariables.DriveMotorGearset = this->pConfigVariables.Config["mechanical_system"]["drive"]["gear_ratio"];
             this->pConfigVariables.DriveConversionFactor = this->pConfigVariables.Config["mechanical_system"]["drive"]["cf"];
             this->pConfigVariables.DriveWheelRadius = this->pConfigVariables.Config["mechanical_system"]["drive"]["radius"];
+            this->pConfigVariables.DriveKPos = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_pos"];
+            this->pConfigVariables.DriveKTheta = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_theta"];
 
             this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
             this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
@@ -105,7 +109,7 @@ class ConfigurationParser {
         TerriBull::Drive* getDriveConfig();
         TerriBull::Intake* getIntakeConfig();
         TerriBull::Roller* getRollerConfig();
-        TerriBull::Shooter* getShooterConfig();
+        TerriBull::Shooter* getShooterConfig(TerriBull::MechanicalSystem* _system);
         TerriBull::MechanicalSystem* getMechanicalSystemConfig();
         TerriBull::InputController* getInputControllerConfig(TerriBull::RoboController* roboController);
 

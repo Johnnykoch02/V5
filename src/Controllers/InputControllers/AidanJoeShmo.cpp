@@ -19,27 +19,23 @@ void AidanJoeShmo::Update(float delta) {
     int yInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_LEFT_Y);
     if (abs(yInput) < deadzone) yInput = 0;
     if (yInput != 0) {
-      yInput/=5;
+      float voltages[] = {0, 0, 0, 0, 0, 0};
       drive_engaged = true;
-      Vector2* currentPos = this->roboController->getSystem()->getPosition();
-      int angleMod = (yInput > 0) ? 1 : 0;
-      Vector2* unitPos = currentPos->unit();
-      Vector2* scalePos = *unitPos * yInput;
-      Vector2* goalPos = *scalePos - *currentPos;
-      this->roboController->getSystem()->GoToPosition(*goalPos);
-      delete unitPos;
-      delete goalPos;
-      delete scalePos;
+      yInput/=10.7;
+      float V = yInput*fabs(yInput);
+      voltages[0] = V; voltages[1] = V; voltages[2] = V; voltages[3] = V; voltages[4] = V; voltages[5] = V;
+      this->roboController->getSystem()->getDrive()->setVoltage(voltages);
     }
+    if (!drive_engaged) {
+      int turnInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_RIGHT_X);
+      if (abs(turnInput) < deadzone) turnInput = 0;
+      if (turnInput != 0) {
+        drive_engaged = true;
 
-    int turnInput = controller.get_analog(::pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    if (abs(turnInput) < deadzone) turnInput = 0;
-    if (turnInput != 0) {
-      drive_engaged = true;
-      
-      turnInput /= 5;
-      float angle = fmod((this->roboController->getSystem()->getAngle() - turnInput), 360);
-      this->roboController->getSystem()->TurnToAngle(angle);
+        turnInput /= 5;
+        float angle = fmod((this->roboController->getSystem()->getAngle() - turnInput), 360);
+        this->roboController->getSystem()->TurnToAngle(angle);
+      }
     }
     if (!drive_engaged) this->roboController->getSystem()->resetDrive();
 
@@ -61,16 +57,16 @@ void AidanJoeShmo::Update(float delta) {
     } else this->roboController->getSystem()->resetRoller();
 
     /* Shooter */
+    int shoot = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
     TerriBull::Shooter* shooter = this->roboController->getSystem()->getShooter();
-    if (shooter->isToggled()) {
-      shooter->Shoot(delta);
-      if (shooter->shotCompleted()) {
-        shooter->reset();
-      }
-    } else {
-      int shoot = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
-      if (shoot) {
+    if (shoot || shooter->isToggled() ) {
+      pros::lcd::set_text(2, "Shooting");
+      if (shooter->isLoaded()) {
         shooter->Shoot(delta);
       }
-    }
+      else {
+        shooter->Load(delta);
+      }
+    } 
+    else shooter->reset();   
 }

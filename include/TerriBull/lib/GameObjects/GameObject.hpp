@@ -1,7 +1,7 @@
 /**
  * @file GameObject.hpp
  * @author John Koch jkoch21@usf.edu
- * @brief Data structure for implementing game objects on the field
+ * @brief Abstract Data structure for implementing game objects on the field
  *     
  * @version 0.1
  * @date 2023-01-04
@@ -21,11 +21,11 @@ class TerriBull::GameObject {
     private:
     public:
     typedef enum {
-        DISK, ROBOT, ROLLER
+        DISK, ROBOT, ROLLER, GOAL, LOWER_GOAL
     } Types;
 
-    ::std::string identifier;
-    Vector2 pos;
+    byte id;
+    Vector2* pos;
     float width;
     float height;
     Types type;
@@ -33,22 +33,23 @@ class TerriBull::GameObject {
     ~GameObject() {
         
     }
-    GameObject() {
-        
-    }
-    GameObject(Vector2 pos, TerriBull::string identifier, int type, float width, float height) : GameObject() {
-        this->pos = pos;
-        this->identifier = identifier;
-    }
 
-    void setPos(Vector2 pos) {
+    GameObject(Vector2* pos, byte identifier, Types type, float width, float height) : pos(pos), id(identifier), type(type), width(width), height(height) { }
+    
+
+    virtual void setPos(Vector2* pos) final {
         this->pos = pos;
     }
 
-    bool checkID(::std::string identifier) { 
-        if (this->identifier != identifier) return false;
+    virtual Vector2* getPos() const final {
+        return new Vector2(this->pos);
+    }
 
-        return true;
+    virtual Vector2* getPosPtr() final { return this->pos; }
+    
+
+    virtual bool checkID(byte identifier) final { 
+        return this->id == identifier;
     }
 
 };

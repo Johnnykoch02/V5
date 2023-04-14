@@ -17,15 +17,13 @@
 
 class TerriBull::ShooterTask : public TerriBull::Task {
     public: 
-    // typedef enum {ON, } RollerType;
+    typedef enum {LOAD, SHOOT} ShooterType;
     private:
-    // RollerType rollerType;
+    ShooterType shooterType;
     
     public:
     
-    ShooterTask(TerriBull::MechanicalSystem* _system);
-
-
+    ShooterTask(ShooterType _shooterType, TerriBull::MechanicalSystem* _system);
     ~ShooterTask();
 
     void init();

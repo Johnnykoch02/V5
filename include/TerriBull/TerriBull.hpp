@@ -47,6 +47,7 @@ namespace TerriBull {
     class IntakeTask;
     class ShooterTask;
     class TimeTask;
+    class VariableTask;
     typedef ::std::vector<Task*> TaskList;
     /* Manages Serial Communication of the Robot */
     class SerialController;
@@ -60,6 +61,7 @@ namespace TerriBull {
     class Intake;
     class Roller;
     class Shooter; /*FlyWheel Catapult*/
+    class Magazine;
     /* Main Controller for the Robot */
     class RoboController;
     /* Takes Controller Input and Controls the Robot */
@@ -68,7 +70,8 @@ namespace TerriBull {
     class ObjectHandler;
     /* Game Object Class */
     class GameObject;
-
+    /*Subsystem Tools*/    
+    class VoltageRegulator;
     /* TerriBull Type Definitions */
     typedef ::std::vector<::pros::Motor> MotorGroup;
 
@@ -489,10 +492,12 @@ namespace TerriBull {
     #include "../api.h"
 
     #include "./lib/Vector2.hpp"
+    #include "./lib/SubsystemTools/VoltageRegulator.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
     #include "../MechanicalComponents/Intakes/intake.hpp"
     #include "../MechanicalComponents/Rollers/roller.hpp"
+    #include "../MechanicalComponents/Shooters/Magazines/magazine.hpp"
     #include "../MechanicalComponents/Shooters/shooter.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"
@@ -501,6 +506,7 @@ namespace TerriBull {
     #include "./lib/Tasking/Types/IntakeTask.hpp"
     #include "./lib/Tasking/Types/ShooterTask.hpp"
     #include "./lib/Tasking/Types/TimeTask.hpp"
+    #include "./lib/Tasking/Types/VariableTask.hpp"
     #include "../Controllers/TaskManager/TaskManager.hpp"
     #include "./lib/ConfigurationParser.hpp"
     #include "./lib/GameObjects/GameObject.hpp"

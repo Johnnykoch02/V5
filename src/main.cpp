@@ -59,6 +59,8 @@ void autonomous() {
 
 
 void opcontrol() {
+	// controlSys.ClearTasks();
+	controlSys.getSystem()->setStartingPosition(0, 0);
 	while (true) {
 		controlSys.Run();
     }
