@@ -20,7 +20,9 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake
     mu.tare();
     pros::delay(2000);
     /*Drive Setup*/
-    this->pDrive = _drive;    
+    this->pDrive = _drive;
+    /*Initalize*/
+    this->pThetaFilter = new KalmanFilter1D(0, 0.2, 0.1);
 }
 
 void MechanicalSystem::Init() {
@@ -39,6 +41,10 @@ float  MechanicalSystem::getDriveError() const {
 }
 float  MechanicalSystem::getDriveDError() const {
     return this->pDrive->ROdError();
+}
+
+bool MechanicalSystem::driveNeedsAngleCorrection() const {
+    return this->pDrive->needsAngleCorrection();
 }
 
 float  MechanicalSystem::getRollerError() const {
@@ -76,6 +82,9 @@ void TerriBull::MechanicalSystem::resetDrive() {
 
 float TerriBull::MechanicalSystem::getAngle() {
   float theta = mu.get_heading(); 
+  if( this->motherSystem) this->pThetaFilter->update(theta, this->motherSystem->delta());
+  this->pThetaFilter->predict();
+  theta = this->pThetaFilter->getState()[0];
   *(this->pAngle) = ::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);//90;//
   return *(this->pAngle);
 }
@@ -95,8 +104,8 @@ void TerriBull::MechanicalSystem::update(float delta) {
 }
 
 /* MECHANICAL SYSTEM API FUNCTIONS */
-int TerriBull::MechanicalSystem::GoToPosition(Vector2 pos) {
-    return this->pDrive->drive(pos, this->motherSystem->delta());
+int TerriBull::MechanicalSystem::GoToPosition(Vector2 v_f, Vector2 v_i, bool reverse) {
+    return this->pDrive->drive(v_f, v_i, this->motherSystem->delta(), reverse);
 }
 
 int TerriBull::MechanicalSystem::TurnToAngle(float theta) {
@@ -143,6 +152,12 @@ int TerriBull::MechanicalSystem::ShootDisk() {
 int TerriBull::MechanicalSystem::loadShooter() {
     if (this->pShooter != nullptr) {
         return this->pShooter->Load(this->motherSystem->delta());
+    } return -1;
+}
+
+int TerriBull::MechanicalSystem::turnOnShooter() {
+    if (this->pShooter != nullptr) {
+        return this->pShooter->turnOn();
     } return -1;
 }
 

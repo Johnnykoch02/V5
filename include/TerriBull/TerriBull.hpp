@@ -491,6 +491,7 @@ namespace TerriBull {
     #include "../api.h"
 
     #include "./lib/Vector2.hpp"
+    #include "./lib/SubsystemTools/VoltageRegulator.hpp"
     #include "../MechanicalComponents/MechanicalComponent.hpp"
     #include "../MechanicalComponents/Drive/drive.hpp"
     #include "../MechanicalComponents/Intakes/intake.hpp"

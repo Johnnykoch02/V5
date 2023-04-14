@@ -12,7 +12,8 @@
 #ifndef MECHANICAL_SYSTEM_H
 #define MECHANICAL_SYSTEM_H
 
-#include "TerriBull/TerriBull.hpp"
+#include "../../TerriBull/TerriBull.hpp"
+#include "../../TerriBull/lib/KalmanFilter.hpp"
 #include "pros/imu.hpp"
 #include "../../TerriBull/ProsAPI.h"
 #include <map>
@@ -30,6 +31,7 @@ class TerriBull::MechanicalSystem {
         TerriBull::Roller* pRoller;
         TerriBull::Expansion* pExpansion;
         TerriBull::Vector2 * pPosition;
+        KalmanFilter1D* pThetaFilter;
         double * pAngle;
         float pStartingAngle;
 
@@ -48,6 +50,7 @@ class TerriBull::MechanicalSystem {
     /* Tasking Specific */
     float getDriveError() const;
     float getDriveDError() const;
+    bool driveNeedsAngleCorrection() const;
     float getRollerError() const;
     float getRollerDError() const;
     bool isShotCompleted() const;
@@ -57,7 +60,7 @@ class TerriBull::MechanicalSystem {
     void Init();
     void update(float delta);
     /* API TO Mechanical System */
-    int GoToPosition(Vector2 pos);
+    int GoToPosition(Vector2 v_f, Vector2 v_i, bool reverse);
     void resetDrive();
     int TurnToAngle(float theta);
     int turnOnIntake(float direction);
@@ -67,6 +70,7 @@ class TerriBull::MechanicalSystem {
     int resetRoller();
     int ShootDisk();
     int loadShooter();
+    int turnOnShooter();
     int resetShooter();
     /*Setters*/
     void setMotherSystem(RoboController* _motherSystem);
@@ -80,8 +84,6 @@ class TerriBull::MechanicalSystem {
     TerriBull::Roller * getRoller();
     TerriBull::Expansion * getExpansion();
     TerriBull::Drive * getDrive();
-    
-
 
 };
 

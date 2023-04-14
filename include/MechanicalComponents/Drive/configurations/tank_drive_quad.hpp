@@ -48,7 +48,7 @@ class Tank_Drive_Quad : public TerriBull::Drive {
     }
     ~Tank_Drive_Quad();
 
-    int drive(TerriBull::Vector2 pos, float delta);
+    int drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse);
     void reset();
     Vector2* resultant_vector();
     void tare_encoders()  {

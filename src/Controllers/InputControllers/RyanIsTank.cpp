@@ -48,4 +48,9 @@ void RyanIsTank::Update(float delta) {
       };
     } else this->roboController->getSystem()->resetRoller();
 
+    /* Shooter */
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+      this->roboController->getSystem()->turnOnShooter();
+    } else this->roboController->getSystem()->resetShooter();
+
 }

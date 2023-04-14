@@ -25,9 +25,19 @@ class TerriBull::VoltageRegulator {
     uint16_t pLength;
     float pMaxGradient;
 
+    bool allZeros(float* ptr, uint16_t length) {
+        for (uint16_t i = 0; i < length; i++) {
+            if (ptr[i]!= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     public:
     
-    VoltageRegulator(float _lengthVoltages, float _maxGradient) : pLength(_lengthVoltages), pMaxGradient(_maxGradient) {
+    VoltageRegulator(uint16_t _lengthVoltages, float _maxGradient) : pLength(_lengthVoltages), pMaxGradient(_maxGradient) {
         this->pCurrentVoltages = (float*)malloc(sizeof(float) * _lengthVoltages);
         this->pPreviousVoltages = (float*)malloc(sizeof(float) * _lengthVoltages);
         this->pGradientVoltages = (float*)malloc(sizeof(float) * _lengthVoltages);
@@ -38,7 +48,13 @@ class TerriBull::VoltageRegulator {
 
     }
     
+
     float* getRegulatedVoltages(float* targetVoltages) {
+        /* Check to see if it is a Hard Reset */
+        if(allZeros(targetVoltages, pLength) ) {
+                this->ResetGradients();
+                return targetVoltages;
+            }
         /* Copy our Old voltages into our previous container */
         for (uint16_t i = 0; i < this->pLength; i++) this->pPreviousVoltages[i] = this->pCurrentVoltages[i];
         /* Go through Each index and clamp the Gradient to the Max Gradient */

@@ -29,7 +29,7 @@ void DanTheMan::Update(float delta) {
       int angleMod = (yInput > 0) ? 1 : 0;
       Vector2* dPos = Vector2::cartesianToVector2( xInput, yInput );
       Vector2* goalPos = *currentPos + *dPos;
-      this->roboController->getSystem()->GoToPosition(*goalPos);
+      // this->roboController->getSystem()->GoToPosition(*goalPos);
       delete goalPos;
       delete dPos;
     }

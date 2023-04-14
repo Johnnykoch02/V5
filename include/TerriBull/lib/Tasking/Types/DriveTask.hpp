@@ -20,8 +20,9 @@ class TerriBull::DriveTask : public TerriBull::Task {
     typedef enum {TRANSLATION, ORIENTATION, OBJECT} DriveType;
     
     private:
-    float approachOrientation;
-    TerriBull::Vector2* pos;
+    float targetTheta;
+    TerriBull::Vector2* v_f;
+    TerriBull::Vector2* v_i;
     DriveType driveType;
 
     TerriBull::Vector2* offset;
@@ -29,13 +30,14 @@ class TerriBull::DriveTask : public TerriBull::Task {
     bool needsInitialize;
     bool deleteOnCleanup;
     bool reversed;
+    bool lastNeedsCorrection;
+    bool hitTarget;
 
     DriveTask(TerriBull::MechanicalSystem* _system);
     public:
     
     DriveTask(TerriBull::Vector2* pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system);
     DriveTask(TerriBull::Vector2 pos, float _orientation, bool reversed, DriveType _driveType, TerriBull::MechanicalSystem* _system);
-    
     static DriveTask* GoToObject(TerriBull::GameObject* object, bool reversed,TerriBull::MechanicalSystem* system);
     static DriveTask* DynamicInitialize(Vector2* offset, bool reversed, DriveType driveType, TerriBull::MechanicalSystem* system);
 

@@ -50,10 +50,13 @@ class Tank_Drive_Std : public TerriBull::Drive {
       pMotorD->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorE->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorF->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+      /* Debug */
+      this->pUseVoltageRegulator = false;
+      this->pVoltageRegulator = new TerriBull::VoltageRegulator(6, 1.5);
     }
     ~Tank_Drive_Std();
 
-    int drive(TerriBull::Vector2 pos, float delta);
+    int drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse);
     void reset();
     Vector2* resultant_vector();
     void tare_encoders()  {

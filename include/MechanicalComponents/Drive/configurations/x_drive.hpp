@@ -43,7 +43,7 @@ class X_Drive : public TerriBull::Drive {
     }
     ~X_Drive();
 
-    int drive(TerriBull::Vector2 pos, float delta);
+    int drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse);
     void reset();
     Vector2* resultant_vector();
     void tare_encoders()  {

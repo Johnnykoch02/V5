@@ -36,11 +36,11 @@ void Tank_Drive_Quad::setVoltage(float* vals)  {
     this->pMotorD->move(rb);
 }
 
-int Tank_Drive_Quad::drive(TerriBull::Vector2 pos, float delta) {
+int Tank_Drive_Quad::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[6];
     float pct = 0;
-    Vector2* dP = (pos - *(this->pCurrentPos));
+    Vector2* dP = (v_f - *(this->pCurrentPos));
     float difToZero = fabs(GetDTheta(RAD2DEG(dP->theta), *(this->pCurrentAngle)));
     float difToBack = fabs(GetDTheta(RAD2DEG(dP->theta), fmod(*(this->pCurrentAngle)+ 180, 360)));
     int errorMod = (difToZero < difToBack) ? 1 : -1;

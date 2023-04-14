@@ -37,10 +37,10 @@ void X_Drive::setVoltage(float* vals)  {
 
 }
 
-int X_Drive::drive(TerriBull::Vector2 pos, float delta) {
+int X_Drive::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[4];
-    Vector2* dP = (pos - *(this->pCurrentPos));
+    Vector2* dP = (v_f - *(this->pCurrentPos));
     double angle = fmod((RAD2DEG(dP->theta) + (*(this->pCurrentAngle)- 90)) , 360.0);
     angle = (angle < 0)? angle + 360.0 : angle;
     int x = int(round(angle/45)) % 8;
