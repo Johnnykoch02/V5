@@ -123,6 +123,12 @@
                     "reverse_motors": [0, 0],
                     "gear_ratio": "SpecialFlyWheel",
                     "max_speed": 127
+                },
+                "magazine": {
+                    "incPorts": "AB",
+                    "inc_default": [true, true],
+                    "decPorts": "CD",
+                    "dec_default": [false, false]
                 }
             }
         },

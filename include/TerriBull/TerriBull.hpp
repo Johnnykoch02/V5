@@ -61,6 +61,7 @@ namespace TerriBull {
     class Intake;
     class Roller;
     class Shooter; /*FlyWheel Catapult*/
+    class Magazine;
     /* Main Controller for the Robot */
     class RoboController;
     /* Takes Controller Input and Controls the Robot */
@@ -496,6 +497,7 @@ namespace TerriBull {
     #include "../MechanicalComponents/Drive/drive.hpp"
     #include "../MechanicalComponents/Intakes/intake.hpp"
     #include "../MechanicalComponents/Rollers/roller.hpp"
+    #include "../MechanicalComponents/Shooters/Magazines/magazine.hpp"
     #include "../MechanicalComponents/Shooters/shooter.hpp"
     #include "../Controllers/MechanicalSystem/MechanicalSystem.hpp"
     #include "./lib/Tasking/Task.hpp"

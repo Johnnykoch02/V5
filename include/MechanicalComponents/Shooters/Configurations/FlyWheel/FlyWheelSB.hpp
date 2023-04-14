@@ -18,14 +18,14 @@
 class FlyWheelSB : public TerriBull::Shooter {
     protected:
     pros::Motor *pMotorX, *pMotorY;
-    pros::ADIDigitalIn *limitSwitch;
     bool engagedOne; float cntNoVal; float sumTime;
     float currentPos;
+    TerriBull::Magazine* pMag;
 
     int x, y;
 
     public:
-    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, int gearSet) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0) {
+    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0), pMag(_mag) {
         this->pType = "FlyWheel-SB";
         this->pMotorX = new pros::Motor(x, xReverse);
         this->pMotorY = new pros::Motor(y, yReverse);
@@ -34,6 +34,12 @@ class FlyWheelSB : public TerriBull::Shooter {
         this->pMotorY->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->pMotorX->set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         this->pMotorY->set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    }
+
+    ~FlyWheelSB() {
+        delete this->pMotorX;
+        delete this->pMotorY;
+        delete this->pMag;
     }
 
     int Shoot(float delta);// button is held

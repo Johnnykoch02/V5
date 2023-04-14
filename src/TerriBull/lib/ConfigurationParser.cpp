@@ -29,6 +29,7 @@
 /* Shooter */
 #include "../../../include/MechanicalComponents/Shooters/Configurations/Catapult/CatapultZolt.hpp"
 #include "../../../include/MechanicalComponents/Shooters/Configurations/FlyWheel/FlyWheelSB.hpp"
+#include "../../../include/MechanicalComponents/Shooters/Magazines/Magazine.hpp"
 
 /* Ctrls*/
 #include "../../../include/Controllers/InputController/Configurations/AidanJoeShmo.hpp"
@@ -139,7 +140,14 @@ TerriBull::Shooter* ConfigurationParser::getShooterConfig() {
         return new CatapultZolt(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), ShooterConfig["limit_port"].asString()[0], GEAR_ENCODER[gearSet]);
     }
     else if (ConfigType == "ShooterFlyWheelSB") {
-        return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), GEAR_ENCODER[gearSet]);
+        /* Parse for the Magazine as well*/
+        Json::Value MagazineConfig = this->pConfigVariables.Config["mechanical_system"]["magazine"];
+        bool* increment_bools = new bool[2];
+        bool* decrement_bools = new bool[2];
+        increment_bools[0] = MagazineConfig["inc_default"][0].asBool(); increment_bools[1] = MagazineConfig["inc_default"][1].asBool();
+        decrement_bools[0] = MagazineConfig["dec_default"][0].asBool(); decrement_bools[1] = MagazineConfig["dec_default"][1].asBool();
+        Magazine* mag = new Magazine(MagazineConfig["incPorts"].asString(), increment_bools, MagazineConfig["decPorts"].asString(), decrement_bools);
+        return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), mag, GEAR_ENCODER[gearSet]);
     }
     return nullptr;
 }
