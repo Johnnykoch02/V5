@@ -28,6 +28,7 @@
 
 /* Shooter */
 #include "../../../include/MechanicalComponents/Shooters/Configurations/Catapult/CatapultZolt.hpp"
+#include "../../../include/MechanicalComponents/Shooters/Configurations/FlyWheel/FlyWheelSB.hpp"
 
 /* Ctrls*/
 #include "../../../include/Controllers/InputController/Configurations/AidanJoeShmo.hpp"
@@ -136,6 +137,9 @@ TerriBull::Shooter* ConfigurationParser::getShooterConfig() {
     /* Controller Configurations that are Currently Supported */
     if (ConfigType == "CatapultZolt") {
         return new CatapultZolt(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), ShooterConfig["limit_port"].asString()[0], GEAR_ENCODER[gearSet]);
+    }
+    else if (ConfigType == "ShooterFlyWheelSB") {
+        return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), GEAR_ENCODER[gearSet]);
     }
     return nullptr;
 }

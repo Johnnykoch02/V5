@@ -25,14 +25,15 @@ class FlyWheelSB : public TerriBull::Shooter {
     int x, y;
 
     public:
-    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, char limitSwitchPort, int gearSet) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0) {
+    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, int gearSet) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0) {
         this->pType = "FlyWheel-SB";
         this->pMotorX = new pros::Motor(x, xReverse);
         this->pMotorY = new pros::Motor(y, yReverse);
         this->setPID(120, 2.5, 0);
-        this->limitSwitch = new pros::ADIDigitalIn(limitSwitchPort);
         this->pMotorX->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->pMotorY->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+        this->pMotorX->set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+        this->pMotorY->set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     }
 
     int Shoot(float delta);// button is held
