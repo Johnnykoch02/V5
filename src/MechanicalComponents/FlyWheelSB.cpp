@@ -22,7 +22,7 @@ int FlyWheelSB::Load(float delta) {
     return 0;   
 }
 int FlyWheelSB::turnOn() {
-    float pwr = 120;
+    float pwr = 127;
     this->pMotorX->move(pwr);
     this->pMotorY->move(pwr);
     return 0;
