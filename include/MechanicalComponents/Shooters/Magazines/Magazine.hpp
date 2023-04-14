@@ -1,7 +1,7 @@
 /**
  * @file magazine.hpp
  * @author John Koch jkoch21@usf.edu
- * @brief Intake mechanism for Robots to take in Game Objects.
+ * @brief Magazine mechanism for Robots to count the number of contained disks.
  *
  * @version 0.1
  * @date 2023-03-01
@@ -17,9 +17,8 @@
 
 class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     protected:
-    bool toggled;
-    bool loaded;
-    bool shotComplete;
+    bool toggledInc;
+    bool toggledDec;
     pros::ADIDigitalIn **incSensors;
     uint8_t numIncSensors, numDecSensors;
     int8_t pMagazineCnt; /* Maintain Number of Disks in the Magazine */
@@ -55,14 +54,20 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
 
     void __inc__(bool inc) {
         if (inc != this->previousIncState) {
-            if (inc) this->pMagazineCnt++;
+            if (inc) {
+                this->pMagazineCnt++;
+                this->toggledInc = true;
+            }
         }
         this->previousIncState = inc;
     }
 
     void __dec__(bool dec) {
         if (dec != this->previousDecState) {
-            if (dec) this->pMagazineCnt--;
+            if (dec) {
+                this->pMagazineCnt--;
+                this->toggledDec = true;
+            }
         }
         this->previousDecState = dec;
         /* Clamp our Dec to 0*/
@@ -82,8 +87,21 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
         this->__dec__(dec);
         return 0;
     }
-    int8_t getMagazineCount() {
 
+    int reset() {
+        this->toggledInc = false;
+        this->toggledDec = false;
+        return 0;
+    }
+
+    int8_t getMagazineCount() {
+        return this->pMagazineCnt;
+    }
+    bool getIncToggle() {
+        return this->toggledInc;
+    }
+    bool getDecToggle() {
+        return this->toggledDec;
     }
 
 };     

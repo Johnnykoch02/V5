@@ -1,7 +1,7 @@
 /**
  * @file FlyWheelSB.hpp
  * @author John Koch jkoch21@usf.edu
- * @brief Catapult Shooter Mechanism that uses a Zolt-like reflex to shoot the Disc Game Pieces.
+ * @brief Uses a Flywheel to propell the Disc Game Pieces into the goal.
  *
  * @version 0.1
  * @date 2023-03-01
@@ -21,11 +21,11 @@ class FlyWheelSB : public TerriBull::Shooter {
     bool engagedOne; float cntNoVal; float sumTime;
     float currentPos;
     TerriBull::Magazine* pMag;
-
+    TerriBull::MechanicalSystem* pSystem;
     int x, y;
 
     public:
-    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0), pMag(_mag) {
+    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet, TerriBull::MechanicalSystem* _system) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0), pMag(_mag), pSystem(_system) {
         this->pType = "FlyWheel-SB";
         this->pMotorX = new pros::Motor(x, xReverse);
         this->pMotorY = new pros::Motor(y, yReverse);

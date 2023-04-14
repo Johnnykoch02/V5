@@ -30,8 +30,7 @@ void ShooterTask::update(float delta) {
             this->system->ShootDisk();
             this->finishedFlag = this->system->isShotCompleted();
         }
-    }
-    
+    }   
 }
 
 void ShooterTask::terminate() {

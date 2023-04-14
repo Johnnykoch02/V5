@@ -127,7 +127,7 @@ TerriBull::Roller* ConfigurationParser::getRollerConfig() {
     return nullptr;
 }
 
-TerriBull::Shooter* ConfigurationParser::getShooterConfig() {
+TerriBull::Shooter* ConfigurationParser::getShooterConfig(TerriBull::MechanicalSystem* _system) {
     Json::Value ShooterConfig = this->pConfigVariables.Config["mechanical_system"]["shooter"];
     if (ShooterConfig.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;
@@ -147,7 +147,7 @@ TerriBull::Shooter* ConfigurationParser::getShooterConfig() {
         increment_bools[0] = MagazineConfig["inc_default"][0].asBool(); increment_bools[1] = MagazineConfig["inc_default"][1].asBool();
         decrement_bools[0] = MagazineConfig["dec_default"][0].asBool(); decrement_bools[1] = MagazineConfig["dec_default"][1].asBool();
         Magazine* mag = new Magazine(MagazineConfig["incPorts"].asString(), increment_bools, MagazineConfig["decPorts"].asString(), decrement_bools);
-        return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), mag, GEAR_ENCODER[gearSet]);
+        return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), mag, GEAR_ENCODER[gearSet], _system);
     }
     return nullptr;
 }
@@ -193,7 +193,7 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
         }
 
         else if (ref == "shooter") {
-            TerriBull::Shooter* shooter = this->getShooterConfig();
+            TerriBull::Shooter* shooter = this->getShooterConfig(system);
             if (shooter!= nullptr) {
                 system->setShooter(shooter);
             }

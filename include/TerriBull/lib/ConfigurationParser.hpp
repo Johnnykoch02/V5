@@ -109,7 +109,7 @@ class ConfigurationParser {
         TerriBull::Drive* getDriveConfig();
         TerriBull::Intake* getIntakeConfig();
         TerriBull::Roller* getRollerConfig();
-        TerriBull::Shooter* getShooterConfig();
+        TerriBull::Shooter* getShooterConfig(TerriBull::MechanicalSystem* _system);
         TerriBull::MechanicalSystem* getMechanicalSystemConfig();
         TerriBull::InputController* getInputControllerConfig(TerriBull::RoboController* roboController);
 

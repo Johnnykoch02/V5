@@ -1,7 +1,7 @@
 /**
  * @file FlyWheelSB.cpp
  * @author John Koch jkoch21@usf.edu
- * @brief Catapult Shooter Mechanism that uses a Zolt-like reflex to shoot the Disc Game Pieces.
+ * @brief Uses a Flywheel to propell the Disc Game Pieces into the goal.
  *
  * @version 0.1
  * @date 2023-03-01
@@ -38,6 +38,7 @@ int FlyWheelSB::reset() {
     this->pMotorY->move(0);
     this->pMotorX->tare_position();
     this->pMotorY->tare_position();
+    this->pMag->reset();
     return 0;
 }
 bool FlyWheelSB::shotCompleted() {
