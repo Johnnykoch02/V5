@@ -103,7 +103,7 @@
                     "cf": 0.83375,
                     "radius": 1.5,
                     "wheel_base": 12.0,
-                    "k_pos": [1.2, 0.0001, 0.2],
+                    "k_pos": [9.2, 0.0001, 1.8],
                     "k_theta": [3.5, 0.002, 0.4]
                 },
                 "intake": {
@@ -122,8 +122,8 @@
                 },
                 "shooter": {
                     "config": "ShooterFlyWheelSB",
-                    "motor_ports": [8, 9],
-                    "reverse_motors": [0, 0],
+                    "motor_ports": [19, 20],
+                    "reverse_motors": [1, 1],
                     "gear_ratio": "SpecialFlyWheel",
                     "max_speed": 127
                 },
