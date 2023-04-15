@@ -51,7 +51,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
      * @cite Control of Mobile Robots https://drive.google.com/file/d/1Aakq3O7vaGR-X-FKcNERPgBE4h5oWohU/view?usp=share_link
      * @author https://www.usf.edu/engineering/cse/people/weitzenfeld-alfredo.aspx
      */
-    int angleMod = (reverse) ? 180 : 0;
+    int angleMod = (reverse) ? 0 : 0;
     int rev = (reverse)? -1 : 1;
     Vector2* dPos = v_f - *(this->pCurrentPos);
     Vector2* dPos_Unit = dPos->unit();
@@ -62,6 +62,10 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     float omega = deltaAngle / ICC->r;
     float vLeft = omega * (ICC->r - (this->wheelBase / 2));
     float vRight = omega * (ICC->r - (this->wheelBase / 2));
+    /* Account for 0 division */
+    if (vLeft == 0 || vRight == 0) {
+        vLeft = vRight = 1;
+    }
     this->currentError = dPos->r;
     float leftProportional = vLeft / vRight;
     float rightProportional = vRight / vLeft;
