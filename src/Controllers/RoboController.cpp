@@ -59,7 +59,7 @@ void TerriBull::RoboController::Init() {
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
         /* TASKS SECTION */
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::VariableTask(this->system->getDrive()->getRefMaxSpeed(), new float(70), VariableTask::FLOAT, this->getSystem())}));
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::VariableTask(this->system->getDrive()->getRefMaxSpeed(), new float(70), VariableTask::FLOAT, this->getSystem())}));
         
         this->taskManager->addTaskSet(
             new TaskList({{
