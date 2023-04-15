@@ -88,27 +88,27 @@ void DriveTask::update(float delta) {
         switch(driveType) {
             case TRANSLATION:
                 if (!this->hitTarget) {
-                    bool currentCorrectionStatus = this->system->driveNeedsAngleCorrection();
-                    if (currentCorrectionStatus) {
-                        if (this->lastNeedsCorrection != this->system->driveNeedsAngleCorrection()) {
-                             this->system->resetDrive();
-                        }
-                        this->lastNeedsCorrection = currentCorrectionStatus;
-                        Vector2* dPos = *(this->v_f) - *(this->system->getPosition());
-                        float angleMod = (this->reversed) ? 180 : 0;
-                        float angleCorrection = fmod(RAD2DEG(dPos->theta) + angleMod, 360);
-                        this->system->TurnToAngle(angleCorrection);
-                        this->system->getDrive()->updateAngleCorrection(fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.1);
-                        delete dPos;
-                    }
-                    else {
+                    // bool currentCorrectionStatus = this->system->driveNeedsAngleCorrection();
+                    // if (currentCorrectionStatus) {
+                    //     if (this->lastNeedsCorrection != this->system->driveNeedsAngleCorrection()) {
+                    //          this->system->resetDrive();
+                    //     }
+                    //     this->lastNeedsCorrection = currentCorrectionStatus;
+                    //     Vector2* dPos = *(this->v_f) - *(this->system->getPosition());
+                    //     float angleMod = (this->reversed) ? 180 : 0;
+                    //     float angleCorrection = fmod(RAD2DEG(dPos->theta) + angleMod, 360);
+                    //     this->system->TurnToAngle(angleCorrection);
+                    //     this->system->getDrive()->updateAngleCorrection(fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.1);
+                    //     delete dPos;
+                    // }
+                    // else {
                         this->system->GoToPosition(*(this->v_f), *(this->v_i), this->reversed); /*TODO: Test Delta Value  */
-                        this->hitTarget = fabs(this->system->getDriveError()) < 0.35 && (fabs(this->system->getDriveDError()) / delta) < 0.25; 
-                    }
-               }
-               else {
-                this->system->TurnToAngle(this->targetTheta);
-                this->finishedFlag = fabs(this->system->getDriveError()) < 0.38 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
+                        this->hitTarget = fabs(this->system->getDriveError()) < 1.6 && (fabs(this->system->getDriveDError()) / delta) < 0.25; 
+                }
+            //    }
+                else {
+                    this->system->TurnToAngle(this->targetTheta);
+                    this->finishedFlag = fabs(this->system->getDriveError()) < 0.38 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
                } 
             break;
             case ORIENTATION:

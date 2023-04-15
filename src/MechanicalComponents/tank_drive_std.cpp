@@ -52,6 +52,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
      * @author https://www.usf.edu/engineering/cse/people/weitzenfeld-alfredo.aspx
      */
     int angleMod = (reverse) ? 180 : 0;
+    int rev = (reverse)? -1 : 1;
     Vector2* dPos = v_f - *(this->pCurrentPos);
     Vector2* dPos_Unit = dPos->unit();
     Vector2* dPos_Scaled = (*dPos_Unit)*((0.5*this->wheelBase)+1.5);
@@ -67,12 +68,12 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     float y_t = this->kP * this->currentError + this->kD * this->dError() / delta;
     /* We need to Scale our vLeft and vRight such that the Proportion is maintained but the power is relative to y_t */
     if (fabs(leftProportional) > fabs(rightProportional)) { /* Lets start the scale on the Left Side*/
-        vLeft = std::clamp(vLeft*y_t, -this->maxSpeed, this->maxSpeed);
-        vRight = vLeft * rightProportional;
+        vLeft = std::clamp(vLeft*y_t, -this->maxSpeed, this->maxSpeed) * rev;
+        vRight = vLeft * rightProportional * rev;
     }
     else { /* Lets start the scale on the Right Side*/
-        vRight = std::clamp(vRight*y_t, -this->maxSpeed, this->maxSpeed);
-        vLeft = vRight * leftProportional;
+        vRight = std::clamp(vRight*y_t, -this->maxSpeed, this->maxSpeed) * rev;
+        vLeft = vRight * leftProportional * rev;
     }
     float voltages[] = {vLeft, vLeft, vLeft, vRight, vRight, vRight};
     this->setVoltage(voltages);
