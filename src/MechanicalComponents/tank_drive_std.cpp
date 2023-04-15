@@ -36,7 +36,7 @@ void Tank_Drive_Std::setVoltage(float* vals)  {
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(2);
     s3 << "Left: "<< lm << " Right: " << rm;
-    pros::lcd::set_text(5, s3.str());
+    pros::lcd::set_text(6, s3.str());
     this->pMotorA->move(lt);
     this->pMotorB->move(lm);
     this->pMotorC->move(lb);
@@ -55,23 +55,24 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     int rev = (reverse)? -1 : 1;
     Vector2* dPos = v_f - *(this->pCurrentPos);
     Vector2* dPos_Unit = dPos->unit();
-    Vector2* dPos_Scaled = (*dPos_Unit)*((0.5*this->wheelBase)+2.5);
+    Vector2* dPos_Scaled = (*dPos_Unit)*(6);
     float currentAngle = DEG2RAD(fmod(*(this->pCurrentAngle) + angleMod, 360.0));
     float deltaAngle = DEG2RAD(GetDTheta(RAD2DEG(dPos->theta), RAD2DEG(currentAngle)));
     Vector2* ICC = Vector2::cartesianToVector2(dPos_Scaled->x-(0.5*this->wheelBase)*sin(currentAngle), dPos_Scaled->y+(0.5*this->wheelBase)*sin(currentAngle));
     float omega = deltaAngle / ICC->r;
-    float vLeft = omega * (ICC->r - (this->wheelBase / 2));
+    float vLeft = omega * (ICC->r + (this->wheelBase / 2));
     float vRight = omega * (ICC->r - (this->wheelBase / 2));
     /* Account for 0 division */
-    if (vLeft == 0 || vRight == 0) {
-        vLeft = vRight = 1;
-    }
     this->currentError = dPos->r;
     float leftProportional = vLeft / vRight;
     float rightProportional = vRight / vLeft;
     float y_t = this->kP * this->currentError + this->kD * this->dError() / delta;
     /* We need to Scale our vLeft and vRight such that the Proportion is maintained but the power is relative to y_t */
-    if (fabs(leftProportional) > fabs(rightProportional)) { /* Lets start the scale on the Left Side*/
+    if (vLeft == 0 || vRight == 0) {
+        vLeft = y_t * rev;
+        vRight = y_t * rev;
+    }
+    else if (fabs(leftProportional) > fabs(rightProportional)) { /* Lets start the scale on the Left Side*/
         vLeft = std::clamp(vLeft*y_t, -this->maxSpeed, this->maxSpeed) * rev;
         vRight = vLeft * rightProportional * rev;
     }
@@ -81,8 +82,18 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     }
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(1);
-    s3 << "Err: "<< this->currentError << "|" << RAD2DEG(dPos->theta) << " " << dPos->r;
+    s3 << "Err: "<< this->currentError << " / " << vLeft << " | " << vRight << " / r:" << dPos->r;
     pros::lcd::set_text(4,s3.str());
+    std::stringstream debugOutput;
+    debugOutput << std::fixed << ::std::setprecision(1);
+    debugOutput << "o: " << omega;
+    debugOutput << " IC->r: " << ICC->r;
+    debugOutput << " vLb4: " << vLeft;
+    debugOutput << "vRb4: " << vRight;
+    debugOutput << "lP: " << leftProportional;
+    debugOutput << "rP: " << rightProportional;
+
+pros::lcd::set_text(5, debugOutput.str());
     float voltages[] = {vLeft, vLeft, vLeft, vRight, vRight, vRight};
     this->setVoltage(voltages);
     /* Clean Memory */
