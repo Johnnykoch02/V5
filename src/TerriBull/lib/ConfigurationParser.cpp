@@ -45,22 +45,22 @@ ConfigurationParser::~ConfigurationParser () {
 }
 
 TerriBull::Drive* ConfigurationParser::getDriveConfig() {
-    if (this->pConfigVariables.DriveConfig.isNull() || this->pConfigVariables.DriveMotorPorts.isNull() || this->pConfigVariables.DriveMotorGearset.isNull() || this->pConfigVariables.DriveWheelRadius.isNull() || this->pConfigVariables.DriveConversionFactor.isNull()) {
+    if (this->pConfigVariables.DriveConfig.Config.isNull() || this->pConfigVariables.DriveConfig.MotorPorts.isNull() || this->pConfigVariables.DriveConfig.MotorGearset.isNull() || this->pConfigVariables.DriveConfig.WheelRadius.isNull() || this->pConfigVariables.DriveConfig.WheelRadius.isNull() || this->pConfigVariables.DriveConfig.ConversionFactor.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }
-    Json::String DriveType = this->pConfigVariables.DriveConfig.asString();
-    Json::String gearSet = this->pConfigVariables.DriveMotorGearset.asString();
+    Json::String DriveType = this->pConfigVariables.DriveConfig.Config.asString();
+    Json::String gearSet = this->pConfigVariables.DriveConfig.MotorGearset.asString();
     
     /* Drive Configurations that are Currently Supported */
     if (DriveType == "x_drive") {
-        return new X_Drive(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorPorts[3].asInt(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat(), this->pConfigVariables.DriveKPos[0].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKTheta[0].asFloat(), this->pConfigVariables.DriveKTheta[1].asFloat(), this->pConfigVariables.DriveKTheta[2].asFloat());
+        return new X_Drive(this->pConfigVariables.DriveConfig.MotorPorts[0].asInt(), this->pConfigVariables.DriveConfig.MotorPorts[1].asInt(), this->pConfigVariables.DriveConfig.MotorPorts[2].asInt(), this->pConfigVariables.DriveConfig.MotorPorts[3].asInt(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConfig.ConversionFactor.asFloat(), this->pConfigVariables.DriveConfig.WheelRadius.asFloat(), this->pConfigVariables.DriveConfig.WheelBase.asFloat(), this->pConfigVariables.DriveConfig.KPos[0].asFloat(), this->pConfigVariables.DriveConfig.KPos[1].asFloat(), this->pConfigVariables.DriveConfig.KPos[2].asFloat(), this->pConfigVariables.DriveConfig.KTheta[0].asFloat(), this->pConfigVariables.DriveConfig.KTheta[1].asFloat(), this->pConfigVariables.DriveConfig.KTheta[2].asFloat());
     }
     if (DriveType == "tank_drive_std") {
-        return new Tank_Drive_Std(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), this->pConfigVariables.DriveMotorPorts[4].asInt(), this->pConfigVariables.DriveMotorReverse[4].asBool(), this->pConfigVariables.DriveMotorPorts[5].asInt(), this->pConfigVariables.DriveMotorReverse[5].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat(), this->pConfigVariables.DriveKPos[0].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKTheta[0].asFloat(), this->pConfigVariables.DriveKTheta[1].asFloat(), this->pConfigVariables.DriveKTheta[2].asFloat());
+        return new Tank_Drive_Std(this->pConfigVariables.DriveConfig.MotorPorts[0].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[0].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[1].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[1].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[2].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[2].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[3].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[3].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[4].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[4].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[5].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[5].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConfig.ConversionFactor.asFloat(), this->pConfigVariables.DriveConfig.WheelRadius.asFloat(), this->pConfigVariables.DriveConfig.WheelBase.asFloat(), this->pConfigVariables.DriveConfig.KPos[0].asFloat(), this->pConfigVariables.DriveConfig.KPos[2].asFloat(), this->pConfigVariables.DriveConfig.KPos[2].asFloat(), this->pConfigVariables.DriveConfig.KTheta[0].asFloat(), this->pConfigVariables.DriveConfig.KTheta[1].asFloat(), this->pConfigVariables.DriveConfig.KTheta[2].asFloat());
     }
     if (DriveType == "tank_drive_quad") {
-        return new Tank_Drive_Quad(this->pConfigVariables.DriveMotorPorts[0].asInt(), this->pConfigVariables.DriveMotorReverse[0].asBool(), this->pConfigVariables.DriveMotorPorts[1].asInt(), this->pConfigVariables.DriveMotorReverse[1].asBool(), this->pConfigVariables.DriveMotorPorts[2].asInt(), this->pConfigVariables.DriveMotorReverse[2].asBool(), this->pConfigVariables.DriveMotorPorts[3].asInt(), this->pConfigVariables.DriveMotorReverse[3].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConversionFactor.asFloat(), this->pConfigVariables.DriveWheelRadius.asFloat(), this->pConfigVariables.DriveKPos[0].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKPos[2].asFloat(), this->pConfigVariables.DriveKTheta[0].asFloat(), this->pConfigVariables.DriveKTheta[1].asFloat(), this->pConfigVariables.DriveKTheta[2].asFloat());
+        return new Tank_Drive_Quad(this->pConfigVariables.DriveConfig.MotorPorts[0].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[0].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[1].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[1].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[2].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[2].asBool(), this->pConfigVariables.DriveConfig.MotorPorts[3].asInt(), this->pConfigVariables.DriveConfig.MotorReverse[3].asBool(), GEAR_ENCODER[gearSet], this->pConfigVariables.DriveConfig.ConversionFactor.asFloat(), this->pConfigVariables.DriveConfig.WheelRadius.asFloat(), this->pConfigVariables.DriveConfig.WheelBase.asFloat(), this->pConfigVariables.DriveConfig.KPos[0].asFloat(), this->pConfigVariables.DriveConfig.KPos[2].asFloat(), this->pConfigVariables.DriveConfig.KPos[2].asFloat(), this->pConfigVariables.DriveConfig.KTheta[0].asFloat(), this->pConfigVariables.DriveConfig.KTheta[1].asFloat(), this->pConfigVariables.DriveConfig.KTheta[2].asFloat());
     }
     else return nullptr;
 }
@@ -160,12 +160,12 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
     }
     TerriBull::Drive* drive = this->getDriveConfig();
     if (drive == nullptr) {
-        pros::lcd::set_text(3, "Null Drivebase : " + this->pConfigVariables.DriveConfig.asString());
+        pros::lcd::set_text(3, "Null Drivebase : " + this->pConfigVariables.DriveConfig.Config.asString());
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }
     if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StartingPos.isNull()) {
-        pros::lcd::set_text(3, "Null Start Info : " + this->pConfigVariables.DriveConfig.asString());
+        pros::lcd::set_text(3, "Null Start Info : " + this->pConfigVariables.DriveConfig.Config.asString());
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }

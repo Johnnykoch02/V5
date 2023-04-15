@@ -19,6 +19,7 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     double * pCurrentAngle;
     float conversionFactor;
     float wheelRadius;
+    float wheelBase;
     float maxSpeed;
     Vector2* pCurrentPos;
     Vector2 pPreviousPos;
@@ -31,7 +32,7 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     VoltageRegulator* pVoltageRegulator;
     
     public: 
-    Drive(int gearSet, float _conversionFactor, float _wheelRadius, float maxSpeed, float kP_Pos, float KI_Pos, float KD_Pos, float kP_Theta, float kI_Theta, float kD_Theta) : TerriBull::MechanicalComponent(gearSet), motorPowerThreshold(127), maxSpeed(127), conversionFactor(_conversionFactor), wheelRadius(_wheelRadius), kPTheta(kP_Theta), kITheta(kI_Theta), kDTheta(kD_Theta) {
+    Drive(int gearSet, float _conversionFactor, float _wheelRadius, float _wheelBase, float maxSpeed, float kP_Pos, float KI_Pos, float KD_Pos, float kP_Theta, float kI_Theta, float kD_Theta) : TerriBull::MechanicalComponent(gearSet), motorPowerThreshold(127), maxSpeed(127), conversionFactor(_conversionFactor), wheelRadius(_wheelRadius), wheelBase(_wheelBase), kPTheta(kP_Theta), kITheta(kI_Theta), kDTheta(kD_Theta) {
         this->kP = kP_Pos;
         this->kI = KI_Pos;
         this->kD = KD_Pos;

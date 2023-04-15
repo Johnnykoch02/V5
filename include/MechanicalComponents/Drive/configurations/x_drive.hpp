@@ -26,7 +26,7 @@ class X_Drive : public TerriBull::Drive {
 
     public:
     void setVoltage(float* vals);
-    X_Drive(int portA, int portB, int portC, int portD, int gearSet, float conversion, float radius, float kP_Pos, float KI_Pos, float KD_Pos, float kP_Theta, float kI_Theta, float kD_Theta) : TerriBull::Drive(gearSet, conversion, radius, 127, kP_Pos, KI_Pos, KD_Pos, kP_Theta, kI_Theta, kD_Theta), pA(portA), pB(portB), pC(portC), pD(portD) {
+    X_Drive(int portA, int portB, int portC, int portD, int gearSet, float conversion, float radius, float _wheelBase, float kP_Pos, float KI_Pos, float KD_Pos, float kP_Theta, float kI_Theta, float kD_Theta) : TerriBull::Drive(gearSet, conversion, radius, _wheelBase, 127, kP_Pos, KI_Pos, KD_Pos, kP_Theta, kI_Theta, kD_Theta), pA(portA), pB(portB), pC(portC), pD(portD) {
       this->pType = "X-Drive";
       this->pMotorA = new pros::Motor(pA, (pros::motor_gearset_e)this->gearSet, false);
       this->pMotorB = new pros::Motor(pB, (pros::motor_gearset_e)this->gearSet, false);

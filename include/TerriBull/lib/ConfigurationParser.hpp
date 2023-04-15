@@ -29,20 +29,25 @@ class ConfigurationParser {
     typedef enum {NO_ERROR, FILE_NOT_FOUND, FILE_OPEN_ERROR, VARIABLE_PARSE_ERROR} Error;
     uint8_t errCode = 0;
     /* MECHANICAL SYSTEM VARIABLES */
-  
+    
     typedef struct {
-        Json::Value Config; /* User Selected Config */
         /*
         Drive Variables
         */
-        Json::Value DriveConfig;
-        Json::Value DriveMotorPorts;
-        Json::Value DriveMotorReverse;
-        Json::Value DriveMotorGearset;
-        Json::Value DriveConversionFactor;
-        Json::Value DriveWheelRadius;
-        Json::Value DriveKPos;
-        Json::Value DriveKTheta;
+        Json::Value Config;
+        Json::Value MotorPorts;
+        Json::Value MotorReverse;
+        Json::Value MotorGearset;
+        Json::Value ConversionFactor;
+        Json::Value WheelRadius;
+        Json::Value WheelBase;
+        Json::Value KPos;
+        Json::Value KTheta;
+    } RoboDriveConfig;
+
+    typedef struct {
+        Json::Value Config; /* User Selected Config */        
+        RoboDriveConfig DriveConfig;
         /* IMU Sensor */
         Json::Value IMUConfig;
         Json::Value StartingAngle;
@@ -86,19 +91,19 @@ class ConfigurationParser {
             /* Load In Configuration Variables */
             this->pConfigVariables.ControllerConfig = this->pConfigVariables.Config["controller_config"];
             this->pConfigVariables.ControllerDeadzone = this->pConfigVariables.Config["controller_deadzone"];
-            this->pConfigVariables.DriveConfig = this->pConfigVariables.Config["mechanical_system"]["drive"]["config"];
-            this->pConfigVariables.DriveMotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
-            this->pConfigVariables.DriveMotorReverse = this->pConfigVariables.Config["mechanical_system"]["drive"]["reverse_motors"];
-            this->pConfigVariables.DriveMotorGearset = this->pConfigVariables.Config["mechanical_system"]["drive"]["gear_ratio"];
-            this->pConfigVariables.DriveConversionFactor = this->pConfigVariables.Config["mechanical_system"]["drive"]["cf"];
-            this->pConfigVariables.DriveWheelRadius = this->pConfigVariables.Config["mechanical_system"]["drive"]["radius"];
-            this->pConfigVariables.DriveKPos = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_pos"];
-            this->pConfigVariables.DriveKTheta = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_theta"];
-
+            this->pConfigVariables.DriveConfig.Config = this->pConfigVariables.Config["mechanical_system"]["drive"]["config"];
+            this->pConfigVariables.DriveConfig.MotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
+            this->pConfigVariables.DriveConfig.MotorReverse = this->pConfigVariables.Config["mechanical_system"]["drive"]["reverse_motors"];
+            this->pConfigVariables.DriveConfig.MotorGearset = this->pConfigVariables.Config["mechanical_system"]["drive"]["gear_ratio"];
+            this->pConfigVariables.DriveConfig.ConversionFactor = this->pConfigVariables.Config["mechanical_system"]["drive"]["cf"];
+            this->pConfigVariables.DriveConfig.WheelRadius = this->pConfigVariables.Config["mechanical_system"]["drive"]["radius"];
+            this->pConfigVariables.DriveConfig.WheelBase = this->pConfigVariables.Config["mechanical_system"]["drive"]["wheel_base"];
+            this->pConfigVariables.DriveConfig.KPos = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_pos"];
+            this->pConfigVariables.DriveConfig.KTheta = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_theta"];
             this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
             this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
             this->pConfigVariables.StartingPos = this->pConfigVariables.Config["mechanical_system"]["starting_position"];
-            pros::lcd::set_text(1, "Parsed DriveType: " + this->pConfigVariables.DriveConfig.asString());
+            pros::lcd::set_text(1, "Parsed DriveType: " + this->pConfigVariables.DriveConfig.Config.asString());
             // pros::lcd::set_text(3, "Parsed Start Pos: " + std::to_string(this->pConfigVariables.StartingPos["x"].asFloat()) + " " + std::to_string(this->pConfigVariables.StartingPos["y"].asFloat()));
             // pros::lcd::set_text(4, "Parsed Start Angle: " + std::to_string(this->pConfigVariables.StartingAngle.asFloat()));
         }
