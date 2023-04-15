@@ -55,7 +55,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     int rev = (reverse)? -1 : 1;
     Vector2* dPos = v_f - *(this->pCurrentPos);
     Vector2* dPos_Unit = dPos->unit();
-    Vector2* dPos_Scaled = (*dPos_Unit)*((0.5*this->wheelBase)+1.5);
+    Vector2* dPos_Scaled = (*dPos_Unit)*((0.5*this->wheelBase)+2.5);
     float currentAngle = DEG2RAD(fmod(*(this->pCurrentAngle) + angleMod, 360.0));
     float deltaAngle = DEG2RAD(GetDTheta(RAD2DEG(dPos->theta), RAD2DEG(currentAngle)));
     Vector2* ICC = Vector2::cartesianToVector2(dPos_Scaled->x-(0.5*this->wheelBase)*sin(currentAngle), dPos_Scaled->y+(0.5*this->wheelBase)*sin(currentAngle));
@@ -79,11 +79,16 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
         vRight = std::clamp(vRight*y_t, -this->maxSpeed, this->maxSpeed) * rev;
         vLeft = vRight * leftProportional * rev;
     }
+    std::stringstream s3;
+    s3 << std::fixed << ::std::setprecision(1);
+    s3 << "Err: "<< this->currentError << "|" << RAD2DEG(dPos->theta) << " " << dPos->r;
+    pros::lcd::set_text(4,s3.str());
     float voltages[] = {vLeft, vLeft, vLeft, vRight, vRight, vRight};
     this->setVoltage(voltages);
     /* Clean Memory */
     delete dPos;
     delete dPos_Unit;
+    delete dPos_Scaled;
     delete ICC;
     return 0;   
 }
