@@ -31,6 +31,7 @@ class TerriBull::RoboController {
     TerriBull::InputController* inputController;
     ConfigurationParser* configParser;
     uint32_t currentTime, previousTime;
+    bool pDebug;
 
     public:
 

@@ -33,10 +33,7 @@ class TerriBull::VoltageRegulator {
         }
         return true;
     }
-
-
-    public:
-    
+    public:   
     VoltageRegulator(uint16_t _lengthVoltages, float _maxGradient) : pLength(_lengthVoltages), pMaxGradient(_maxGradient) {
         this->pCurrentVoltages = (float*)malloc(sizeof(float) * _lengthVoltages);
         this->pPreviousVoltages = (float*)malloc(sizeof(float) * _lengthVoltages);
@@ -48,7 +45,6 @@ class TerriBull::VoltageRegulator {
 
     }
     
-
     float* getRegulatedVoltages(float* targetVoltages) {
         /* Check to see if it is a Hard Reset */
         if(allZeros(targetVoltages, pLength) ) {

@@ -17,6 +17,7 @@
 #include "../pros/apix.h"
 #include "./lib/Logger.hpp"
 #include <list>
+#include <vector>
 #include <map>
 #include <string>
 #include <cmath>
@@ -38,6 +39,7 @@ namespace TerriBull {
     // typedef ::std::map<string, size_t> Str2SizeMap;
     /* Vectorization Class */
     class Vector2;
+    typedef std::vector<std::vector<float>> matrix;
     /* Manages Tasks for the Robot */
     class TaskManager;
     /* Task Data Containers */
@@ -91,6 +93,7 @@ namespace TerriBull {
     extern float DEG2RAD( const float deg );
     extern float RAD2DEG( const float rad );
     extern float GetDTheta(float tf, float ti);
+    extern matrix matrix_mult(matrix &M1, int M1_rows, int M1_cols, matrix &M2, int M2_rows, int M2_cols);
     extern pros::Imu mu;
     
 

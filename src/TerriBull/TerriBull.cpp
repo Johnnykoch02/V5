@@ -40,8 +40,6 @@ namespace TerriBull {
 Logger logger("/usd/logfile.log"); /* Global Logger */
 ::pros::Controller controller(::pros::E_CONTROLLER_MASTER); /* Global Controller */
 pros::Imu mu(11);
-
-
 };
 #endif
 #ifndef __TERRIBULL_FUNCTIONS__
@@ -57,13 +55,26 @@ namespace TerriBull {
     }
 
     float GetDTheta(float tf, float ti) {
-    float positiveDTheta = fmod((tf+360)-ti, 360.0);
-    float negativeDTheta = -360 + positiveDTheta;
+      float positiveDTheta = fmod((tf+360)-ti, 360.0);
+      float negativeDTheta = -360 + positiveDTheta;
+      if (fabs(positiveDTheta) <= fabs(negativeDTheta))
+        return positiveDTheta;
+      else return negativeDTheta;
+    }
 
-    if (fabs(positiveDTheta) <= fabs(negativeDTheta))
-      return positiveDTheta;
-    else return negativeDTheta;
-
+   matrix matrix_mult(matrix &M1, int M1_rows, int M1_cols, matrix &M2, int M2_rows, int M2_cols) {
+      if (M1_cols != M2_rows) {
+            throw runtime_error("The number of columns in M1 must match the number of rows in M2 for matrix multiplication");
+      }
+      matrix result(M1_rows, std::vector<float>(M2_cols, 0));
+      for (int i = 0; i < M1_rows; i++) {
+        for (int j = 0; j < M2_cols; j++) {
+          for (int k = 0; k < M1_cols; k++) {
+            result[i][j] += M1[i][k] * M2[k][j];
+          }
+        }
+      }
+      return result;
     }
 };
 #endif

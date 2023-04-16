@@ -44,6 +44,7 @@ void TerriBull::SerialController::readBuffer()
         {
             if (packet_length >= __header_length){
                 __next_packet.push_back(_int);
+                /* Checks to see if Transmition is terminated */
                 if (this->compareBuffer(__next_packet, packet_length-__footer_length, packet_length, __end_of_transmission))
                 {
                     DeserializePacket();
@@ -219,3 +220,4 @@ void TerriBull::SerialController::DeserializePacket()
 void TerriBull::SerialController::sendData(::std::string data) {
     ::std::cout<<data<<::std::endl;
 }
+

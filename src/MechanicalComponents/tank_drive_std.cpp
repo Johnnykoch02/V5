@@ -46,62 +46,72 @@ void Tank_Drive_Std::setVoltage(float* vals)  {
 }
 
 int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
-    /**
-     * @brief Equations: Applied Kinematics
-     * @cite Control of Mobile Robots https://drive.google.com/file/d/1Aakq3O7vaGR-X-FKcNERPgBE4h5oWohU/view?usp=share_link
-     * @author https://www.usf.edu/engineering/cse/people/weitzenfeld-alfredo.aspx
-     */
-    int angleMod = (reverse) ? 0 : 0;
+/* Theta of desired Modified By our current Look Angle */
+    float* vals = new float[6];
+    float pct = 0;
+    Vector2* v_to_goal = (v_f - *(this->pCurrentPos));
+    Vector2* v_i_to_goal = (v_f - v_i);
+    Vector2* v_i_to_bot = (*(this->pCurrentPos) - v_i);
     int rev = (reverse)? -1 : 1;
-    Vector2* dPos = v_f - *(this->pCurrentPos);
-    Vector2* dPos_Unit = dPos->unit();
-    Vector2* dPos_Scaled = (*dPos_Unit)*(6);
-    float currentAngle = DEG2RAD(fmod(*(this->pCurrentAngle) + angleMod, 360.0));
-    float deltaAngle = DEG2RAD(GetDTheta(RAD2DEG(dPos->theta), RAD2DEG(currentAngle)));
-    Vector2* ICC = Vector2::cartesianToVector2(dPos_Scaled->x-(0.5*this->wheelBase)*sin(currentAngle), dPos_Scaled->y+(0.5*this->wheelBase)*sin(currentAngle));
-    float omega = deltaAngle / ICC->r;
-    float vLeft = omega * (ICC->r + (this->wheelBase / 2));
-    float vRight = omega * (ICC->r - (this->wheelBase / 2));
-    /* Account for 0 division */
-    this->currentError = dPos->r;
-    float leftProportional = vLeft / vRight;
-    float rightProportional = vRight / vLeft;
-    float y_t = this->kP * this->currentError + this->kD * this->dError() / delta;
-    /* We need to Scale our vLeft and vRight such that the Proportion is maintained but the power is relative to y_t */
-    if (vLeft == 0 || vRight == 0) {
-        vLeft = y_t * rev;
-        vRight = y_t * rev;
-    }
-    else if (fabs(leftProportional) > fabs(rightProportional)) { /* Lets start the scale on the Left Side*/
-        vLeft = std::clamp(vLeft*y_t, -this->maxSpeed, this->maxSpeed) * rev;
-        vRight = vLeft * rightProportional * rev;
-    }
-    else { /* Lets start the scale on the Right Side*/
-        vRight = std::clamp(vRight*y_t, -this->maxSpeed, this->maxSpeed) * rev;
-        vLeft = vRight * leftProportional * rev;
-    }
+    /* Overshooting: Bot traveled further than distance, and the Vectors of displacement are somewhat in the same direction */
+    int errorMod = (v_i_to_goal->r < v_i_to_bot->r) ? 1 : -1;
+    // if (v_to_goal->r > errorMod) targetDirection = errorMod;
+    this->currentError = v_to_goal->r * errorMod; /* First Part: Absolute Displacement, Second Part: Positive or Negative */
+    // this->sumError+=currentError;
+    // this->sumError = std::clamp(this->sumError, -200.0f, 200.0f);
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(1);
-    s3 << "Err: "<< this->currentError << " / " << vLeft << " | " << vRight << " / r:" << dPos->r;
+    s3 << "Err: "<< this->currentError << " Mod: " << errorMod << "|" << RAD2DEG(v_to_goal->theta) << " " << v_to_goal->r;
     pros::lcd::set_text(4,s3.str());
-    std::stringstream debugOutput;
-    debugOutput << std::fixed << ::std::setprecision(1);
-    debugOutput << "o: " << omega;
-    debugOutput << " IC->r: " << ICC->r;
-    debugOutput << " vLb4: " << vLeft;
-    debugOutput << "vRb4: " << vRight;
-    debugOutput << "lP: " << leftProportional;
-    debugOutput << "rP: " << rightProportional;
+    /* Basic PID Equation */
+    pct = kP*currentError + kD*this->dError() / delta;
+    if (fabs(pct) >  this->maxSpeed) {/* Clmp Pwr to this->maxSpeed */
+        pct = this->maxSpeed * fabs(pct) / pct;
+    }
+    float pL = pct;
+    float pR = pct;
+    int angleMod = (rev > 0) ? 0 : 180;
+    float offTrack = GetDTheta(RAD2DEG(v_to_goal->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360));
+    if (fabs(v_to_goal->r) > 6.0 && fabs(offTrack) > 30 ) {
+        pros::lcd::set_text(4,"+++ in wrong 1 case ++++");
+        this->reset();
+        this->pNeedsAngleCorrection = true;
+        delete v_to_goal;
+        delete v_i_to_goal;
+        delete v_i_to_bot;
+        return 0;
+    }
+    else if (v_to_goal->r > 3 && fabs(offTrack) < 15) {
+        // pros::lcd::set_text(4,"--- in target case ---");
+        int dir = fabs(offTrack)/offTrack;
+        pL *= 0.5;
+        pR *= 0.5;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.05* pct)) * dir * errorMod * rev;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.05* pct)) * dir * errorMod * rev;
+    }
+    else if (fabs(v_to_goal->r) > 1.5 && fabs(offTrack) > 15) {
+        pros::lcd::set_text(4,"+++ in wrong 2 case ++++");
+        this->reset();
+        this->pNeedsAngleCorrection = true;
+        delete v_to_goal;
+        delete v_i_to_goal;
+        delete v_i_to_bot;
+        return 0;
+    }
 
-pros::lcd::set_text(5, debugOutput.str());
-    float voltages[] = {vLeft, vLeft, vLeft, vRight, vRight, vRight};
-    this->setVoltage(voltages);
-    /* Clean Memory */
-    delete dPos;
-    delete dPos_Unit;
-    delete dPos_Scaled;
-    delete ICC;
-    return 0;   
+    vals[0] = pL;
+    vals[1] = pL;
+    vals[2] = pL;
+    
+    vals[3] = pR;
+    vals[4] = pR;
+    vals[5] = pR;
+    this->setVoltage(vals);
+    delete[] vals;
+    delete v_to_goal;
+    delete v_i_to_goal;
+    delete v_i_to_bot;   
+    return 0;
 }
 
 int Tank_Drive_Std::change_orientation(float theta, float delta) {
@@ -271,4 +281,70 @@ Vector2* Tank_Drive_Std::resultant_vector() {
 //     delete v_i_to_goal;
 //     delete v_i_to_bot;   
 //     return 0;
+// }
+
+//     /**
+//      * @brief Equations: Applied Kinematics
+//      * @cite Control of Mobile Robots https://drive.google.com/file/d/1Aakq3O7vaGR-X-FKcNERPgBE4h5oWohU/view?usp=share_link
+//      * @author https://www.usf.edu/engineering/cse/people/weitzenfeld-alfredo.aspx
+//      */
+//     int angleMod = (reverse) ? 0 : 0;
+//     int rev = (reverse)? -1 : 1;
+//     Vector2* dPos = v_f - *(this->pCurrentPos);
+//     Vector2* dPos_Unit = dPos->unit();
+//     Vector2* dPos_Scaled = (*dPos_Unit)*(3); /* 3 Inches ahead of Center*/
+//     float currentAngle = DEG2RAD(fmod(*(this->pCurrentAngle) + angleMod, 360.0));
+//     float deltaAngle = GetDTheta(RAD2DEG(dPos_Unit->theta), RAD2DEG(currentAngle));
+//     float ICC_r = dPos_Scaled->r / (2 * sin(deltaAngle));
+//     Vector2* ICC = Vector2::cartesianToVector2(dPos_Scaled->x-(0.5*this->wheelBase)*sin(deltaAngle), dPos_Scaled->y+(0.5*this->wheelBase)*cos(deltaAngle));
+//     matrix ICC_Matrix = {{cos(deltaAngle), sin(deltaAngle), 0}, {-sin(deltaAngle), cos(deltaAngle), 0}, {0, 0, 1}};
+//     matrix radial_Matrix = {{}};
+//     float omega = deltaAngle / ICC_r;
+//     float vLeft = omega * (ICC_r + (this->wheelBase / 2));
+//     float vRight = omega * (ICC_r - (this->wheelBase / 2));
+//     /*
+//      Account for 0 division 
+//     */
+//     this->currentError = dPos->r;
+//     float leftProportional = vLeft / vRight;
+//     float rightProportional = vRight / vLeft;
+//     float y_t = this->kP * this->currentError + this->kD * this->dError() / delta;
+//     /* 
+//      We need to Scale our vLeft and vRight such that the Proportion is maintained but the power is relative to y_t 
+//     */
+//     if (vLeft == 0 || vRight == 0 || fabs(fabs(vLeft) - fabs(vRight)) < 0.01) { 
+//         vLeft = y_t;
+//         vRight = y_t;
+//     }
+//     else if (fabs(leftProportional) > fabs(rightProportional)) { /* Lets start the scale on the Left Side */
+//         vLeft = std::clamp(vLeft*y_t, -this->maxSpeed, this->maxSpeed);// * rev;
+//         vRight = vLeft * rightProportional;// * rev;
+//     }
+//     else { /* Lets start the scale on the Right Side */
+//         vRight = std::clamp(vRight*y_t, -this->maxSpeed, this->maxSpeed);// * rev;
+//         vLeft = vRight * leftProportional;// * rev;
+//     }
+//     if (reverse) {
+//         vLeft = -vRight;
+//         vRight = -vLeft;
+//     }
+//     std::stringstream s3;
+//     s3 << std::fixed << ::std::setprecision(1);
+//     s3 << "Err: "<< this->currentError << " / " << vLeft << " | " << vRight << " / r:" << dPos->r;
+//     pros::lcd::set_text(4,s3.str());
+//     std::stringstream debugOutput;
+//     debugOutput << std::fixed << ::std::setprecision(1);
+//     debugOutput << "o: " << omega;
+//     debugOutput << " IC->r: " << ICC->r;
+//     debugOutput << "lP: " << leftProportional;
+//     debugOutput << "rP: " << rightProportional;
+//     pros::lcd::set_text(5, debugOutput.str());
+//     float voltages[] = {vLeft, vLeft, vLeft, vRight, vRight, vRight};
+//     this->setVoltage(voltages);
+//     /* Clean Memory */
+//     delete dPos;
+//     delete dPos_Unit;
+//     delete dPos_Scaled;
+//     delete ICC;
+//     return 0;   
 // }

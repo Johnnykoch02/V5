@@ -82,9 +82,9 @@ void TerriBull::MechanicalSystem::resetDrive() {
 
 float TerriBull::MechanicalSystem::getAngle() {
   float theta = mu.get_heading(); 
-  if( this->motherSystem) this->pThetaFilter->update(theta, this->motherSystem->delta());
-  this->pThetaFilter->predict();
-  theta = this->pThetaFilter->getState()[0];
+//   if( this->motherSystem) this->pThetaFilter->update(theta, this->motherSystem->delta());
+//   this->pThetaFilter->predict();
+//   theta = this->pThetaFilter->getState()[0];
   *(this->pAngle) = ::std::fmod(((360 - theta) + this->pStartingAngle), 360.0);//90;//
   return *(this->pAngle);
 }
