@@ -100,7 +100,7 @@
                     "motor_ports": [1, 2, 3, 8, 9, 10],
                     "reverse_motors": [1, 0, 1, 0, 1, 0],
                     "gear_ratio": "BLUE",
-                    "cf": 0.83375,
+                    "cf": 0.5573,
                     "radius": 1.5,
                     "wheel_base": 12.0,
                     "k_pos": [9.2, 0.0001, 1.8],
