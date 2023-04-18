@@ -24,7 +24,7 @@ class TerriBull::GameObject {
         DISK, ROBOT, ROLLER, GOAL, LOWER_GOAL
     } Types;
 
-    byte id;
+    char id;
     Vector2* pos;
     float width;
     float height;
@@ -34,7 +34,7 @@ class TerriBull::GameObject {
         
     }
 
-    GameObject(Vector2* pos, byte identifier, Types type, float width, float height) : pos(pos), id(identifier), type(type), width(width), height(height) { }
+    GameObject(Vector2* pos, char identifier, Types type, float width, float height) : pos(pos), id(identifier), type(type), width(width), height(height) { }
     
 
     virtual void setPos(Vector2* pos) final {
@@ -48,7 +48,7 @@ class TerriBull::GameObject {
     virtual Vector2* getPosPtr() final { return this->pos; }
     
 
-    virtual bool checkID(byte identifier) final { 
+    virtual bool checkID(char identifier) final { 
         return this->id == identifier;
     }
 

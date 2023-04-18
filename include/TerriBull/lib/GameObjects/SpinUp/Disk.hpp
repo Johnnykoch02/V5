@@ -21,10 +21,25 @@ class Disk : public TerriBull::GameObject {
     private:
     public:
     
+    struct UpdateArgs {
+        float x;
+        float y;
+    };
+
+    static void* ConstructUpdateArgs(float x, float y) {
+        size_t size = sizeof(float) * 2; /* Calculate Size*/
+        void* data = malloc(size);
+        size_t offset = 0;
+        memcpy((char*)data + offset, &x, sizeof(float));
+        offset += sizeof(float);
+        memcpy((char*)data + offset, &y, sizeof(float));
+        return data;
+    }
+    
     ~Disk() {
         
     }
-    Disk(Vector2* pos, byte identifier) :GameObject(pos, identifier, DISK, 5, 5) { }
+    Disk(TerriBull::Vector2* pos, char identifier) :GameObject(pos, identifier, DISK, 5, 5) { }
 
 };
 

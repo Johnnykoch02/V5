@@ -85,14 +85,15 @@ void DriveTask::init() {
 }
 
 void DriveTask::update(float delta) {
+    pros::lcd::set_text(4,"Inside drivetask");
     if (!this->finishedFlag) {
-        std::stringstream s3;
+        std::stringstream s3, s4;
+        bool currentAngleCurrection;
         switch(driveType) {
             case TRANSLATION:
-            s3 << std::fixed << ::std::setprecision(2);
-            s3 << "x: "<< this->v_f->x << " y: " << this->v_f->y << "| Off x: "<< this->offset->x << " y: " << this->offset->y;
+                currentAngleCurrection = this->system->driveNeedsAngleCorrection();
                 if (!this->hitTarget) {
-                    if (this->system->driveNeedsAngleCorrection()) {
+                    if (currentAngleCurrection) {
                         Vector2 * currentPos = this->system->getPosition();
                         Vector2* v_to_goal = (*v_f - *(currentPos));
                         Vector2* v_i_to_goal = (*v_f - *v_i);
@@ -108,14 +109,18 @@ void DriveTask::update(float delta) {
                     }
                     else {
                         this->system->GoToPosition(*(this->v_f), *(this->v_i), this->reversed); /*TODO: Test Delta Value  */
-                        this->hitTarget = fabs(this->system->getDriveError()) < 1.6 && (fabs(this->system->getDriveDError()) / delta) < 0.1; 
+                        if (currentAngleCurrection == this->lastNeedsCorrection) this->hitTarget = fabs(this->system->getDriveError()) < 1.6 && (fabs(this->system->getDriveDError()) / delta) < 0.1; 
                 }
                }
                 else {
                     this->system->TurnToAngle(this->targetTheta);
-                    this->finishedFlag = fabs(this->system->getDriveError()) < 1.5 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
+                    if (currentAngleCurrection == this->lastNeedsCorrection) this->finishedFlag = fabs(this->system->getDriveError()) < 1.5 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
                } 
-                pros::lcd::set_text(6, s3.str());
+                s3 << std::fixed << ::std::setprecision(1) << "x: "<< this->v_f->x << " y: " << this->v_f->y;
+                pros::lcd::set_text(5, s3.str());
+                s4 << std::fixed << ::std::setprecision(1) << "| Off x: "<< this->offset->x << " y: " << this->offset->y;
+                pros::lcd::set_text(6, s4.str());
+                this->lastNeedsCorrection = currentAngleCurrection;
                 break;
             case ORIENTATION:
                 this->system->TurnToAngle(this->targetTheta);

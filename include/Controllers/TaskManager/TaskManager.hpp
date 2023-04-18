@@ -23,75 +23,92 @@
 #include <list>
 // #include "../../TerriBull/lib/Expressions/Expression.hpp"
 
-
 class TerriBull::TaskManager {
 private:
-    TerriBull::TaskList *currentTaskSet;
-    TerriBull::PriorityQueue<TerriBull::TaskList> tasks;
-    int tasksCompleted;
-    // ::std::vector<Expression*> Expressions;
+    std::list<TerriBull::TaskList*> tasks;
+    TerriBull::TaskList* currentTaskSet = nullptr;
+    int tasksCompleted = 0;
+    // std::vector<Expression*> Expressions;
 public:
-    TaskManager() : tasksCompleted(0) {
-        currentTaskSet = nullptr;
-        this->tasks = TerriBull::PriorityQueue<TerriBull::TaskList>();
+    TaskManager() = default;
+
+    ~TaskManager() {
+        ClearAllTasks();
     }
+
     void ClearAllTasks() {
-        this->tasks.deque_all();
-        if (this->currentTaskSet!= nullptr) {
-            for ( auto tsk : *(this->currentTaskSet) ) {
-                    delete tsk;
+        if (currentTaskSet != nullptr) {
+            for (auto tsk : *currentTaskSet) {
+                tsk->terminate();
+                delete tsk;
             }
-            delete this->currentTaskSet;
+            delete currentTaskSet;
+            currentTaskSet = nullptr;
         }
-        this->currentTaskSet = nullptr;
-    }
-    void addTaskSet(TaskList *tasks) {
-        this->tasks.enqueue(tasks, 0);
+        for (auto taskList : tasks) {
+            for (auto tsk : *taskList) {
+                tsk->terminate();
+                delete tsk;
+            }
+            delete taskList;
+        }
+        tasks.clear();
     }
 
-    void Init() {
-
+    TerriBull::TaskList* InterruptCurrentTask() {
+        TerriBull::TaskList* tasks = currentTaskSet;
+        currentTaskSet = nullptr;
+        if (tasks != nullptr) {
+            for (auto tsk : *tasks) {
+                tsk->terminate();
+            }
+        }
+        return tasks;
     }
+
+    void addTaskSet(TerriBull::TaskList* tasks) {
+        this->tasks.push_back(tasks);
+    }
+
+    void Init() {}
 
     void run(float delta) {
-        if (this->currentTaskSet != nullptr)
-        { /* Update and chek our current task*/
-        pros::lcd::set_text(7, "Task Number: " + std::to_string(this->tasksCompleted+1));
+        if (currentTaskSet != nullptr) { /* Update and check our current task */
+            pros::lcd::set_text(7, "Task Number: " + std::to_string(tasksCompleted + 1));
             int finishedTasks = 0, totalTasks = 0;
-            for ( auto tsk : *(this->currentTaskSet)) {
+            for (auto tsk : *currentTaskSet) {
                 totalTasks++;
-                if (tsk->finishedFlag != true) tsk->update(delta);        
-                else {
+                if (tsk->finishedFlag != true) {
+                    tsk->update(delta);
+                } else {
                     finishedTasks++; /* Task is complete */
-                    if (!tsk->terminated) tsk->terminate();
-                } 
+                    if (!tsk->terminated) {
+                        tsk->terminate();
+                    }
+                }
             }
             if (totalTasks == finishedTasks) {
-                for ( auto tsk : *(this->currentTaskSet) ) {
+                for (auto tsk : *currentTaskSet) {
                     delete tsk;
                 }
-                delete this->currentTaskSet;
-                this->currentTaskSet = nullptr;
-                this->tasksCompleted++;
+                delete currentTaskSet;
+                currentTaskSet = nullptr;
+                tasksCompleted++;
             }
-        }
-        else if (tasks.isEmpty() == false)
-        { /* Obtain the next task*/
-            this->currentTaskSet = this->tasks.deque();
-            for (  auto tsk : *(this->currentTaskSet) ) 
+        } else if (!tasks.empty()) { /* Obtain the next task */
+            currentTaskSet = tasks.front();
+            tasks.pop_front();
+            for (auto tsk : *currentTaskSet) {
                 tsk->init();
+            }
+        } else { /* Do Nothing? */
+            pros::lcd::set_text(7, "All Tasks Completed.");
         }
-        else
-        {/* Do Nothing?*/
-        // pros::lcd::print(3, "All Tasks Completed.");
-        // pros::lcd::set_text(7, "All Tasks Completed.");
-    
-        }
-        /* TODO: Optimize the way Expressions are updated such that the Expressions being updated are only those that are realavent to the Current Task */
-        // for (auto expression : this->Expressions) {
+
+        /* TODO: Optimize the way Expressions are updated such that the Expressions being updated are only those that are relevant to the Current Task */
+        // for (auto expression : Expressions) {
         //     expression->updateTotal();
         // }
     }
-
 };
 #endif

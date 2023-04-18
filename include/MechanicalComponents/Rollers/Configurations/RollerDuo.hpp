@@ -32,6 +32,8 @@ class Roller_Duo : public TerriBull::Roller {
     }
 
     int Spin(int direction, float time, float delta);
+    int TurnOn(int direction, float pwr);
+    float getRPM() const;
     int SpinToPos(float pos);
     void reset();
     void update();

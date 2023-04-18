@@ -20,7 +20,13 @@
 
 class TerriBull::SerialController {
     public:
-    typedef int (*PacketCallback) (char * array, int start_index, int length);
+    typedef void (*PacketCallback) (TerriBull::RoboController* robot, char * array, int start_index, int length);
+
+    typedef struct {
+        PacketCallback callback;
+        std::string friendly_name;
+        int jetson_id;
+    } CallbackItem;
 
     private:
     vector<char> __next_packet;
@@ -28,26 +34,33 @@ class TerriBull::SerialController {
     char __end_of_transmission[4] { (char)11, (char)11, (char)10, (char)0 };
     int __header_length = sizeof(__packet_header) + 1;
     int __footer_length = sizeof(__end_of_transmission);
-    vector<PacketCallback> Callbacks;
-    vector<char> CallTags;
+    int __packet_index_offset = 15;
+    bool isCollectingTags, tagExchange;
+    map<int, CallbackItem*> Callbacks;
+    TerriBull::RoboController* motherSys;
 
     bool compareBuffer(vector<char> buffer1, int start, int end, char* buffer2);
     
 
     public:
-    SerialController();
+    SerialController(TerriBull::RoboController* _motherSys);
+
     static std::string SerializeNumber( double f );
     static double DeserializeNumber( char *array, int *si );
     static std::string SerializeString( std::string s );
     static std::string SerializeString( const char *s );
     static std::string DeserializeString( char *array, int *si );
     void ExchangeTags();
-    int RegisterCallback(char *tag_name, PacketCallback callback);
+    int RegisterCallback(std::string tag_name, PacketCallback callback);
     void DeserializePacket();
     void update();
     void readBuffer();
     void processDataFromBuffer();
-    void sendData(::std::string data);
+    void SendData(::std::string data);
+    void updateExchangeTags();
+    bool isInitialized();
+    void ProcessTagExchange(char * array, int start_index, int length);
+    int GetCallbackIndex(std::string tag_name);
 };
 
 

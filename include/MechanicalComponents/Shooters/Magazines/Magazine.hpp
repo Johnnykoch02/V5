@@ -19,25 +19,25 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     protected:
     bool toggledInc;
     bool toggledDec;
-    pros::ADIDigitalIn **incSensors;
+    pros::ADIAnalogIn **incSensors;
     uint8_t numIncSensors, numDecSensors;
     int8_t pMagazineCnt; /* Maintain Number of Disks in the Magazine */
-    pros::ADIDigitalIn **decSensors;
+    pros::ADIAnalogIn **decSensors;
     bool previousIncState, previousDecState;
-    bool* incDefaults,* decDefaults;
+    float* incDefaults,* decDefaults;
     public: /* TODO:
      - some of our sensors might be in state high as default as opposed to low. 
      - if a state is high as default, then we need to multiply that sensor readings like this:
         1. add to config file a way to modify the magazines default state.
      */
-    Magazine(std::string incSensorPorts, bool* inc_defaults, std::string decSensorPorts, bool* dec_defaults) : TerriBull::MechanicalComponent(0), numIncSensors(incSensorPorts.size()), numDecSensors(decSensorPorts.size()), incDefaults(inc_defaults), decDefaults(dec_defaults) {
-        incSensors = new pros::ADIDigitalIn*[incSensorPorts.size()];
-        decSensors = new pros::ADIDigitalIn*[decSensorPorts.size()];
+    Magazine(std::string incSensorPorts, float* inc_defaults, std::string decSensorPorts, float* dec_defaults) : TerriBull::MechanicalComponent(0), numIncSensors(incSensorPorts.size()), numDecSensors(decSensorPorts.size()), incDefaults(inc_defaults), decDefaults(dec_defaults) {
+        incSensors = new pros::ADIAnalogIn*[incSensorPorts.size()];
+        decSensors = new pros::ADIAnalogIn*[decSensorPorts.size()];
         for (int i = 0; i < incSensorPorts.size(); i++) {
-            incSensors[i] = new pros::ADIDigitalIn(incSensorPorts[i]);
+            incSensors[i] = new pros::ADIAnalogIn(incSensorPorts[i]);
         }
         for (int i = 0; i < decSensorPorts.size(); i++) {
-            decSensors[i] = new pros::ADIDigitalIn(decSensorPorts[i]);
+            decSensors[i] = new pros::ADIAnalogIn(decSensorPorts[i]);
         }
     }
     ~Magazine() {
@@ -77,12 +77,14 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int update(float delta) {
         int inc = 1;
         for (int i = 0; i < this->numIncSensors; i++) {
-            inc *= int(bool(incSensors[i]->get_value()) != incDefaults[i]); /* 1 - 0 */
+            pros::lcd::set_text(i, to_string(incSensors[i]->get_value()));
+            inc *= int(incSensors[i]->get_value() < incDefaults[i]); /* 1 - 0 */
         }
         this->__inc__(inc);
         int dec = 1;
         for (int i = 0; i < this->numDecSensors; i++) {
-            dec *= int(bool(decSensors[i]->get_value()) != decDefaults[i]); 
+            pros::lcd::set_text(this->numIncSensors+i, to_string(decSensors[i]->get_value()));
+            dec *= int(decSensors[i]->get_value() < decDefaults[i]); 
         }
         this->__dec__(dec);
         return 0;

@@ -44,6 +44,7 @@ class FlyWheelSB : public TerriBull::Shooter {
 
     int Shoot(float delta);// button is held
     int Load(float delta);
+    float getRPM() const;
     int turnOn();
     int reset();
     bool shotCompleted();

@@ -142,11 +142,17 @@ TerriBull::Shooter* ConfigurationParser::getShooterConfig(TerriBull::MechanicalS
     else if (ConfigType == "ShooterFlyWheelSB") {
         /* Parse for the Magazine as well*/
         Json::Value MagazineConfig = this->pConfigVariables.Config["mechanical_system"]["magazine"];
-        bool* increment_bools = new bool[2];
-        bool* decrement_bools = new bool[2];
-        increment_bools[0] = MagazineConfig["inc_default"][0].asBool(); increment_bools[1] = MagazineConfig["inc_default"][1].asBool();
-        decrement_bools[0] = MagazineConfig["dec_default"][0].asBool(); decrement_bools[1] = MagazineConfig["dec_default"][1].asBool();
-        Magazine* mag = new Magazine(MagazineConfig["incPorts"].asString(), increment_bools, MagazineConfig["decPorts"].asString(), decrement_bools);
+        int cnt_inc = MagazineConfig["inc_threshold"].size();
+        int cnt_dec = MagazineConfig["dec_threshold"].size();
+        float* increment_thresholds = new float[cnt_inc];
+        float* decrement_thresholds = new float[cnt_dec];
+        for (int i = 0; i < cnt_inc; i++) {
+            increment_thresholds[i] = MagazineConfig["inc_threshold"][i].asFloat();
+        }
+        for (int i = 0; i < cnt_dec; i++) {
+            decrement_thresholds[i] = MagazineConfig["dec_threshold"][i].asFloat();
+        }
+        Magazine* mag = new Magazine(MagazineConfig["incPorts"].asString(), increment_thresholds, MagazineConfig["decPorts"].asString(), decrement_thresholds);
         return new FlyWheelSB(ShooterConfig["motor_ports"][0].asInt(), ShooterConfig["reverse_motors"][0].asBool(), ShooterConfig["motor_ports"][1].asInt(), ShooterConfig["reverse_motors"][1].asBool(), mag, GEAR_ENCODER[gearSet], _system);
     }
     return nullptr;

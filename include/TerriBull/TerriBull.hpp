@@ -114,6 +114,8 @@ namespace TerriBull {
 
     template <class T>
     class Node {
+
+    public:
         Node<T> *prev;
         Node<T> *next;
         int16_t priority;
@@ -180,7 +182,7 @@ namespace TerriBull {
 
     template <class T>
     class linkedlist {
-
+    
     int size;
     Node<T> *g(int index, int cur, Node<T> *curr);
     public:
@@ -190,8 +192,8 @@ namespace TerriBull {
 
     linkedlist<T>() {
         this->size = 0;
-        this->head = nullptr;
-        this->tail = nullptr;
+      this->head = nullptr;
+      this->tail = nullptr;
     }
 
     ~linkedlist() {
@@ -202,10 +204,10 @@ namespace TerriBull {
             tempNode = node;
             node = node->getNext();
             delete tempNode;
-        }
+      }
         delete node;
-        }
     }
+      }
 
     linkedlist(Node<T> *h){
         this->size = 0;
@@ -229,7 +231,7 @@ namespace TerriBull {
 
     bool isEmpty() {
         return this->size < 1;
-    }
+      }
 
     void add(T* data, int priority) {
         bool insertion = false;
@@ -242,7 +244,7 @@ namespace TerriBull {
             this->tail= node;
             this->size++;
             insertion = true;
-        }
+      }
         /*
         The List has only one node, check the prioritys and insert accordingly
         */
@@ -253,10 +255,10 @@ namespace TerriBull {
                 this->head->setPrev(node);
                 node->setNext(this->head);
                 this->tail = this->head;
-                this->head = node;
+          this->head = node;
                 insertion = true;
                 this->size++;
-            }
+      }
             else {
                 /*Create Linkage*/
                 this->tail = node;
@@ -264,7 +266,7 @@ namespace TerriBull {
                 this->tail->setPrev(this->head);
                 insertion = true;
                 this->size++;
-            }
+    }
         } else  {
             /*
                 Our list has multiple nodes, back->front approach until we find our insertion spot
@@ -273,7 +275,7 @@ namespace TerriBull {
             while(priority>current->getPriority() && insertion==false) {
                 //Our current node has not found the right insertion spot, and we haven't reached the end of the list
                 if (current != this->head) {
-
+    
                     current = current->getPrev();
                 }
                 //Our current node has not found the right insertion spot, and we have reached our head node.
@@ -281,11 +283,11 @@ namespace TerriBull {
                     /*Create Linkage*/
                     node->setNext(this->head);
                     this->head->setPrev(node);
-                    this->head = node;
+      this->head = node;
                     insertion = true;
                     this->size++;
-                }
-            }
+      }
+      }
             // WE found our spot!
             if(!insertion) {
                 /*
@@ -297,7 +299,7 @@ namespace TerriBull {
                     /*Create Linkage*/
                     this->tail->setNext(node);
                     node->setPrev(this->tail);
-                    this->tail = node;
+        this->tail = node;
                     this->size++;
                 }
                 // Insertion in middle of list
@@ -310,9 +312,9 @@ namespace TerriBull {
                     this->size++;
                 }
             }
-        }
+      }
     }
-
+    
     bool remove(T* data){
             /* To Prevent a break, we want to return null if index isn't in our list.*/
         Node<T> *node = this->head;
@@ -330,12 +332,12 @@ namespace TerriBull {
                         next->setPrev(nullptr);
                         this->head = next;
                         delete node;
-                    }
+    }
                     else if(next == nullptr) {
                         prev->setNext(nullptr);
                         this->tail = prev;
                         delete node;
-                    }
+    }
 
                     else {
                         /*Create Linkage*/
@@ -353,7 +355,7 @@ namespace TerriBull {
                         this->head = nullptr;
                         this->tail = nullptr;
                         delete node;
-                    }
+        }
                     else
                     {/* We are deleting the head node of a length-2 list */
                         if(node == this->head)
@@ -364,16 +366,16 @@ namespace TerriBull {
                         else {
                             this->tail = this->head;
                             delete node;
-                        }
-                    }
-                }
+        }
+        }
+    }
                 this->size--;
                 return true;
-            }
+        }
             node = node->getNext();
         }
         return false;
-    }
+        }
 
     void clear() {
         if (this->head != nullptr) {
@@ -399,7 +401,7 @@ namespace TerriBull {
         }
         return nullptr;
     }
-
+    
     T* pop() {
         T* returnValue = this->head->getData();
         this->head->setData(nullptr);
@@ -428,7 +430,7 @@ namespace TerriBull {
     //     }
     //     return stream;
     // }
-    };
+};
 
     #endif
 

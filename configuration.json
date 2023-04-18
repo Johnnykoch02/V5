@@ -115,7 +115,7 @@
                 },
                 "roller": {
                     "config": "RollerUni",
-                    "motor_ports": [19],
+                    "motor_ports": [6],
                     "reverse_motors": [0],
                     "gear_ratio": "GREEN",
                     "max_speed": 120
@@ -128,10 +128,10 @@
                     "max_speed": 127
                 },
                 "magazine": {
-                    "incPorts": "AB",
-                    "inc_default": [true, true],
-                    "decPorts": "CD",
-                    "dec_default": [false, false]
+                    "incPorts": "DE",
+                    "inc_thresholg": [0.64, 0.64],
+                    "decPorts": "B",
+                    "dec_threshold": [0.64]
                 }
             }
         },

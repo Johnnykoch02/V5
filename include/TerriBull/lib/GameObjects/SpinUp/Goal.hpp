@@ -24,14 +24,31 @@ class Goal : public TerriBull::GameObject {
     } Color;
 
     private:
-    
     float pDTheta;
         
-    ~Goal() {
-        
-    }
+    ~Goal() {}
+
     public:
-    Goal(Vector2* pos, byte identifier) :GameObject(pos, identifier, GOAL, 8, 8) { }
+    
+    struct UpdateArgs {
+        float x;
+        float y;
+        float dTheta;
+    };
+    
+    static void* ConstructUpdateArgs(float x, float y, float dtheta) {
+        size_t size = sizeof(float) * 3; /* Calculate Size*/
+        void* data = malloc(size);
+        size_t offset = 0;
+        memcpy((char*)data + offset, &x, sizeof(float));
+        offset += sizeof(float);
+        memcpy((char*)data + offset, &y, sizeof(float));
+        offset += sizeof(float);
+        memcpy((char*)data + offset, &dtheta, sizeof(bool));
+        return data;
+    }
+    
+    Goal(TerriBull::Vector2* pos, char identifier) : GameObject(pos, identifier, DISK, 8, 8) { }
     
     float getDTheta() {
         return pDTheta;

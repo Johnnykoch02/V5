@@ -33,5 +33,4 @@ class TerriBull::Shooter : public TerriBull::MechanicalComponent {
     virtual bool isLoaded() const final { return loaded; }
     virtual bool* getLoadedPtr() { return &loaded; }
 };     
-
 #endif // SHOOTER_H

@@ -56,14 +56,14 @@ class TerriBull::MechanicalSystem {
     bool isShotCompleted() const;
     bool isShooterLoaded() const;
     bool isRollerCompleted() const;
-    
     void Init();
     void update(float delta);
-    /* API TO Mechanical System */
+
+    /* API To Mechanical System */
     int GoToPosition(Vector2 v_f, Vector2 v_i, bool reverse);
     void resetDrive();
     int TurnToAngle(float theta);
-    int turnOnIntake(float direction);
+    int turnOnIntake(float direction); //+
     int turnOffIntake();
     int spinRollerTo(float pos);
     int spinRollerFor(int direction, float time);
@@ -72,6 +72,9 @@ class TerriBull::MechanicalSystem {
     int loadShooter();
     int turnOnShooter();
     int resetShooter();
+
+    float getIntakeRPM() const;
+
     /*Setters*/
     void setMotherSystem(RoboController* _motherSystem);
     void setIntake(TerriBull::Intake * _intake);

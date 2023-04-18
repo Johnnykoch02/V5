@@ -26,3 +26,8 @@ int Intake_Duo::TurnOff() {
     this->toggled = false;
     return 0;
 }
+float Intake_Duo::getRPM() const {
+    float rpmI = this->pMotorI->get_actual_velocity();
+    float rpmJ = this->pMotorJ->get_actual_velocity();
+    return 0.5 *(rpmI + rpmJ);
+}

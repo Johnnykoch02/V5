@@ -28,6 +28,7 @@ class Intake_Uni : public TerriBull::Intake {
     }
 
     int TurnOn(float dir); // button is held
+    float getRPM() const;
     int TurnOff();
 };     
 

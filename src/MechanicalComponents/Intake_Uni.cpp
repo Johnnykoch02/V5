@@ -24,3 +24,7 @@ int Intake_Uni::TurnOff() {
     this->toggled = false;
     return 0;
 }
+
+float Intake_Uni::getRPM() const {
+    return this->pMotorI->get_actual_velocity();
+}

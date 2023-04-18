@@ -18,6 +18,14 @@ int Roller_Uni::Spin(int direction, float time, float delta) {
     this->update();
     return 0;
 }
+int Roller_Uni::TurnOn(int direction, float pwr) {
+    this->pMotorI->move(direction * pwr);
+    return 0;
+}
+
+float Roller_Uni::getRPM() const {
+    return this->pMotorI->get_actual_velocity();
+}
 
 int Roller_Uni::SpinToPos(float pos) {/* TODO: Fix this */
     this->currentError = pos - this->currentPos;

@@ -26,6 +26,18 @@ int Roller_Duo::Spin(int direction, float time, float delta) {
     return 0;
 }
 
+int Roller_Duo::TurnOn(int direction, float pwr) {
+    this->pMotorI->move(direction * pwr);
+    this->pMotorJ->move(direction * pwr);
+    return 0;
+}
+
+float Roller_Duo::getRPM() const {
+    float rpmI = this->pMotorI->get_actual_velocity();
+    float rpmJ = this->pMotorJ->get_actual_velocity();
+    return 0.5 *(rpmI + rpmJ);
+}
+
 int Roller_Duo::SpinToPos(float pos) {
     this->currentError = pos - this->currentPos;
     this->sumError += this->currentError;

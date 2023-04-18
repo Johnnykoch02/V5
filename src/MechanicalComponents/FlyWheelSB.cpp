@@ -13,6 +13,7 @@
 int FlyWheelSB::Shoot(float delta) { 
     toggled = true;
     this->sumTime+=delta;
+    this->pMag->update(delta);
     return 0;
 }
 
@@ -27,6 +28,13 @@ int FlyWheelSB::turnOn() {
     this->pMotorY->move(pwr);
     return 0;
 }
+
+float FlyWheelSB::getRPM() const {
+    float rpmI = fabs(this->pMotorX->get_actual_velocity());
+    float rpmJ = fabs(this->pMotorY->get_actual_velocity());
+    return (0.5 *(rpmI + rpmJ));
+}
+
 int FlyWheelSB::reset() {
     this->shotComplete = false;
     this->toggled = false;

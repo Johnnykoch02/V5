@@ -167,6 +167,12 @@ int TerriBull::MechanicalSystem::resetShooter() {
     } return -1;
 }
 
+float TerriBull::MechanicalSystem::getIntakeRPM() const {
+    if (this->pIntake!= nullptr) {
+        return this->pIntake->getRPM();
+    } return 0;
+}
+
 /*  SETTERS AND GETTERS  */
 void TerriBull::MechanicalSystem::setMotherSystem(RoboController* _motherSystem) {
     this->motherSystem = _motherSystem;

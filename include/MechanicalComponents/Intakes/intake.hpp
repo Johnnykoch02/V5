@@ -24,6 +24,7 @@ class TerriBull::Intake : public TerriBull::MechanicalComponent {
     virtual bool isToggled() const final { return this->toggled; }
     virtual float getDirection() const final { return this->currentDir; }
     virtual int TurnOn(float dir) = 0; // button is held
+    virtual float getRPM() const = 0;
     virtual int TurnOff() = 0;
 
 };     

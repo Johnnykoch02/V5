@@ -74,14 +74,14 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     float offTrack = GetDTheta(RAD2DEG(v_to_goal->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360));
     if (fabs(v_to_goal->r) > 6.0 && fabs(offTrack) > 30 ) {
         pros::lcd::set_text(4,"+++ in wrong 1 case ++++");
-        this->reset();
+        // this->reset();
         this->pNeedsAngleCorrection = true;
         delete v_to_goal;
         delete v_i_to_goal;
         delete v_i_to_bot;
         return 0;
     }
-    else if (v_to_goal->r > 3 && fabs(offTrack) < 15) {
+    else if (fabs(offTrack) < 15) {
         // pros::lcd::set_text(4,"--- in target case ---");
         int dir = fabs(offTrack)/offTrack;
         pL *= 0.5;
@@ -89,9 +89,9 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
         pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.05* pct)) * dir * errorMod * rev;
         pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.05* pct)) * dir * errorMod * rev;
     }
-    else if (fabs(v_to_goal->r) > 1.5 && fabs(offTrack) > 15) {
+    else if (fabs(offTrack) >= 15) {
         pros::lcd::set_text(4,"+++ in wrong 2 case ++++");
-        this->reset();
+        // this->reset();
         this->pNeedsAngleCorrection = true;
         delete v_to_goal;
         delete v_i_to_goal;

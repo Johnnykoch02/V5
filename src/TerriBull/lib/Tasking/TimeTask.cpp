@@ -19,12 +19,15 @@ void TimeTask::init() {
 }
 
 void TimeTask::update(float delta) {
+    // pros::lcd::set_text(4,);
     if (!this->finishedFlag) {
         this->sumTime+=delta;
         this->finishedFlag = this->sumTime > this->goalTime;
+
     }
 }
 
 void TimeTask::terminate() {
+    pros::lcd::set_text(4,"LEAVING TIME TASK");
     this->terminated = true;
 }
