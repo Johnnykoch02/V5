@@ -35,7 +35,7 @@ void RollerTask::init() {
     if(this->needsInitialize) {
         this->targetPos = *(this->initialPos) + this->offset;
     }
-    this->system->resetRoller();
+    this->system->ResetRoller();
 }
 
 void RollerTask::update(float delta) {
@@ -43,11 +43,11 @@ void RollerTask::update(float delta) {
     if (!this->finishedFlag) {
         switch(rollerType) {
             case TIME:
-                this->system->spinRollerFor(this->direction, this->time);
+                this->system->SpinRollerFor(this->direction, this->time);
                 this->finishedFlag = this->system->isRollerCompleted();
                 break;
             case POS:
-                this->system->spinRollerTo(this->targetPos);
+                this->system->SpinRollerTo(this->targetPos);
                 this->finishedFlag = fabs(this->system->getRollerError()) < 2 && fabs(this->system->getRollerDError()) < 0.5;
                 break;
         }
@@ -56,5 +56,5 @@ void RollerTask::update(float delta) {
 
 void RollerTask::terminate() {
     this->terminated = true;
-    this->system->resetRoller();
+    this->system->ResetRoller();
 }

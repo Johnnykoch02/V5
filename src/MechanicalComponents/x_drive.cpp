@@ -117,6 +117,14 @@ void X_Drive::reset() {
     this->previousError = 0;
 }
 
+float X_Drive::getRPM() const {
+    float rpmI = fabs(this->pMotorA->get_actual_velocity());
+    float rpmJ = fabs(this->pMotorB->get_actual_velocity());
+    float rpmK = fabs(this->pMotorC->get_actual_velocity());
+    float rpmL = fabs(this->pMotorD->get_actual_velocity());
+    return 0.25 *(rpmI + rpmJ + rpmJ + rpmK);
+}
+
 Vector2* X_Drive::resultant_vector() {
   // return Vector2::cartesianToVector2(0, 0);
     float l1 = this->pMotorA->get_position();

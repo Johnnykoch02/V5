@@ -43,14 +43,14 @@ void DanTheMan::Update(float delta) {
       float angle = fmod((this->roboController->getSystem()->getAngle() - turnInput), 360);
       this->roboController->getSystem()->TurnToAngle(angle);
     }
-    if (!drive_engaged) this->roboController->getSystem()->resetDrive();
+    if (!drive_engaged) this->roboController->getSystem()->ResetDrive();
 
     /* Intake */
     int in = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
     int out = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
     if (in || out) {
-      this->roboController->getSystem()->turnOnIntake(in - out);
-    } else this->roboController->getSystem()->turnOffIntake();
+      this->roboController->getSystem()->TurnOnIntake(in - out);
+    } else this->roboController->getSystem()->TurnOffIntake();
 
     /* Shooter */
     // TerriBull::Shooter* shooter = this->roboController->getSystem()->getShooter();

@@ -43,7 +43,7 @@ float  MechanicalSystem::getDriveDError() const {
     return this->pDrive->ROdError();
 }
 
-bool MechanicalSystem::driveNeedsAngleCorrection() const {
+bool MechanicalSystem::DriveNeedsAngleCorrection() const {
     return this->pDrive->needsAngleCorrection();
 }
 
@@ -55,6 +55,12 @@ float  MechanicalSystem::getRollerError() const {
 float  MechanicalSystem::getRollerDError() const {
     if (this->pRoller != nullptr) return this->pDrive->ROdError();
     return 0;
+}
+
+float TerriBull::MechanicalSystem::getIntakeRPM() const {
+    if (this->pIntake!= nullptr) {
+        return this->pIntake->getRPM();
+    } return 0;
 }
 
 bool MechanicalSystem::isShotCompleted() const {
@@ -76,7 +82,7 @@ TerriBull::Vector2*  MechanicalSystem::getPosition() {
     return this->pPosition;
 }
 
-void TerriBull::MechanicalSystem::resetDrive() {
+void TerriBull::MechanicalSystem::ResetDrive() {
     this->pDrive->reset();
 }
 
@@ -112,31 +118,31 @@ int TerriBull::MechanicalSystem::TurnToAngle(float theta) {
      return this->pDrive->change_orientation(theta, this->motherSystem->delta());
 }
 
-int TerriBull::MechanicalSystem::turnOnIntake(float direction) {
+int TerriBull::MechanicalSystem::TurnOnIntake(float direction) {
     if (this->pIntake != nullptr) {
         return this->pIntake->TurnOn(direction);
     } return -1; 
 }
 
-int TerriBull::MechanicalSystem::turnOffIntake() {
+int TerriBull::MechanicalSystem::TurnOffIntake() {
     if (this->pIntake != nullptr) {
         return this->pIntake->TurnOff();
     } return -1;
 }
 
-int TerriBull::MechanicalSystem::spinRollerTo(float pos) {
+int TerriBull::MechanicalSystem::SpinRollerTo(float pos) {
     if (this->pRoller != nullptr) {
         return this->pRoller->SpinToPos(pos);
     } return -1;
 }
 
-int TerriBull::MechanicalSystem::spinRollerFor(int direction, float time) {
+int TerriBull::MechanicalSystem::SpinRollerFor(int direction, float time) {
     if (this->pRoller != nullptr) {
         return this->pRoller->Spin(direction, time, this->motherSystem->delta());
     } return -1;
 }
 
-int TerriBull::MechanicalSystem::resetRoller() {
+int TerriBull::MechanicalSystem::ResetRoller() {
     if (this->pRoller != nullptr) {
         this->pRoller->reset();
         return 0;
@@ -149,28 +155,42 @@ int TerriBull::MechanicalSystem::ShootDisk() {
     } return -1;
 }
 
-int TerriBull::MechanicalSystem::loadShooter() {
+int TerriBull::MechanicalSystem::LoadShooter() {
     if (this->pShooter != nullptr) {
-        return this->pShooter->Load(this->motherSystem->delta());
+        return this->pShooter->Load(this->motherSystem->delta(), nullptr);
     } return -1;
 }
 
-int TerriBull::MechanicalSystem::turnOnShooter() {
+int TerriBull::MechanicalSystem::TurnOnShooter() {
     if (this->pShooter != nullptr) {
         return this->pShooter->turnOn();
     } return -1;
 }
 
-int TerriBull::MechanicalSystem::resetShooter() {
+int TerriBull::MechanicalSystem::ResetShooter() {
     if (this->pShooter != nullptr) {
         return this->pShooter->reset();
     } return -1;
 }
 
-float TerriBull::MechanicalSystem::getIntakeRPM() const {
-    if (this->pIntake!= nullptr) {
-        return this->pIntake->getRPM();
-    } return 0;
+int TerriBull::MechanicalSystem::ConstrictMotorGroupCurrent(TerriBull::MechanicalComponent::MotorRefs* refGroup) {
+    /* TODO: Log the Constriction to the Log File refGroup.ComponentName */
+    for (int i = 0; i < refGroup->NumMotors; i++) {
+        if (refGroup->Motors[i]!= nullptr) {
+            refGroup->Motors[i]->set_current_limit(1000);
+        }
+    }
+    return 0;
+}
+
+int TerriBull::MechanicalSystem::UnConstrictMotorGroupCurrent(TerriBull::MechanicalComponent::MotorRefs* refGroup) {
+    /* TODO: Log the Un-Constriction to the Log File refGroup.ComponentName */
+    for (int i = 0; i < refGroup->NumMotors; i++) {
+        if (refGroup->Motors[i]!= nullptr) {
+            refGroup->Motors[i]->set_current_limit(2500);
+        }
+    }
+    return 0;
 }
 
 /*  SETTERS AND GETTERS  */

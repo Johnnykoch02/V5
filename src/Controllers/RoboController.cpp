@@ -11,6 +11,9 @@
  *
  */
 #include "../../include/Controllers/RoboController/RoboController.hpp"
+#include "../../include/TerriBull/lib/GameObjects/SpinUp/Disk.hpp"
+#include "../../include/TerriBull/lib/GameObjects/SpinUp/FieldRoller.hpp"
+#include "../../include/TerriBull/lib/GameObjects/SpinUp/Goal.hpp"
 #include <sstream>
 #include <iomanip>
 void RoboController::setObjHandler(ObjectHandler* objHandler) {
@@ -70,23 +73,23 @@ void TerriBull::RoboController::Init() {
         this->taskManager = new TaskManager();
         /* Init Serial Controller */
         this->serialController = new SerialController(this); /* TODO: Needs SerialController::Init() */
-        // this->serialController->RegisterCallback("set_disk_obj", (SerialController::PacketCallback)SetDiskObjectCallback);
-        // this->serialController->RegisterCallback("get_disk_obj", (SerialController::PacketCallback)GetDiskObjectCallback);
-        // this->serialController->RegisterCallback("set_goal_obj", (SerialController::PacketCallback)SetGoalObjectCallback);
-        // this->serialController->RegisterCallback("get_goal_obj", (SerialController::PacketCallback)GetGoalObjectCallback);
-        // this->serialController->RegisterCallback("set_roller_obj", (SerialController::PacketCallback)SetRollerObjectCallback);
-        // this->serialController->RegisterCallback("get_roller_obj", (SerialController::PacketCallback)GetRollerObjectCallback);
-        // this->serialController->RegisterCallback("get_pos", (SerialController::PacketCallback)GetPositionCallback);
-        // this->serialController->RegisterCallback("set_pos", (SerialController::PacketCallback)SetPositionCallback);
-        // this->serialController->RegisterCallback("go_to_pos", (SerialController::PacketCallback)GoToPositionCallback);
-        // this->serialController->RegisterCallback("go_to_pos_dx_dy", (SerialController::PacketCallback)GoToPositionDxDyCallback);
-        // this->serialController->RegisterCallback("go_to_pos_dr_dtheta", (SerialController::PacketCallback)GoToPositionDRDThetaCallback);
-        // this->serialController->RegisterCallback("go_to_obj", (SerialController::PacketCallback)GoToObjectCallback);
-        // this->serialController->RegisterCallback("turn_to_angle", (SerialController::PacketCallback)TurnToAngleCallback);
-        // this->serialController->RegisterCallback("spin_roller", (SerialController::PacketCallback)SpinRollerCallback);
-        // this->serialController->RegisterCallback("shoot_disk", (SerialController::PacketCallback)ShootDiskCallback);
-        // this->serialController->RegisterCallback("load_shooter", (SerialController::PacketCallback)LoadShooterCallback);
-        // // if(!this->pDebug) this->serialController->ExchangeTags();
+        this->serialController->RegisterCallback("set_disk_obj", (SerialController::PacketCallback)SetDiskObjectCallback);
+        this->serialController->RegisterCallback("get_disk_obj", (SerialController::PacketCallback)GetDiskObjectCallback);
+        this->serialController->RegisterCallback("set_goal_obj", (SerialController::PacketCallback)SetGoalObjectCallback);
+        this->serialController->RegisterCallback("get_goal_obj", (SerialController::PacketCallback)GetGoalObjectCallback);
+        this->serialController->RegisterCallback("set_roller_obj", (SerialController::PacketCallback)SetRollerObjectCallback);
+        this->serialController->RegisterCallback("get_roller_obj", (SerialController::PacketCallback)GetRollerObjectCallback);
+        this->serialController->RegisterCallback("get_pos", (SerialController::PacketCallback)GetPositionCallback);
+        this->serialController->RegisterCallback("set_pos", (SerialController::PacketCallback)SetPositionCallback);
+        this->serialController->RegisterCallback("go_to_pos", (SerialController::PacketCallback)GoToPositionCallback);
+        this->serialController->RegisterCallback("go_to_pos_dx_dy", (SerialController::PacketCallback)GoToPositionDxDyCallback);
+        this->serialController->RegisterCallback("go_to_pos_dr_dtheta", (SerialController::PacketCallback)GoToPositionDRDThetaCallback);
+        this->serialController->RegisterCallback("go_to_obj", (SerialController::PacketCallback)GoToObjectCallback);
+        this->serialController->RegisterCallback("turn_to_angle", (SerialController::PacketCallback)TurnToAngleCallback);
+        this->serialController->RegisterCallback("spin_roller", (SerialController::PacketCallback)SpinRollerCallback);
+        this->serialController->RegisterCallback("shoot_disk", (SerialController::PacketCallback)ShootDiskCallback);
+        this->serialController->RegisterCallback("load_shooter", (SerialController::PacketCallback)LoadShooterCallback);
+        if(!this->pDebug) this->serialController->ExchangeTags();
         // /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
@@ -415,6 +418,38 @@ void GoToPositionDRDThetaCallback(TerriBull::RoboController* robot, char * array
     delete pos;
 }
 /**
+ * @brief Create a Object Callback object
+ * 
+ * @param robot 
+ * @param array 
+ * @param start_index 
+ * @param length 
+ */
+void CreateObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length) {
+    int id = (int) SerialController::DeserializeNumber(array, &start_index);
+    TerriBull::GameObject::Types objectType = (TerriBull::GameObject::Types) (int) SerialController::DeserializeNumber(array, &start_index);
+    int x = SerialController::DeserializeNumber(array, &start_index);
+    int y = SerialController::DeserializeNumber(array, &start_index);
+    GameObject* obj = nullptr;
+    Vector2* pos = Vector2::cartesianToVector2(x, y);
+    switch (objectType) {
+        case GameObject::Types::DISK: {
+            obj = new Disk(pos, id);
+            break;
+        }
+        case GameObject::Types::ROLLER: {
+            obj = new FieldRoller(pos, id);
+            break;
+        }
+        case GameObject::Types::GOAL: {
+            obj = new Goal(pos, id);
+            break;
+        }
+        default:
+            break;
+    }       
+}
+/**
  * @brief Goes to an Object based on a identifier and type.
  * DATA: [char OBJECT_ID, int OBJECT_TYPE, bool reversed]
  * @param robot 
@@ -458,7 +493,7 @@ void TurnToAngleCallback(TerriBull::RoboController* robot, char * array, int sta
  */
 void SpinRollerCallback(TerriBull::RoboController* robot, char * array, int start_index, int length) {
     int dir = SerialController::DeserializeNumber(array, &start_index);
-    robot->getSystem()->spinRollerFor(dir, 1000); /*TODO: Change such that there is a Power Parameter */
+    robot->getSystem()->SpinRollerFor(dir, 1000); /*TODO: Change such that there is a Power Parameter */
 }
 /**
  * @brief 

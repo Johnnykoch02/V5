@@ -49,6 +49,7 @@ class TerriBull::Drive : public TerriBull::MechanicalComponent {
     virtual void reset() = 0;
     virtual Vector2* resultant_vector() = 0;
     virtual void tare_encoders() = 0;
+    virtual float getRPM() const = 0;
 };     
 
 #endif // DRIVE_H

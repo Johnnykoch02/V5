@@ -16,14 +16,14 @@ ShooterTask::~ShooterTask() {}
 
 void ShooterTask::init() {
     this->finishedFlag = false;
-    this->system->resetShooter();
+    this->system->ResetShooter();
 }
 
 void ShooterTask::update(float delta) {
     if (!this->finishedFlag) {
     switch (this->shooterType) {
         case LOAD:
-            this->system->loadShooter();
+            this->system->LoadShooter();
             this->finishedFlag = this->system->isShooterLoaded();
             break;
         case SHOOT:
@@ -35,5 +35,5 @@ void ShooterTask::update(float delta) {
 
 void ShooterTask::terminate() {
     this->terminated = true;
-    this->system->resetShooter();
+    this->system->ResetShooter();
 }

@@ -36,22 +36,34 @@ void RyanIsTank::Update(float delta) {
     }
 
     if (drive_engaged) this->roboController->getSystem()->getDrive()->setVoltage(voltages);
-    else this->roboController->getSystem()->resetDrive();
-
+    else this->roboController->getSystem()->ResetDrive();
+    /* TODO: Change Constriction such that the motor Groups are checked for their Current first.*/
     /* Roller */
     int l1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
     int r1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
     if (l1 || r1) {
+      this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       float currentPos = this->roboController->getSystem()->getRoller()->getPos();
-      if(this->roboController->getSystem()->spinRollerTo(currentPos + 50*(l1 - r1))) {
+      if(this->roboController->getSystem()->SpinRollerTo(currentPos + 50*(l1 - r1))) {
         pros::lcd::set_text(2, "Error with Roller");
-      };
-    } else this->roboController->getSystem()->resetRoller();
-
-    /* Shooter */
+      }
+    } 
+    else {
+      this->roboController->getSystem()->ResetRoller();
+      if (this->roboController->getSystem()->getRoller()->getRPM() < 5) {
+        this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
+      }
+    }
+    /* Shooter */ /*TODO: Change To Toggle */
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-      this->roboController->getSystem()->turnOnShooter();
+      this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
+      this->roboController->getSystem()->TurnOnShooter();
       this->roboController->getSystem()->getShooter()->Shoot(delta);
-    } else this->roboController->getSystem()->resetShooter();
-
+    }
+    else {
+      this->roboController->getSystem()->ResetShooter();
+      if (this->roboController->getSystem()->getShooter()->getRPM() < 5) {
+        this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
+      }
+    }
 }

@@ -85,6 +85,7 @@ extern void GetPositionCallback(TerriBull::RoboController* robot, char * array, 
 extern void GoToPositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GoToPositionDxDyCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GoToPositionDRDThetaCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void CreateObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GoToObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void TurnToAngleCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void SpinRollerCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);

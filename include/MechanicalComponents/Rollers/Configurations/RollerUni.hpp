@@ -26,6 +26,11 @@ class Roller_Uni : public TerriBull::Roller {
         this->pMotorI = new pros::Motor(i, (pros::motor_gearset_e) this->gearSet, iReverse);
         this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->setPID(4.5, 0, 0.8);
+        this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*1);
+        this->pMotorRefs[0] = pMotorI;
+        this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 1
+      };
     }
 
     int Spin(int direction, float time, float delta);

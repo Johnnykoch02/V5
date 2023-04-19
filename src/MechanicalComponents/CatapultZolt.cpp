@@ -35,7 +35,7 @@ int CatapultZolt::Shoot(float delta) {
     return 0;
 }
 
-int CatapultZolt::Load(float delta) {
+int CatapultZolt::Load(float delta, void* args) {
     toggled = true;
     this->sumTime+=delta;
     this->currentError = 0.3 - this->currentPos;
@@ -76,4 +76,8 @@ int CatapultZolt::reset() {
 }
 bool CatapultZolt::shotCompleted() {
     return this->shotComplete;
+}
+
+float CatapultZolt::getRPM() {
+    return 0; /* we dont use catapults :> */
 }

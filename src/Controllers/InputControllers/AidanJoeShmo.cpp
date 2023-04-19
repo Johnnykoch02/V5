@@ -37,24 +37,24 @@ void AidanJoeShmo::Update(float delta) {
         this->roboController->getSystem()->TurnToAngle(angle);
       }
     }
-    if (!drive_engaged) this->roboController->getSystem()->resetDrive();
+    if (!drive_engaged) this->roboController->getSystem()->ResetDrive();
 
     /* Intake */
     int in = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
     int out = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
     if (in || out) {
-      this->roboController->getSystem()->turnOnIntake(in - out);
-    } else this->roboController->getSystem()->turnOffIntake();
+      this->roboController->getSystem()->TurnOnIntake(in - out);
+    } else this->roboController->getSystem()->TurnOffIntake();
 
     /* Roller */
     int l1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
     int r1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
     if (l1 || r1) {
       float currentPos = this->roboController->getSystem()->getRoller()->getPos();
-      if(this->roboController->getSystem()->spinRollerTo(currentPos + 50*(l1 - r1))) {
+      if(this->roboController->getSystem()->SpinRollerTo(currentPos + 50*(l1 - r1))) {
         pros::lcd::set_text(2, "Error with Roller");
       };
-    } else this->roboController->getSystem()->resetRoller();
+    } else this->roboController->getSystem()->ResetRoller();
 
     /* Shooter */
     int shoot = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
@@ -65,7 +65,7 @@ void AidanJoeShmo::Update(float delta) {
         shooter->Shoot(delta);
       }
       else {
-        shooter->Load(delta);
+        shooter->Load(delta, nullptr);
       }
     } 
     else shooter->reset();   

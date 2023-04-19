@@ -7,7 +7,9 @@
  * @date 2023-03-01
  *
  * @copyright Copyright (c) 2022
- *
+ * CHANGELOG:
+ * - Converted Digital to Analog Logic 04-18-2023 
+ * 
 */
 #ifndef MAGAZINE_H
 #define MAGAZINE_H
@@ -29,15 +31,18 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
      - some of our sensors might be in state high as default as opposed to low. 
      - if a state is high as default, then we need to multiply that sensor readings like this:
         1. add to config file a way to modify the magazines default state.
+    
      */
     Magazine(std::string incSensorPorts, float* inc_defaults, std::string decSensorPorts, float* dec_defaults) : TerriBull::MechanicalComponent(0), numIncSensors(incSensorPorts.size()), numDecSensors(decSensorPorts.size()), incDefaults(inc_defaults), decDefaults(dec_defaults) {
         incSensors = new pros::ADIAnalogIn*[incSensorPorts.size()];
         decSensors = new pros::ADIAnalogIn*[decSensorPorts.size()];
         for (int i = 0; i < incSensorPorts.size(); i++) {
             incSensors[i] = new pros::ADIAnalogIn(incSensorPorts[i]);
+            incSensors[i]->calibrate();
         }
         for (int i = 0; i < decSensorPorts.size(); i++) {
             decSensors[i] = new pros::ADIAnalogIn(decSensorPorts[i]);
+            decSensors[i]->calibrate();
         }
     }
     ~Magazine() {
@@ -77,13 +82,13 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int update(float delta) {
         int inc = 1;
         for (int i = 0; i < this->numIncSensors; i++) {
-            pros::lcd::set_text(i, to_string(incSensors[i]->get_value()));
+            pros::lcd::set_text(i, to_string(incSensors[i]->get_value_calibrated()));
             inc *= int(incSensors[i]->get_value() < incDefaults[i]); /* 1 - 0 */
         }
         this->__inc__(inc);
         int dec = 1;
         for (int i = 0; i < this->numDecSensors; i++) {
-            pros::lcd::set_text(this->numIncSensors+i, to_string(decSensors[i]->get_value()));
+            pros::lcd::set_text(this->numIncSensors+i, to_string(decSensors[i]->get_value_calibrated()));
             dec *= int(decSensors[i]->get_value() < decDefaults[i]); 
         }
         this->__dec__(dec);

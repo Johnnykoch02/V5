@@ -154,3 +154,11 @@ Vector2* Tank_Drive_Quad::resultant_vector() {
     delete vecUnNormalized;
     return resultantVector;    
 }
+
+float Tank_Drive_Quad::getRPM() const {
+    float rpmI = fabs(this->pMotorA->get_actual_velocity());
+    float rpmJ = fabs(this->pMotorB->get_actual_velocity());
+    float rpmK = fabs(this->pMotorC->get_actual_velocity());
+    float rpmL = fabs(this->pMotorD->get_actual_velocity());
+    return 0.25 *(rpmI + rpmJ + rpmJ + rpmK);
+}

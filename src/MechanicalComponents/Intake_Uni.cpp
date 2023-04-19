@@ -26,5 +26,5 @@ int Intake_Uni::TurnOff() {
 }
 
 float Intake_Uni::getRPM() const {
-    return this->pMotorI->get_actual_velocity();
+    return fabs(this->pMotorI->get_actual_velocity());
 }

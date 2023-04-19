@@ -60,7 +60,7 @@ DriveTask* DriveTask::GoToObject(TerriBull::GameObject* object, bool reversed,Te
 void DriveTask::init() {
     this->finishedFlag = false;
     this->hitTarget = false;
-    this->system->resetDrive();
+    this->system->ResetDrive();
     this->v_i = new TerriBull::Vector2(*(this->system->getPosition()));
     if (this->calculateOnInit) {
         this->v_f = *(v_i) + *(this->offset);
@@ -91,7 +91,7 @@ void DriveTask::update(float delta) {
         bool currentAngleCurrection;
         switch(driveType) {
             case TRANSLATION:
-                currentAngleCurrection = this->system->driveNeedsAngleCorrection();
+                currentAngleCurrection = this->system->DriveNeedsAngleCorrection();
                 if (!this->hitTarget) {
                     if (currentAngleCurrection) {
                         Vector2 * currentPos = this->system->getPosition();
@@ -127,7 +127,7 @@ void DriveTask::update(float delta) {
                 this->finishedFlag = fabs(this->system->getDriveError()) < 1.5 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
                 break;
         } if (this->finishedFlag) {
-            this->system->resetDrive();
+            this->system->ResetDrive();
         }
         
     }

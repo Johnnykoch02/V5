@@ -40,7 +40,7 @@ TerriBull::RoboController controlSys;
 void on_center_button() {
 	controlSys.ClearTasks();
 	// pros::delay(100);
-	// controlSys.getSystem()->resetDrive();
+	// controlSys.getSystem()->ResetDrive();
 }
 
 void initialize() {

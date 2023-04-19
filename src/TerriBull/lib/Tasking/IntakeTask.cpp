@@ -18,11 +18,11 @@ void IntakeTask::update(float delta) {
     if (!this->finishedFlag) {
         switch (intakeType) {
             case ON:
-                this->system->turnOnIntake(this->dir);
+                this->system->TurnOnIntake(this->dir);
                 this->finishedFlag = (this->system->getIntake()->isToggled()) && (this->system->getIntake()->getDirection() == this->dir);
                 break;
             case OFF:
-                this->system->turnOffIntake();
+                this->system->TurnOffIntake();
                 this->finishedFlag = !(this->system->getIntake()->isToggled());
                 break;
         }

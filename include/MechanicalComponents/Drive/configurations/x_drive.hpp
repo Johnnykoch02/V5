@@ -40,6 +40,14 @@ class X_Drive : public TerriBull::Drive {
       pMotorB->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorC->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       pMotorD->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+      this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*4);
+      this->pMotorRefs[0] = pMotorA;
+      this->pMotorRefs[1] = pMotorB;
+      this->pMotorRefs[2] = pMotorC;
+      this->pMotorRefs[3] = pMotorD;
+      this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 4
+      };
     }
     ~X_Drive();
 
@@ -54,6 +62,7 @@ class X_Drive : public TerriBull::Drive {
     }
 
     int change_orientation(float theta, float delta);
+    float getRPM() const;
 
 };
 

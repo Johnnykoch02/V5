@@ -29,6 +29,12 @@ class Roller_Duo : public TerriBull::Roller {
         this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->pMotorJ->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->setPID(3.5, 0.01, 0.8);
+        this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*2);
+        this->pMotorRefs[0] = pMotorI;
+        this->pMotorRefs[1] = pMotorJ;
+        this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 2
+      };
     }
 
     int Spin(int direction, float time, float delta);

@@ -50,7 +50,7 @@ class TerriBull::MechanicalSystem {
     /* Tasking Specific */
     float getDriveError() const;
     float getDriveDError() const;
-    bool driveNeedsAngleCorrection() const;
+    bool DriveNeedsAngleCorrection() const;
     float getRollerError() const;
     float getRollerDError() const;
     bool isShotCompleted() const;
@@ -61,17 +61,20 @@ class TerriBull::MechanicalSystem {
 
     /* API To Mechanical System */
     int GoToPosition(Vector2 v_f, Vector2 v_i, bool reverse);
-    void resetDrive();
+    void ResetDrive();
     int TurnToAngle(float theta);
-    int turnOnIntake(float direction); //+
-    int turnOffIntake();
-    int spinRollerTo(float pos);
-    int spinRollerFor(int direction, float time);
-    int resetRoller();
+    int TurnOnIntake(float direction); //+
+    int TurnOffIntake();
+    int SpinRollerTo(float pos);
+    int SpinRollerFor(int direction, float time);
+    int ResetRoller();
     int ShootDisk();
-    int loadShooter();
-    int turnOnShooter();
-    int resetShooter();
+    int LoadShooter();
+    int TurnOnShooter();
+    int ResetShooter();
+    int ConstrictMotorGroupCurrent(TerriBull::MechanicalComponent::MotorRefs* refGroup);
+    int UnConstrictMotorGroupCurrent(TerriBull::MechanicalComponent::MotorRefs* refGroup);
+
 
     float getIntakeRPM() const;
 

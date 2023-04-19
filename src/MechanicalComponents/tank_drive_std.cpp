@@ -210,6 +210,13 @@ Vector2* Tank_Drive_Std::resultant_vector() {
     return resultantVector;    
 }
 
+float Tank_Drive_Std::getRPM() const {
+    float rpmI = fabs(this->pMotorA->get_actual_velocity());
+    float rpmJ = fabs(this->pMotorB->get_actual_velocity());
+    float rpmK = fabs(this->pMotorC->get_actual_velocity());
+    float rpmL = fabs(this->pMotorD->get_actual_velocity());
+    return 0.25 *(rpmI + rpmJ + rpmJ + rpmK);
+}
 /// Old Drive Code using PID
 ///* Theta of desired Modified By our current Look Angle */
 //     float* vals = new float[6];

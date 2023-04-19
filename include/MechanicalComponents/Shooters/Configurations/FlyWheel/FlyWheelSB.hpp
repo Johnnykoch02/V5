@@ -24,6 +24,7 @@ class FlyWheelSB : public TerriBull::Shooter {
     TerriBull::MechanicalSystem* pSystem;
     int x, y;
 
+
     public:
     FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet, TerriBull::MechanicalSystem* _system) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0), pMag(_mag), pSystem(_system) {
         this->pType = "FlyWheel-SB";
@@ -34,6 +35,12 @@ class FlyWheelSB : public TerriBull::Shooter {
         this->pMotorY->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->pMotorX->set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         this->pMotorY->set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+        this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*2);
+        this->pMotorRefs[0] = pMotorX;
+        this->pMotorRefs[1] = pMotorY;
+        this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 2
+      };
     }
 
     ~FlyWheelSB() {
@@ -43,7 +50,7 @@ class FlyWheelSB : public TerriBull::Shooter {
     }
 
     int Shoot(float delta);// button is held
-    int Load(float delta);
+    int Load(float delta, void* args);
     float getRPM() const;
     int turnOn();
     int reset();

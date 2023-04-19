@@ -33,10 +33,17 @@ class CatapultZolt : public TerriBull::Shooter {
         this->limitSwitch = new pros::ADIDigitalIn(limitSwitchPort);
         this->pMotorX->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->pMotorY->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+        this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*2);
+        this->pMotorRefs[0] = pMotorX;
+        this->pMotorRefs[1] = pMotorY;
+        this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 2
+      };
     }
 
     int Shoot(float delta);// button is held
-    int Load(float delta);
+    int Load(float delta, void* args);
+    float getRPM();
     int turnOn();
     int reset();
     bool shotCompleted();

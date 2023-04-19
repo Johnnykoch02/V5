@@ -25,6 +25,11 @@ class Intake_Uni : public TerriBull::Intake {
         this->pType = "Intake-Uni";
         this->pMotorI = new pros::Motor(i, (pros::motor_gearset_e) this->gearSet, iReverse);
         this->pMotorI->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
+        this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*1);
+        this->pMotorRefs[0] = pMotorI;
+        this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 1
+      };
     }
 
     int TurnOn(float dir); // button is held

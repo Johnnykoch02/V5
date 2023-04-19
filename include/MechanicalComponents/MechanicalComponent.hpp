@@ -15,6 +15,12 @@
 #include "../TerriBull/TerriBull.hpp"
 
 class TerriBull::MechanicalComponent  {
+    public:
+    struct MotorRefs {
+        ::std::string ComponentName;
+        pros::Motor** Motors;
+        size_t NumMotors;
+    };
     protected:
     ::std::string pType;
     int pVoltageCap;
@@ -22,10 +28,13 @@ class TerriBull::MechanicalComponent  {
     float currentError;
     float previousError;
     float sumError;
-
+    pros::Motor** pMotorRefs;    
     int gearSet;
 
     float kP, kD, kI;
+
+    private:
+    MotorRefs *motorRefs;
 
     public:
     MechanicalComponent(int gearSet) : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE), gearSet(gearSet) {}
@@ -63,6 +72,15 @@ class TerriBull::MechanicalComponent  {
     virtual ::std::string getType() const final {
         return this->pType;
     };
+
+    virtual float getRPM() const {
+        return 0;
+    }
+
+    virtual MotorRefs* getMotorRefs() const final {
+        return this->motorRefs;
+    }
+
 };
 
 

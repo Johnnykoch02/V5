@@ -53,6 +53,16 @@ class Tank_Drive_Std : public TerriBull::Drive {
       /* Debug */
       this->pUseVoltageRegulator = false;
       this->pVoltageRegulator = new TerriBull::VoltageRegulator(6, 2.2);
+      this->pMotorRefs = (pros::Motor**) malloc(sizeof(pros::Motor*)*6);
+      this->pMotorRefs[0] = pMotorA;
+      this->pMotorRefs[1] = pMotorB;
+      this->pMotorRefs[2] = pMotorC;
+      this->pMotorRefs[3] = pMotorD;
+      this->pMotorRefs[4] = pMotorE;
+      this->pMotorRefs[5] = pMotorF;
+      this->motorRefs = new MechanicalComponent::MotorRefs {
+        this->pType, this->pMotorRefs, 6
+      };
     }
     ~Tank_Drive_Std();
 
@@ -69,6 +79,7 @@ class Tank_Drive_Std : public TerriBull::Drive {
     }
     int change_orientation(float theta, float delta);
     void maneuverAngle(float theta, float delta, float r, int errorMod);
+    float getRPM() const;
 
 };
 

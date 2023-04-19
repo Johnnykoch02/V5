@@ -17,9 +17,13 @@ int FlyWheelSB::Shoot(float delta) {
     return 0;
 }
 
-int FlyWheelSB::Load(float delta) {
+int FlyWheelSB::Load(float delta, void* args) {
     toggled = true;
     this->sumTime+=delta;
+    /**
+     * @brief Assuming we are Querying the 
+     * 
+     */
     return 0;   
 }
 int FlyWheelSB::turnOn() {
