@@ -26,6 +26,7 @@ void TerriBull::SerialController::update(float delta)
         }
     }
 }
+
 void TerriBull::SerialController::updateExchangeTags() {
     this->tagExchange = true;
 }

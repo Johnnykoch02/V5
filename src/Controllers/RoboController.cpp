@@ -556,12 +556,11 @@ void TagExchangeCallback(TerriBull::RoboController* robot, char * array, int sta
  */
 void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array, int start, int length) {
     std::stringstream s3;
-    Vector2* pos = robot->getSystem()->getPosition();
     float theta = robot->getSystem()->getAngle();
-    s3 << (unsigned char) robot->getSerialController()->GetCallbackIndex("get_pos");
-    s3 << SerialController::SerializeNumber(pos->x);
-    s3 << SerialController::SerializeNumber(pos->y);
+    s3 << (unsigned char) robot->getSerialController()->GetCallbackIndex("serial_test_v5_to_jetson");
     s3 << SerialController::SerializeNumber(theta);
+    s3 << SerialController::SerializeString("Digits of Pi:");
+    s3 << SerialController::SerializeNumber(3.14159);
     robot->getSerialController()->SendData(s3.str());
 }
 /**
