@@ -28,6 +28,12 @@ class TerriBull::SerialController {
         int jetson_id;
     } CallbackItem;
 
+    typedef struct {
+        CallbackItem* callbackItem;
+        float sumTime;
+        float frequency;
+    } ScheduledCallback;
+
     private:
     vector<char> __next_packet;
     char __packet_header[4] { (char)115, (char)111, (char)117, (char)116 };
@@ -37,6 +43,7 @@ class TerriBull::SerialController {
     int __packet_index_offset = 15;
     bool isCollectingTags, tagExchange;
     map<int, CallbackItem*> Callbacks;
+    vector<ScheduledCallback*> ScheduledCallbacks;
     TerriBull::RoboController* motherSys;
 
     bool compareBuffer(vector<char> buffer1, int start, int end, char* buffer2);
@@ -53,7 +60,7 @@ class TerriBull::SerialController {
     void ExchangeTags();
     int RegisterCallback(std::string tag_name, PacketCallback callback);
     void DeserializePacket();
-    void update();
+    void update(float delta);
     void readBuffer();
     void processDataFromBuffer();
     void SendData(::std::string data);

@@ -14,9 +14,17 @@ TerriBull::SerialController::SerialController(TerriBull::RoboController* _mother
         ::pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
 }
 
-void TerriBull::SerialController::update()
+void TerriBull::SerialController::update(float delta)
 { 
 	this->readBuffer();
+    for (auto it = this->ScheduledCallbacks.begin(); it!= this->ScheduledCallbacks.end(); ++it) {
+        ScheduledCallback* callback = *it;
+        callback->sumTime+=delta;
+        if (callback->sumTime >= callback->frequency) {
+            callback->callbackItem->callback(this->motherSys, nullptr, 0, 0);
+            callback->sumTime = 0;
+        }
+    }
 }
 void TerriBull::SerialController::updateExchangeTags() {
     this->tagExchange = true;
