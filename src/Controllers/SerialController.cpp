@@ -308,9 +308,29 @@ int TerriBull::SerialController::GetCallbackIndex(std::string tag_name) {
     return -1;
 }
 
-/*
+SerialController::CallbackItem* TerriBull::SerialController::GetCallback(std::string tag_name) { 
+    for (auto it = this->Callbacks.begin(); it!= this->Callbacks.end(); ++it) {
+        SerialController::CallbackItem* item = it->second;
+        if (item->friendly_name == tag_name) {
+            return item;
+        }
+    }
+    return nullptr;
+}
 
-*/
+void TerriBull::SerialController::ScheduleCallback(std::string tag_name, float frequency) {
+    CallbackItem* callback = this->GetCallback(tag_name);
+    if (callback != nullptr) {
+        ScheduledCallback* scheduledCallback = new ScheduledCallback();
+        scheduledCallback->callbackItem = callback;
+        scheduledCallback->frequency = frequency;
+        this->ScheduledCallbacks.push_back(scheduledCallback);
+    }
+    else {
+        throw new exception;
+    }
+}
+
 void TerriBull::SerialController::SendData(std::string data) {
     ::std::cout<<data<<SerialController::__end_of_transmission;
 }

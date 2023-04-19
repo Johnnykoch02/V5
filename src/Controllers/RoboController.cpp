@@ -91,6 +91,7 @@ void TerriBull::RoboController::Init() {
         this->serialController->RegisterCallback("spin_roller", (SerialController::PacketCallback)SpinRollerCallback);
         this->serialController->RegisterCallback("shoot_disk", (SerialController::PacketCallback)ShootDiskCallback);
         this->serialController->RegisterCallback("load_shooter", (SerialController::PacketCallback)LoadShooterCallback);
+        
         if(!this->pDebug) this->serialController->ExchangeTags();
         // /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */

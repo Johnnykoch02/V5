@@ -47,7 +47,7 @@ class TerriBull::SerialController {
     TerriBull::RoboController* motherSys;
 
     bool compareBuffer(vector<char> buffer1, int start, int end, char* buffer2);
-    
+    CallbackItem* GetCallback(std::string tag_name);
 
     public:
     SerialController(TerriBull::RoboController* _motherSys);
@@ -57,6 +57,8 @@ class TerriBull::SerialController {
     static std::string SerializeString( std::string s );
     static std::string SerializeString( const char *s );
     static std::string DeserializeString( char *array, int *si );
+    
+    void ScheduleCallback(std::string tag_name, float frequency);
     void ExchangeTags();
     int RegisterCallback(std::string tag_name, PacketCallback callback);
     void DeserializePacket();
