@@ -9,14 +9,19 @@
  * @copyright Copyright (c) 2022
  * 
  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+
 #include "../../include/Controllers/SerialController/SerialController.hpp"
 TerriBull::SerialController::SerialController(TerriBull::RoboController* _motherSys) : motherSys(_motherSys), tagExchange(false), isCollectingTags(false) {
         ::pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
+        pros::Task input_task(read_input_task, nullptr);
 }
 
-void TerriBull::SerialController::update(float delta)
+void TerriBull::SerialController::Update(float delta)
 { 
-	this->readBuffer();
+	this->ReadBuffer();
     for (auto it = this->ScheduledCallbacks.begin(); it!= this->ScheduledCallbacks.end(); ++it) {
         ScheduledCallback* callback = *it;
         callback->sumTime+=delta;
@@ -27,14 +32,11 @@ void TerriBull::SerialController::update(float delta)
     }
 }
 
-void TerriBull::SerialController::updateExchangeTags() {
-    this->tagExchange = true;
-}
 bool TerriBull::SerialController::isInitialized() {
     return this->tagExchange;
 }
 
-bool TerriBull::SerialController::compareBuffer(vector<char> buffer1, int start, int end, char* buffer2) {
+bool TerriBull::SerialController::CompareBuffer(vector<char> buffer1, int start, int end, char* buffer2) {
     for(int i = start; i < end; i++)
     {
         if (buffer1[i] != buffer2[i-start])
@@ -45,42 +47,41 @@ bool TerriBull::SerialController::compareBuffer(vector<char> buffer1, int start,
     return true;
 }
 
-void TerriBull::SerialController::readBuffer()
+void TerriBull::SerialController::ReadBuffer()
 {
-    std::string input;
-    int _packet_cnt = 0;
-    while (_packet_cnt < 3) { /* Process 3 */
-        input = "";
-        getline(std::cin, input);
-        if (input.empty()) break;
-        double last_length = 0;
-        for (char _int : input)
+    if (!buffer_has_data) return;
+    std::string input = input_buffer;
+    input_buffer = std::string();
+    buffer_has_data = false;
+
+    if (input.empty()) return;
+
+    double last_length = 0;
+    for (char _int : input)
+    {
+        int packet_length = sizeof(__next_packet);
+        int lchar = __next_packet[packet_length-1];
+        if (packet_length - 1 < lchar)
         {
-            int packet_length = sizeof(__next_packet);
-            int lchar = __next_packet[packet_length-1];
-            if (packet_length - 1 < lchar)
-            {
-                if (packet_length >= __header_length){
-                    __next_packet.push_back(_int);
-                    /* Checks to see if Transmition is terminated */
-                    if (this->compareBuffer(__next_packet, packet_length-__footer_length, packet_length, __end_of_transmission))
-                    {
-                        DeserializePacket();
-                        __next_packet.clear();
-                        __next_packet.push_back(1);
-                        continue;
-                    }
-                }
-                else if (_int == __packet_header[packet_length-1])
+            if (packet_length >= __header_length){
+                __next_packet.push_back(_int);
+                /* Checks to see if Transmition is terminated */
+                if (this->CompareBuffer(__next_packet, packet_length-__footer_length, packet_length, __end_of_transmission))
                 {
-                    __next_packet.push_back(_int);
+                    DeserializePacket();
+                    __next_packet.clear();
+                    __next_packet.push_back(1);
                     continue;
                 }
             }
-            __next_packet.clear();
-            __next_packet.push_back(_int);
+            else if (_int == __packet_header[packet_length-1])
+            {
+                __next_packet.push_back(_int);
+                continue;
+            }
         }
-        _packet_cnt++;
+        __next_packet.clear();
+        __next_packet.push_back(_int);
     }
 }
 
@@ -126,6 +127,7 @@ std::string TerriBull::SerialController::SerializeNumber( double f )
     std::string ret = stream.str();
     ret = (char)(ret.length() + 10) + ret;
     ret = (char)1 + ret;
+
     return ret;
 }
 
@@ -206,22 +208,26 @@ std::string TerriBull::SerialController::DeserializeString( char *array, int *si
     return stream.str();
 }
 
-void TerriBull::SerialController::ExchangeTags() {
-
-    while (!this->tagExchange) {
-        if (!(this->isCollectingTags)) {
-            for (auto it = this->Callbacks.begin(); it!= this->Callbacks.end(); ++it) {
+void TerriBull::SerialController::ExchangeTags()
+{
+    while (!this->tagExchange)
+    {
+        if (!(this->isCollectingTags))
+        {
+            for (auto it = this->Callbacks.begin(); it!= this->Callbacks.end(); ++it)
+            {
                 CallbackItem* item = it->second;
                 if (item->callback!= nullptr) {
                     std::stringstream s3;
-                    s3 << (unsigned char) 1;
+                    s3 << (char) 1;
+                    s3 << SerialController::SerializeNumber(this->Callbacks.size() - 1 == it->first ? 0 : 1);
                     s3 << SerialController::SerializeNumber(it->first);
-                    s3 << SerialController::SerializeString(item->friendly_name); 
+                    s3 << SerialController::SerializeString(item->friendly_name);
                     this->SendData(s3.str());
                 }
             }
         }
-        this->readBuffer();
+        this->ReadBuffer();
         pros::delay(5);
     } 
 }
@@ -279,7 +285,8 @@ void TerriBull::SerialController::DeserializePacket()
  * @param start_index 
  * @param length 
  */
-void TerriBull::SerialController::ProcessTagExchange(char * array, int start_index, int length) {
+void TerriBull::SerialController::ProcessTagExchange(char * array, int start_index, int length)
+{
     int step = (int) SerialController::DeserializeNumber(array, &start_index);
     int tag_id = (int) SerialController::DeserializeNumber(array, &start_index);
     std::string friendly_name = SerialController::DeserializeString(array, &start_index);
@@ -312,5 +319,10 @@ int TerriBull::SerialController::GetCallbackIndex(std::string tag_name) {
 
 */
 void TerriBull::SerialController::SendData(std::string data) {
-    ::std::cout<<data<<SerialController::__end_of_transmission;
+    for(auto c : SerialController::__packet_header) std::cout << c;
+    std::cout << data;
+    for(auto c : SerialController::__end_of_transmission) std::cout << c;
+    
+    //std::cout << (char)0 << (char)0 << (char)10 << (char)10;
+    //std::cout << SerialController::__end_of_transmission;
 }

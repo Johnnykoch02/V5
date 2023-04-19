@@ -33,7 +33,7 @@ class TerriBull::MechanicalComponent  {
 
     float kP, kD, kI;
 
-    private:
+    public:
     MotorRefs *motorRefs;
 
     public:

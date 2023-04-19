@@ -43,7 +43,7 @@ SerialController* RoboController::getSerialController() {
 }
 
 void RoboController::runSerialTask(void* args) {
-    this->serialController->update(this->delta());
+    this->serialController->Update(this->delta());
 }
 void RoboController::runMainTask(void* args) {
     this->Run();
@@ -73,8 +73,8 @@ void TerriBull::RoboController::Init() {
         this->taskManager = new TaskManager();
         /* Init Serial Controller */
         this->serialController = new SerialController(this); /* TODO: Needs SerialController::Init() */
-        this->serialController->RegisterCallback("serial_test_v5_to_jetson", (SerialController::PacketCallback)SerialTestV5ToJetsonCallback);
-        this->serialController->RegisterCallback("serial_test_jetson_to_v5", (SerialController::PacketCallback)SerialTestJetsonToV5Callback);
+        //this->serialController->RegisterCallback("serial_test_v5_to_jetson", (SerialController::PacketCallback)SerialTestV5ToJetsonCallback);
+        //this->serialController->RegisterCallback("serial_test_jetson_to_v5", (SerialController::PacketCallback)SerialTestJetsonToV5Callback);
         this->serialController->RegisterCallback("set_disk_obj", (SerialController::PacketCallback)SetDiskObjectCallback);
         this->serialController->RegisterCallback("get_disk_obj", (SerialController::PacketCallback)GetDiskObjectCallback);
         this->serialController->RegisterCallback("set_goal_obj", (SerialController::PacketCallback)SetGoalObjectCallback);
@@ -202,7 +202,7 @@ void TerriBull::RoboController::Init() {
 void TerriBull::RoboController::Run() {
     this->updateTime();
     this->system->update(this->delta());
-    this->serialController->update(this->delta());
+    this->serialController->Update(this->delta());
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
         this->taskManager->run(this->delta());
     } else {
@@ -554,6 +554,7 @@ void TagExchangeCallback(TerriBull::RoboController* robot, char * array, int sta
  * @param start 
  * @param length 
  */
+/*
 void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array, int start, int length) {
     std::stringstream s3;
     float theta = robot->getSystem()->getAngle();
@@ -563,6 +564,7 @@ void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array
     s3 << SerialController::SerializeNumber(3.14159);
     robot->getSerialController()->SendData(s3.str());
 }
+*/
 /**
  * @brief Recieves Test Data from the Jetson
  * 
@@ -571,6 +573,7 @@ void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array
  * @param start 
  * @param length 
  */
+/*
 void SerialTestJetsonToV5Callback(TerriBull::RoboController* robot, char * array, int start, int length) {
     
-}
+}*/
