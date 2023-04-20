@@ -16,7 +16,14 @@
 #include "../../include/Controllers/SerialController/SerialController.hpp"
 TerriBull::SerialController::SerialController(TerriBull::RoboController* _motherSys) : motherSys(_motherSys), tagExchange(false), isCollectingTags(false) {
         ::pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
-        pros::Task input_task(read_input_task, nullptr);
+        void* tsk_updater = malloc(sizeof(volatile bool*) + sizeof(std::string*));
+        int offset = 0;
+        volatile bool* mem_loc_a = &(this->buffer_has_data);
+        memcpy((char*)tsk_updater + offset, &mem_loc_a, sizeof(float));
+        offset += sizeof(volatile bool*);
+        std::string* mem_loc_b = &(this->input_buffer);
+        memcpy((char*)tsk_updater + offset, &mem_loc_b, sizeof(std::string*));
+        pros::Task input_task(SerialController::read_input_task, tsk_updater);
 }
 
 void TerriBull::SerialController::Update(float delta)
