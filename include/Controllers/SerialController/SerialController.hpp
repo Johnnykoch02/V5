@@ -49,32 +49,33 @@ class TerriBull::SerialController {
     vector<ScheduledCallback*> ScheduledCallbacks;
     TerriBull::RoboController* motherSys;
 
-    struct UpdateArgs {
-        volatile bool* buffer_update;
-        std::string* buffer;
-    };
-
-
-    static void TerriBull::SerialController::read_input_task(void* ignore)
-    {
-        SerialController::UpdateArgs* args = static_cast<SerialController::UpdateArgs*>(ignore);
-        while (true) 
-        {
-            if (!*(args->buffer_update))
-            {
-                std::cin >> *(args->buffer);
-                *(args->buffer_update) = true;
-                pros::delay(10);
-            }
-        }
-    }
-
     std::string input_buffer;
     volatile bool buffer_has_data = false;
 
     bool CompareBuffer(vector<char> buffer1, int start, int end, char* buffer2);    
 
     public:
+    struct UpdateArgs {
+        volatile bool* buffer_update;
+        std::string* buffer;
+    };
+
+
+    static void read_input_task(void* ignore)
+    {
+        pros::lcd::print(4, "I STARTED EATING POOP");
+        SerialController::UpdateArgs* args = static_cast<SerialController::UpdateArgs*>(ignore);
+        while (true) 
+        {
+            if (!*(args->buffer_update))
+            {
+                std::cin >> *(args->buffer);
+                pros::lcd::print(5, args->buffer->c_str());
+                *(args->buffer_update) = true;
+                pros::delay(10);
+            }
+        }
+    }
     SerialController(TerriBull::RoboController* _motherSys);
 
     static std::string SerializeNumber( double f );

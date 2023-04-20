@@ -23,7 +23,7 @@ TerriBull::SerialController::SerialController(TerriBull::RoboController* _mother
         offset += sizeof(volatile bool*);
         std::string* mem_loc_b = &(this->input_buffer);
         memcpy((char*)tsk_updater + offset, &mem_loc_b, sizeof(std::string*));
-        pros::Task input_task(SerialController::read_input_task, tsk_updater);
+        pros::Task input_task(SerialController::read_input_task, tsk_updater, "ogga_booga");
 }
 
 void TerriBull::SerialController::Update(float delta)
@@ -58,7 +58,8 @@ void TerriBull::SerialController::ReadBuffer()
 {
     if (!buffer_has_data) return;
     std::string input = input_buffer;
-    input_buffer = std::string();
+    pros::lcd::print(3, input.c_str());
+    input_buffer.clear();
     buffer_has_data = false;
 
     if (input.empty()) return;
@@ -217,6 +218,7 @@ std::string TerriBull::SerialController::DeserializeString( char *array, int *si
 
 void TerriBull::SerialController::ExchangeTags()
 {
+    int dfoklgjldkf = 0;
     while (!this->tagExchange)
     {
         if (!(this->isCollectingTags))
@@ -234,8 +236,10 @@ void TerriBull::SerialController::ExchangeTags()
                 }
             }
         }
+        dfoklgjldkf++;
         this->ReadBuffer();
         pros::delay(5);
+        pros::lcd::print(2, to_string(dfoklgjldkf).c_str());
     } 
 }
 
