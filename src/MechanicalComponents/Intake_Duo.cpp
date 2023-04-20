@@ -13,6 +13,7 @@
 
 
 int Intake_Duo::TurnOn(float dir) {
+    this->pToggled = true;
     this->pMotorI->move(this->maxSpeed*dir);
     this->pMotorJ->move(this->maxSpeed*dir);
     this->currentDir = dir;
@@ -20,6 +21,7 @@ int Intake_Duo::TurnOn(float dir) {
     return 0;
 }
 int Intake_Duo::TurnOff() {
+    this->pToggled = false;
     this->pMotorI->move(0);
     this->pMotorJ->move(0);
     this->currentDir = 0;

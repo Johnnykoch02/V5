@@ -37,6 +37,7 @@ void Tank_Drive_Quad::setVoltage(float* vals)  {
 }
 
 int Tank_Drive_Quad::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
+    this->pToggled = true;
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[6];
     float pct = 0;
@@ -85,6 +86,7 @@ int Tank_Drive_Quad::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float
 }
 
 int Tank_Drive_Quad::change_orientation(float theta, float delta) {
+  this->pToggled = true;
   float* vals = new float[6];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
@@ -105,6 +107,7 @@ int Tank_Drive_Quad::change_orientation(float theta, float delta) {
 }
 
 void Tank_Drive_Quad::maneuverAngle(float theta, float delta) {
+  this->pToggled = true;
   float* vals = new float[4];
   this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
   this->sumError += this->currentError;
@@ -129,6 +132,7 @@ void Tank_Drive_Quad::reset() {
     this->currentError = 0;
     this->sumError = 0;
     this->previousError = 0;
+    this->pToggled = false;
 }
 
 Vector2* Tank_Drive_Quad::resultant_vector() {

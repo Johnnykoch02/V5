@@ -102,19 +102,19 @@ void DriveTask::update(float delta) {
                         float angleMod = (this->reversed ^ errorMod > 0)? 180 : 0;
                         float angleCorrection = fmod(RAD2DEG(v_to_goal->theta) + angleMod, 360);
                         this->system->TurnToAngle(angleCorrection);
-                        this->system->getDrive()->updateAngleCorrection(fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.01);
+                        this->system->getDrive()->updateAngleCorrection((fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.01) && !this->system->isDriveReset() && this->system->isDriveToggled());
                         delete v_to_goal;
                         delete v_i_to_goal;
                         delete v_i_to_bot;
                     }
                     else {
                         this->system->GoToPosition(*(this->v_f), *(this->v_i), this->reversed); /*TODO: Test Delta Value  */
-                        if (currentAngleCurrection == this->lastNeedsCorrection) this->hitTarget = fabs(this->system->getDriveError()) < 1.6 && (fabs(this->system->getDriveDError()) / delta) < 0.1; 
+                        if (currentAngleCurrection == this->lastNeedsCorrection) this->hitTarget = (fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.01) && !this->system->isDriveReset() && this->system->isDriveToggled(); 
                 }
                }
                 else {
                     this->system->TurnToAngle(this->targetTheta);
-                    if (currentAngleCurrection == this->lastNeedsCorrection) this->finishedFlag = fabs(this->system->getDriveError()) < 1.5 && (fabs(this->system->getDriveDError()) / delta) < 0.01; 
+                    if (currentAngleCurrection == this->lastNeedsCorrection) this->finishedFlag = (fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.01) && !this->system->isDriveReset() && this->system->isDriveToggled(); 
                } 
                 s3 << std::fixed << ::std::setprecision(1) << "x: "<< this->v_f->x << " y: " << this->v_f->y;
                 pros::lcd::set_text(5, s3.str());

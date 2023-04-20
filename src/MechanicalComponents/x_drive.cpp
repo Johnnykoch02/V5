@@ -38,6 +38,7 @@ void X_Drive::setVoltage(float* vals)  {
 }
 
 int X_Drive::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
+    this->pToggled = true;
     /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[4];
     Vector2* dP = (v_f - *(this->pCurrentPos));
@@ -91,23 +92,25 @@ int X_Drive::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, 
 }
 
 int X_Drive::change_orientation(float theta, float delta) {
-  float* vals = new float[4];
-  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
-  ::pros::lcd::set_text(6, "Theta Error: " + std::to_string(this->currentError));
-  this->sumError += this->currentError;
-  float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError();
-  ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pwr));
-  vals[0] = -pwr * fabs(this->currentError)/this->currentError;
-  vals[1] = 0; 
-  vals[2] = 0;
-  vals[3] = pwr * fabs(this->currentError)/this->currentError;
-  this->setVoltage(vals);
+    this->pToggled = true;
+    float* vals = new float[4];
+    this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+    ::pros::lcd::set_text(6, "Theta Error: " + std::to_string(this->currentError));
+    this->sumError += this->currentError;
+    float pwr = this->kPTheta * this->currentError + this->kI * this->sumError + this->kDTheta * this->dError();
+    ::pros::lcd::set_text(7, "Drive Pct: " + std::to_string(pwr));
+    vals[0] = -pwr * fabs(this->currentError)/this->currentError;
+    vals[1] = 0; 
+    vals[2] = 0;
+    vals[3] = pwr * fabs(this->currentError)/this->currentError;
+    this->setVoltage(vals);
 
-  delete[] vals;
-  return 0;
+    delete[] vals;
+    return 0;
 }
 
 void X_Drive::reset() {
+    this->pToggled = false;
     this->pMotorA->move(0);
     this->pMotorB->move(0);
     this->pMotorC->move(0);

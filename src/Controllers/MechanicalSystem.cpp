@@ -23,6 +23,7 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake
     this->pDrive = _drive;
     /*Initalize*/
     this->pThetaFilter = new KalmanFilter1D(0, 0.2, 0.1);
+    this->targetGameObj = nullptr;
 }
 
 void MechanicalSystem::Init() {
@@ -63,6 +64,24 @@ float TerriBull::MechanicalSystem::getIntakeRPM() const {
     } return 0;
 }
 
+float TerriBull::MechanicalSystem::getShooterRPM() const {
+    if (this->pIntake!= nullptr) {
+        return this->pIntake->getRPM();
+    } return 0;
+}
+
+float TerriBull::MechanicalSystem::getRollerRPM() const {
+    if (this->pIntake!= nullptr) {
+        return this->pIntake->getRPM();
+    } return 0;
+}
+
+float TerriBull::MechanicalSystem::getDriveRPM() const {
+    if (this->pIntake!= nullptr) {
+        return this->pIntake->getRPM();
+    } return 0;
+}
+
 bool MechanicalSystem::isShotCompleted() const {
     if (this->pShooter!= nullptr) return this->pShooter->shotCompleted();
     return true;
@@ -76,6 +95,38 @@ bool MechanicalSystem::isShooterLoaded() const {
 bool MechanicalSystem::isRollerCompleted() const {
     if (this->pShooter!= nullptr) return this->pRoller->timeFlag;
     return true;
+}
+
+bool MechanicalSystem::isRollerToggled() const {
+    if(this->pRoller != nullptr) return this->pRoller->getToggled();
+    return false;
+}
+bool MechanicalSystem::isIntakeToggled() const {
+    if(this->pIntake != nullptr) return this->pIntake->getToggled();
+    return false;
+}
+bool MechanicalSystem::isDriveToggled() const {
+    if(this->pDrive != nullptr) return this->pDrive->getToggled();
+    return false;
+}
+bool MechanicalSystem::isShooterToggled() const {
+    if(this->pShooter != nullptr) return this->pShooter->getToggled();
+    return false;
+}
+bool MechanicalSystem::isRollerReset() const {
+    if(this->pRoller != nullptr) return this->pRoller->isReset(); 
+}
+bool MechanicalSystem::isIntakeReset() const {
+    if(this->pIntake != nullptr) return this->pIntake->isReset(); 
+    return false;
+}
+bool MechanicalSystem::isDriveReset() const {
+    if(this->pRoller != nullptr) return this->pDrive->isReset(); 
+    return false;
+}
+bool MechanicalSystem::isShooterReset() const {
+    if(this->pRoller != nullptr) return this->pShooter->isReset(); 
+    return false;
 }
 
 TerriBull::Vector2*  MechanicalSystem::getPosition() {
@@ -209,6 +260,9 @@ void TerriBull::MechanicalSystem::setRoller(TerriBull::Roller * _roller) {
 void TerriBull::MechanicalSystem::setExpansion(TerriBull::Expansion * _expansion) {
     this->pExpansion = _expansion;
 }
+void TerriBull::MechanicalSystem::setTargetObject(TerriBull::GameObject * _targetGameObject) {
+    this->targetGameObj = _targetGameObject;
+}
 TerriBull::Intake * TerriBull::MechanicalSystem::getIntake() {
     return this->pIntake;
 }
@@ -223,4 +277,7 @@ TerriBull::Expansion * TerriBull::MechanicalSystem::getExpansion() {
 }
 TerriBull::Drive * TerriBull::MechanicalSystem::getDrive() {
     return this->pDrive;
+}
+TerriBull::GameObject * TerriBull::MechanicalSystem::getTargetObject() {
+    return this->targetGameObj;
 }

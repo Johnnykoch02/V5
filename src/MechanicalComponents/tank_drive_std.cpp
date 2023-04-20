@@ -46,6 +46,7 @@ void Tank_Drive_Std::setVoltage(float* vals)  {
 }
 
 int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float delta, bool reverse) {
+    this->pToggled = true;
 /* Theta of desired Modified By our current Look Angle */
     float* vals = new float[6];
     float pct = 0;
@@ -74,7 +75,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     float offTrack = GetDTheta(RAD2DEG(v_to_goal->theta),  fmod(*(this->pCurrentAngle) + angleMod, 360));
     if (fabs(v_to_goal->r) > 6.0 && fabs(offTrack) > 30 ) {
         pros::lcd::set_text(4,"+++ in wrong 1 case ++++");
-        // this->reset();
+        this->reset();
         this->pNeedsAngleCorrection = true;
         delete v_to_goal;
         delete v_i_to_goal;
@@ -91,7 +92,7 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     }
     else if (fabs(offTrack) >= 15) {
         pros::lcd::set_text(4,"+++ in wrong 2 case ++++");
-        // this->reset();
+        this->reset();
         this->pNeedsAngleCorrection = true;
         delete v_to_goal;
         delete v_i_to_goal;
@@ -115,60 +116,63 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
 }
 
 int Tank_Drive_Std::change_orientation(float theta, float delta) {
-  float* vals = new float[6];
-  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
-  this->sumError += this->currentError;
-  float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
-  std::stringstream s3;
-  s3 << std::fixed << ::std::setprecision(1);
-  s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
-  pros::lcd::set_text(4,s3.str());
-  vals[0] = -pwr;
-  vals[1] = -pwr;
-  vals[2] = -pwr;
-  vals[3] = pwr;
-  vals[4] = pwr;
-  vals[5] = pwr;
-  this->setVoltage(vals);
-  delete[] vals;
-  return 0;
+    this->pToggled = true;
+    float* vals = new float[6];
+    this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+    this->sumError += this->currentError;
+    float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
+    std::stringstream s3;
+    s3 << std::fixed << ::std::setprecision(1);
+    s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
+    pros::lcd::set_text(4,s3.str());
+    vals[0] = -pwr;
+    vals[1] = -pwr;
+    vals[2] = -pwr;
+    vals[3] = pwr;
+    vals[4] = pwr;
+    vals[5] = pwr;
+    this->setVoltage(vals);
+    delete[] vals;
+    return 0;
 }
 
 void Tank_Drive_Std::maneuverAngle(float theta, float delta, float r, int errorMod) {
-   float Kr = 0.028;
-  float* vals = new float[6];
-  this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
-  this->sumError += this->currentError;
-  float pwr = r*Kr*(this->kPTheta * this->currentError + this->kDTheta * this->dError() / delta);
-  float thirdPwr = -pwr*0.3;
-  std::stringstream s3;
-  s3 << std::fixed << ::std::setprecision(1);
-  s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
-  pros::lcd::set_text(4,s3.str());
-  float lPwr = 0 , rPwr = 0;
-  if (errorMod > 0) {
-    lPwr = MAX(0, pwr);
-    rPwr = MIN(pwr, 0);
-    lPwr = (lPwr == 0) ? thirdPwr : lPwr;
-    rPwr = (rPwr == 0)? thirdPwr : rPwr;
-  }
-  else if (errorMod < 0) {
-    lPwr = MIN(pwr, 0);
-    rPwr = MAX(0, pwr);
-    lPwr = (lPwr == 0)? thirdPwr : lPwr;
-    rPwr = (rPwr == 0)? thirdPwr : rPwr;
-  }
-  vals[0] = lPwr;
-  vals[1] = lPwr;
-  vals[2] = lPwr;
-  vals[3] = rPwr;
-  vals[4] = rPwr;
-  vals[5] = rPwr;
-  this->setVoltage(vals);
-  delete[] vals;
+    this->pToggled = true;
+    float Kr = 0.028;
+    float* vals = new float[6];
+    this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
+    this->sumError += this->currentError;
+    float pwr = r*Kr*(this->kPTheta * this->currentError + this->kDTheta * this->dError() / delta);
+    float thirdPwr = -pwr*0.3;
+    std::stringstream s3;
+    s3 << std::fixed << ::std::setprecision(1);
+    s3 << "Err: "<< this->currentError << " Pwr: " << pwr;
+    pros::lcd::set_text(4,s3.str());
+    float lPwr = 0 , rPwr = 0;
+    if (errorMod > 0) {
+      lPwr = MAX(0, pwr);
+      rPwr = MIN(pwr, 0);
+      lPwr = (lPwr == 0) ? thirdPwr : lPwr;
+      rPwr = (rPwr == 0)? thirdPwr : rPwr;
+    }
+    else if (errorMod < 0) {
+      lPwr = MIN(pwr, 0);
+      rPwr = MAX(0, pwr);
+      lPwr = (lPwr == 0)? thirdPwr : lPwr;
+      rPwr = (rPwr == 0)? thirdPwr : rPwr;
+    }
+    vals[0] = lPwr;
+    vals[1] = lPwr;
+    vals[2] = lPwr;
+    vals[3] = rPwr;
+    vals[4] = rPwr;
+    vals[5] = rPwr;
+    this->setVoltage(vals);
+    delete[] vals;
 }
 
 void Tank_Drive_Std::reset() {
+    this->pToggled = false;
     this->pMotorA->move(0);
     this->pMotorB->move(0);
     this->pMotorC->move(0);

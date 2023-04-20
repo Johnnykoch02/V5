@@ -13,15 +13,15 @@
 
 
 int Intake_Uni::TurnOn(float dir) {
+    this->pToggled = true;
     this->pMotorI->move(this->maxSpeed*dir);
     this->currentDir = dir;
-    this->toggled = true;
     return 0;
 }
 int Intake_Uni::TurnOff() {
+    this->pToggled = false;
     this->pMotorI->move(0);
     this->currentDir = 0;
-    this->toggled = false;
     return 0;
 }
 

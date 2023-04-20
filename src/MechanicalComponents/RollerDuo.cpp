@@ -13,6 +13,7 @@
 #include <sstream>
 #include <iomanip>
 int Roller_Duo::Spin(int direction, float time, float delta) {
+    this->pToggled = true;
     this->sumTime+=delta;
     if (this->sumTime < time) {
         std::stringstream s3;
@@ -27,6 +28,7 @@ int Roller_Duo::Spin(int direction, float time, float delta) {
 }
 
 int Roller_Duo::TurnOn(int direction, float pwr) {
+    this->pToggled = true;
     this->pMotorI->move(direction * pwr);
     this->pMotorJ->move(direction * pwr);
     return 0;
@@ -39,6 +41,7 @@ float Roller_Duo::getRPM() const {
 }
 
 int Roller_Duo::SpinToPos(float pos) {
+    this->pToggled = true;
     this->currentError = pos - this->currentPos;
     this->sumError += this->currentError;
     float pwr = kP*this->currentError + kI*this->sumError + kD*this->dError();
@@ -50,6 +53,7 @@ int Roller_Duo::SpinToPos(float pos) {
 }
 
 void Roller_Duo::reset() {
+    this->pToggled = false;
     this->timeFlag = false;
     this->sumTime = 0;
     this->sumError = 0;

@@ -60,7 +60,6 @@ void ObjectHandler::updateObjPos(char identifier, GameObject::Types type, Vector
     }
 }
 
-
 void ObjectHandler::update(GameObject::Types type, char id, void* args) {
     GameObject* obj = this->query(type, id); // Find the GameObject with the specified type and id
     if(obj != nullptr) { // If the object exists

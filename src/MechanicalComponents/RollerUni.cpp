@@ -11,6 +11,7 @@
 */
 #include "../../include/MechanicalComponents/Rollers/Configurations/RollerUni.hpp"
 int Roller_Uni::Spin(int direction, float time, float delta) {
+    this->pToggled = true;
     this->sumTime+=delta;
     if (this->sumTime < time) {
         this->pMotorI->move(direction * this->maxSpeed);
@@ -19,6 +20,7 @@ int Roller_Uni::Spin(int direction, float time, float delta) {
     return 0;
 }
 int Roller_Uni::TurnOn(int direction, float pwr) {
+    this->pToggled = true;
     this->pMotorI->move(direction * pwr);
     return 0;
 }
@@ -28,6 +30,7 @@ float Roller_Uni::getRPM() const {
 }
 
 int Roller_Uni::SpinToPos(float pos) {/* TODO: Fix this */
+    this->pToggled = true;
     this->currentError = pos - this->currentPos;
     this->sumError += this->currentError;
     float pwr = kP*this->currentError + kI*this->sumError + kD*this->dError();
@@ -37,6 +40,7 @@ int Roller_Uni::SpinToPos(float pos) {/* TODO: Fix this */
 }
 
 void Roller_Uni::reset() {
+    this->pToggled = false;
     this->timeFlag = false;
     this->sumTime = 0;
     this->sumError = 0;

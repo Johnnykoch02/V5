@@ -11,22 +11,35 @@
 */
 #include "../../include/MechanicalComponents/Shooters/Configurations/FlyWheel/FlyWheelSB.hpp"
 int FlyWheelSB::Shoot(float delta) { 
-    toggled = true;
+    this->pToggled = true;
     this->sumTime+=delta;
     this->pMag->update(delta);
     return 0;
 }
 
 int FlyWheelSB::Load(float delta, void* args) {
-    toggled = true;
+    this->pToggled = true;
     this->sumTime+=delta;
     /**
-     * @brief Assuming we are Querying the 
-     * 
+     * @brief Assuming we are Querying the Mechanical System
      */
+    GameObject* obj = this->pSystem->getTargetObject();
+    // if this->pSystem->Intake
+    Vector2* targetPos = nullptr;
+    if (obj!= nullptr) {
+        targetPos = obj->getPos();
+    } 
+    else {
+        Vector2* posUnit = this->pSystem->getPosition()->unit();
+        targetPos = *(this->pSystem->getPosition()) + *posUnit; /* Have it move forward */
+        delete posUnit;
+    }
+    this->pMag->update(delta);
+    
     return 0;   
 }
 int FlyWheelSB::turnOn() {
+    this->pToggled = true;
     float pwr = 127;
     this->pMotorX->move(pwr);
     this->pMotorY->move(pwr);
@@ -41,7 +54,7 @@ float FlyWheelSB::getRPM() const {
 
 int FlyWheelSB::reset() {
     this->shotComplete = false;
-    this->toggled = false;
+    this->pToggled = false;
     this->engagedOne = false;
     this->cntNoVal = 0;
     this->sumTime = 0;

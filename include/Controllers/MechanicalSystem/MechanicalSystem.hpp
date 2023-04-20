@@ -32,6 +32,7 @@ class TerriBull::MechanicalSystem {
         TerriBull::Expansion* pExpansion;
         TerriBull::Vector2 * pPosition;
         KalmanFilter1D* pThetaFilter;
+        GameObject* targetGameObj;
         double * pAngle;
         float pStartingAngle;
 
@@ -56,6 +57,16 @@ class TerriBull::MechanicalSystem {
     bool isShotCompleted() const;
     bool isShooterLoaded() const;
     bool isRollerCompleted() const;
+    // bool isExpansionCompleted() const;
+    bool isRollerToggled() const;
+    bool isIntakeToggled() const;
+    bool isDriveToggled() const;
+    bool isShooterToggled() const;
+    bool isRollerReset() const;
+    bool isIntakeReset() const;
+    bool isDriveReset() const;
+    bool isShooterReset() const;
+    
     void Init();
     void update(float delta);
 
@@ -77,6 +88,9 @@ class TerriBull::MechanicalSystem {
 
 
     float getIntakeRPM() const;
+    float getShooterRPM() const;
+    float getRollerRPM() const;
+    float getDriveRPM() const;
 
     /*Setters*/
     void setMotherSystem(RoboController* _motherSystem);
@@ -84,12 +98,14 @@ class TerriBull::MechanicalSystem {
     void setShooter(TerriBull::Shooter * _shooter);
     void setRoller(TerriBull::Roller * _roller);
     void setExpansion(TerriBull::Expansion * _expansion);
+    void setTargetObject(GameObject* _targetGameObject);
     /*Getters*/
     TerriBull::Intake * getIntake();
     TerriBull::Shooter * getShooter();
     TerriBull::Roller * getRoller();
     TerriBull::Expansion * getExpansion();
     TerriBull::Drive * getDrive();
+    TerriBull::GameObject * getTargetObject();
 
 };
 

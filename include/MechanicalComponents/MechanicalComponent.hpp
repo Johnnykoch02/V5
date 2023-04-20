@@ -30,14 +30,13 @@ class TerriBull::MechanicalComponent  {
     float sumError;
     pros::Motor** pMotorRefs;    
     int gearSet;
+    bool pToggled;
 
     float kP, kD, kI;
-
-    private:
     MotorRefs *motorRefs;
-
+ 
     public:
-    MechanicalComponent(int gearSet) : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE), gearSet(gearSet) {}
+    MechanicalComponent(int gearSet) : kP(0), kD(0), kI(0), currentError(0), previousError(0), pVoltageCap(TerriBull::MAX_VOLTAGE), gearSet(gearSet), pToggled(false) {}
  
     virtual float getError() const final { return currentError; } 
 
@@ -46,7 +45,7 @@ class TerriBull::MechanicalComponent  {
      * WARNING: this function is not READONLY
      * @return float 
      */
-    virtual float dError() final{
+    virtual float dError() final {
         float dError = currentError - previousError;
         this->previousError = currentError;
         return dError;
@@ -60,7 +59,7 @@ class TerriBull::MechanicalComponent  {
         return currentError - previousError;
     }
 
-    virtual bool isReset() const final { return this->sumError == 0; }
+    virtual bool isReset() const final { return this->getError() == 0; }
 
     virtual void setPID(float kP, float kI, float kD) final {
         this->kP = kP;
@@ -75,6 +74,9 @@ class TerriBull::MechanicalComponent  {
 
     virtual float getRPM() const {
         return 0;
+    }
+    virtual bool getToggled() const final {
+        return pToggled;
     }
 
     virtual MotorRefs* getMotorRefs() const final {

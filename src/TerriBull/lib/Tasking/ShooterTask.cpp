@@ -27,8 +27,11 @@ void ShooterTask::update(float delta) {
             this->finishedFlag = this->system->isShooterLoaded();
             break;
         case SHOOT:
-            this->system->ShootDisk();
-            this->finishedFlag = this->system->isShotCompleted();
+            if (this->system->isShooterLoaded()) {
+                this->system->ShootDisk();
+                this->finishedFlag = this->system->isShotCompleted();
+            }
+            else this->finishedFlag = true;
         }
     }   
 }

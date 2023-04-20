@@ -51,6 +51,7 @@ void TerriBull::SerialController::readBuffer()
     int _packet_cnt = 0;
     while (_packet_cnt < 3) { /* Process 3 */
         input = "";
+        if(std::cin.rdbuf()->in_avail() <= 0) break;
         getline(std::cin, input);
         if (input.empty()) break;
         double last_length = 0;
@@ -210,13 +211,15 @@ void TerriBull::SerialController::ExchangeTags() {
 
     while (!this->tagExchange) {
         if (!(this->isCollectingTags)) {
+            std::map<int, TerriBull::SerialController::CallbackItem *>::iterator end_ptr = --(this->Callbacks.end());
             for (auto it = this->Callbacks.begin(); it!= this->Callbacks.end(); ++it) {
                 CallbackItem* item = it->second;
                 if (item->callback!= nullptr) {
                     std::stringstream s3;
                     s3 << (unsigned char) 1;
-                    s3 << SerialController::SerializeNumber(it->first);
-                    s3 << SerialController::SerializeString(item->friendly_name); 
+                    s3 << SerialController::SerializeNumber((int)(it != end_ptr)); /* Step */
+                    s3 << SerialController::SerializeNumber(it->first); /* Index */
+                    s3 << SerialController::SerializeString(item->friendly_name); /* Friendly Name */
                     this->SendData(s3.str());
                 }
             }

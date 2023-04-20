@@ -50,7 +50,7 @@ void RyanIsTank::Update(float delta) {
     } 
     else {
       this->roboController->getSystem()->ResetRoller();
-      if (this->roboController->getSystem()->getRoller()->getRPM() < 5) {
+      if (!this->roboController->getSystem()->isRollerToggled()) {
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       }
     }
@@ -62,7 +62,7 @@ void RyanIsTank::Update(float delta) {
     }
     else {
       this->roboController->getSystem()->ResetShooter();
-      if (this->roboController->getSystem()->getShooter()->getRPM() < 5) {
+      if (!this->roboController->getSystem()->isShooterToggled()) {
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
       }
     }
