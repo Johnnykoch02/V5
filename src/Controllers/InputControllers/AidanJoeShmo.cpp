@@ -62,7 +62,7 @@ void AidanJoeShmo::Update(float delta) {
     if (shoot || shooter->isToggled() ) {
       pros::lcd::set_text(2, "Shooting");
       if (shooter->isLoaded()) {
-        shooter->Shoot(delta);
+        shooter->Shoot(delta, nullptr);
       }
       else {
         shooter->Load(delta, nullptr);

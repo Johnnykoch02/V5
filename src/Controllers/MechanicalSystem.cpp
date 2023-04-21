@@ -115,6 +115,7 @@ bool MechanicalSystem::isShooterToggled() const {
 }
 bool MechanicalSystem::isRollerReset() const {
     if(this->pRoller != nullptr) return this->pRoller->isReset(); 
+    return false;
 }
 bool MechanicalSystem::isIntakeReset() const {
     if(this->pIntake != nullptr) return this->pIntake->isReset(); 
@@ -202,7 +203,7 @@ int TerriBull::MechanicalSystem::ResetRoller() {
 
 int TerriBull::MechanicalSystem::ShootDisk() {
     if (this->pShooter != nullptr) {
-        return this->pShooter->Shoot(this->motherSystem->delta());
+        return this->pShooter->Shoot(this->motherSystem->delta(), nullptr);
     } return -1;
 }
 

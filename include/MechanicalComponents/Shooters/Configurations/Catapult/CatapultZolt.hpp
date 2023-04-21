@@ -41,12 +41,14 @@ class CatapultZolt : public TerriBull::Shooter {
       };
     }
 
-    int Shoot(float delta);// button is held
+    int Shoot(float delta, void* args);// button is held
     int Load(float delta, void* args);
     float getRPM();
     int turnOn();
     int reset();
     bool shotCompleted();
+    // void* ConstructUpdateArgs(void);
+    int UpdateInternalState(void* args) {return 0;}
 };     
 
 #endif // SHOOTER_H

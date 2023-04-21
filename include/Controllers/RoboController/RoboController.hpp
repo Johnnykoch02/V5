@@ -97,5 +97,6 @@ extern void ClearTasksCallback(TerriBull::RoboController* robot, char * array, i
 
 /* Other Callbacks */
 extern void TagExchangeCallback(TerriBull::RoboController* robot, char * array, int start, int length);
-
+extern void SerialTestJetsonToV5Callback(TerriBull::RoboController* robot, char * array, int start, int length);
+extern void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array, int start, int length);
 #endif

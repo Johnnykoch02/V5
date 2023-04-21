@@ -67,7 +67,7 @@ void TerriBull::RoboController::Init() {
             // exit(1);
         }
         /* THIS VAR WILL PUT THE SYSTEM INTO DEBUG MODE */
-        this->pDebug = false; //false;
+        this->pDebug = true; //false;
 
         /* Init Task Manager */
         this->taskManager = new TaskManager();
@@ -97,18 +97,20 @@ void TerriBull::RoboController::Init() {
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
         /* TASKS SECTION */
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::VariableTask(this->system->getDrive()->getRefMaxSpeed(), new float(70), VariableTask::FLOAT, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(1000, this->getSystem())}));
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::IntakeTask(1, IntakeTask::ON, this->getSystem())}));
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::RollerTask(1000,this->getSystem())}));
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
-        this->taskManager->addTaskSet(
-            new TaskList({{
-                TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(0, -17.0), true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
-            }})
-        );
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::IntakeTask(1, IntakeTask::ON, this->getSystem())}));
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::RollerTask(1000,this->getSystem())}));
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
+        // this->taskManager->addTaskSet(
+        //     new TaskList({{
+        //         TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(0, -17.0), true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+        //         // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+        //     }})
+        // );
 
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
 
@@ -509,10 +511,11 @@ void SpinRollerCallback(TerriBull::RoboController* robot, char * array, int star
  */
 void ShootDiskCallback(TerriBull::RoboController* robot, char * array, int start_index, int length) {
     int goal_id = SerialController::DeserializeNumber(array, &start_index);
-    TerriBull::GameObject* obj = robot->getObjHandler()->query(GameObject::Types::GOAL, goal_id);    
+    TerriBull::GameObject* obj = robot->getObjHandler()->query(GameObject::Types::GOAL, goal_id); 
+    /*TODO: parse for extra args for update */
     if (obj == nullptr) { return; } /* TODO: Needs ERRNO-like Message Passing */
     robot->getTaskManager()->addTaskSet(new TerriBull::TaskList({
-        new TerriBull::ShooterTask(ShooterTask::SHOOT,robot->getSystem()),
+        new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, robot->getSystem()),
     }));
 }
 /**
@@ -527,8 +530,9 @@ void LoadShooterCallback(TerriBull::RoboController* robot, char * array, int sta
     int disk_id = SerialController::DeserializeNumber(array, &start_index);
     TerriBull::GameObject* obj = robot->getObjHandler()->query(GameObject::Types::DISK, disk_id);    
     if (obj == nullptr) { return; } /* TODO: Needs ERRNO-like Message Passing */
+    /*TODO: parse for extra args for update */
     robot->getTaskManager()->addTaskSet(new TerriBull::TaskList({
-        new TerriBull::ShooterTask(ShooterTask::SHOOT,robot->getSystem()),
+        new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, robot->getSystem()),
     }));
 }
 /* Task Management Callbacks */

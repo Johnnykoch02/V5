@@ -20,10 +20,13 @@ class TerriBull::ShooterTask : public TerriBull::Task {
     typedef enum {LOAD, SHOOT} ShooterType;
     private:
     ShooterType shooterType;
+    void* updateArgs;
+    bool isUpdate;
+
     
     public:
     
-    ShooterTask(ShooterType _shooterType, TerriBull::MechanicalSystem* _system);
+    ShooterTask(ShooterType _shooterType, void* args, bool isUpdate, TerriBull::MechanicalSystem* _system);
     ~ShooterTask();
 
     void init();

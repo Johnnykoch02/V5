@@ -10,13 +10,19 @@
  * 
  */
 #include "../../../../include/TerriBull/lib/Tasking/Types/ShooterTask.hpp"
-ShooterTask::ShooterTask(ShooterType _shooterType, TerriBull::MechanicalSystem* _system) : Task(SHOOTER, _system), shooterType(_shooterType) {}
+ShooterTask::ShooterTask(ShooterType _shooterType, void* args, bool isUpdate, TerriBull::MechanicalSystem* _system) : Task(SHOOTER, _system), shooterType(_shooterType), updateArgs(args), isUpdate(isUpdate) {}
 
 ShooterTask::~ShooterTask() {}
 
 void ShooterTask::init() {
     this->finishedFlag = false;
     this->system->ResetShooter();
+    Shooter* shooter = this->system->getShooter();
+    /* Shooter Should not be Null */
+    if (this->isUpdate) {
+        shooter->UpdateInternalState(this->updateArgs);
+    }
+    
 }
 
 void ShooterTask::update(float delta) {

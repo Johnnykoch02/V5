@@ -58,7 +58,7 @@ void RyanIsTank::Update(float delta) {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
       this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
       this->roboController->getSystem()->TurnOnShooter();
-      this->roboController->getSystem()->getShooter()->Shoot(delta);
+      this->roboController->getSystem()->getShooter()->Shoot(delta, nullptr);
     }
     else {
       this->roboController->getSystem()->ResetShooter();

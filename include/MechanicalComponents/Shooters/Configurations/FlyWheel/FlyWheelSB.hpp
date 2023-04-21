@@ -22,11 +22,19 @@ class FlyWheelSB : public TerriBull::Shooter {
     float currentPos;
     TerriBull::Magazine* pMag;
     TerriBull::MechanicalSystem* pSystem;
+    float targetRPM, maxSpeed;
     int x, y;
+
+    struct UpdateArgs {
+        float targetRPM;
+        float maxSpeed;
+    } ;
+
+    UpdateArgs updateArgs;
 
 
     public:
-    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet, TerriBull::MechanicalSystem* _system) : Shooter(gearSet), x(_x), y(_y), engagedOne(false), cntNoVal(0), sumTime(0), pMag(_mag), pSystem(_system) {
+    FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet, TerriBull::MechanicalSystem* _system) : Shooter(gearSet), x(_x), y(_y), targetRPM(0), engagedOne(false), cntNoVal(0), maxSpeed(TerriBull::MAX_VOLTAGE), sumTime(0), pMag(_mag), pSystem(_system) {
         this->pType = "FlyWheel-SB";
         this->pMotorX = new pros::Motor(x, xReverse);
         this->pMotorY = new pros::Motor(y, yReverse);
@@ -49,12 +57,15 @@ class FlyWheelSB : public TerriBull::Shooter {
         delete this->pMag;
     }
 
-    int Shoot(float delta);// button is held
+    int Shoot(float delta, void* args);// button is held
     int Load(float delta, void* args);
     float getRPM() const;
     int turnOn();
     int reset();
     bool shotCompleted();
+    static void* ConstructUpdateArgs(float targetRPM, float maxSpeed);
+    int UpdateInternalState(void* args);
+
 };     
 
 #endif // SHOOTER_H

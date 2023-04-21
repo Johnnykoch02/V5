@@ -25,7 +25,7 @@ class TerriBull::Shooter : public TerriBull::MechanicalComponent {
     public:
     Shooter(int gearSet) : TerriBull::MechanicalComponent(gearSet), toggled(false), shotComplete(false), loaded(false) {}
 
-    virtual int Shoot(float delta) = 0;// button is held
+    virtual int Shoot(float delta, void* args) = 0;// button is held
     virtual int turnOn() = 0;
     virtual int Load(float delta, void* args) = 0;
     virtual int reset() = 0;
@@ -33,5 +33,7 @@ class TerriBull::Shooter : public TerriBull::MechanicalComponent {
     virtual bool isToggled() const final { return toggled; }
     virtual bool isLoaded() const final { return loaded; }
     virtual bool* getLoadedPtr() { return &loaded; }
+    virtual int UpdateInternalState(void* args) = 0;
+
 };     
 #endif // SHOOTER_H

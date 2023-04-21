@@ -44,6 +44,9 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
             decSensors[i] = new pros::ADIAnalogIn(decSensorPorts[i]);
             decSensors[i]->calibrate();
         }
+        pMagazineCnt = 0;
+        previousIncState = false;
+        previousDecState = false;        
     }
     ~Magazine() {
         /* Delete the Sensors and Data Pointers */
@@ -83,13 +86,13 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
         int inc = 1;
         for (int i = 0; i < this->numIncSensors; i++) {
             pros::lcd::set_text(i, to_string(incSensors[i]->get_value_calibrated()));
-            inc *= int(incSensors[i]->get_value() < incDefaults[i]); /* 1 - 0 */
+            inc *= (incSensors[i]->get_value_calibrated() < incDefaults[i])? 1 : 0 ; /* 1 - 0 */
         }
         this->__inc__(inc);
         int dec = 1;
         for (int i = 0; i < this->numDecSensors; i++) {
             pros::lcd::set_text(this->numIncSensors+i, to_string(decSensors[i]->get_value_calibrated()));
-            dec *= int(decSensors[i]->get_value() < decDefaults[i]); 
+            dec *= (decSensors[i]->get_value_calibrated() < decDefaults[i])? 1 : 0; 
         }
         this->__dec__(dec);
         return 0;

@@ -11,7 +11,7 @@
 */
 #include "../../include/MechanicalComponents/Shooters/Configurations/Catapult/CatapultZolt.hpp"
 
-int CatapultZolt::Shoot(float delta) { 
+int CatapultZolt::Shoot(float delta, void* args) { 
     this->pToggled = true;
     this->sumTime+=delta;
     pros::lcd::set_text(6, ""+ std::to_string(this->sumTime));
@@ -81,3 +81,7 @@ bool CatapultZolt::shotCompleted() {
 float CatapultZolt::getRPM() {
     return 0; /* we dont use catapults :> */
 }
+
+// void* CatapultZolt::ConstructUpdateArgs() { 
+//     return nullptr;
+// }
