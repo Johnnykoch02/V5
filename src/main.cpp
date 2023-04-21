@@ -43,43 +43,83 @@ void on_center_button() {
 	// controlSys.getSystem()->resetDrive();
 }
 
-void TestFunction( RoboController* c, char * array, int start_index, int length )
-{
-	int* i = new int(start_index);
-	double number0 = SerialController::DeserializeNumber(array, i);
-	double number1 = SerialController::DeserializeNumber(array, i);
-	std::string string0 = SerialController::DeserializeString(array, i);
-
-	char* cNumber0 = new char(number0 + 48);
-	char* cNumber1 = new char(number1 + 48);
-	pros::lcd::clear_line(0);
-	pros::lcd::print(0, cNumber0);
-	pros::lcd::clear_line(1);
-	pros::lcd::print(1, cNumber1);
-	pros::lcd::clear_line(2);
-	pros::lcd::print(2, string0.c_str());
+// trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
 }
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string &s) {
+    rtrim(s);
+    ltrim(s);
+}
+
+int kghkh = 1;
+void TestFunction( RoboController* c, char *array, int start_index, int length )
+{
+	int i = start_index + 1;
+
+	double number0 = SerialController::DeserializeNumber(array, &i);
+	i++;
+	double number1 = SerialController::DeserializeNumber(array, &i);
+	i++;
+	std::string string0 = SerialController::DeserializeString(array, &i);
+
+	pros::lcd::set_text(0, to_string(kghkh++).c_str());
+	pros::lcd::set_text(1, to_string(number0).c_str());
+	pros::lcd::set_text(2, to_string(number1).c_str());
+	
+	int u = 3;
+	std::string fmt;
+	for (int p = 0; p < string0.length(); p++)
+	{
+		//if (u > 7) u = 2;
+		fmt += string0[p];
+		if (fmt.length() > 26)
+		{
+			trim(fmt);
+			if (fmt.length() > 0)
+				pros::lcd::set_text(u++, fmt.c_str());
+			fmt.clear();
+		}
+	}
+	trim(fmt);
+	if (fmt.length() > 0)
+		pros::lcd::set_text(u++, fmt.c_str());
+}
+
 
 void initialize() {
 	pros::lcd::initialize();
 	// controlSys.Init();
 	SerialController* serialController = new SerialController(nullptr);
 	serialController->RegisterCallback("TestFunction", (SerialController::PacketCallback)TestFunction);
-	pros::lcd::print(0, "Exchanging Tags...");
 	serialController->ExchangeTags();
-	pros::lcd::print(0, "Finished            ");
+
+	int sent = 1;
 	while(true)
 	{
 		serialController->ReadBuffer();
-		
+
 		stringstream stream;
-		stream << serialController->GetCallbackIndex("test_function");
+		stream << (unsigned char) (serialController->GetCallbackIndex("test_function") - 2);
 		stream << SerialController::SerializeNumber(654);
 		stream << SerialController::SerializeString("this is a super long string that we are sending over serial that i hope will just be over 255 characters to ensure strings are working properly");
-		stream << SerialController::SerializeNumber(5);
-		stream << SerialController::SerializeNumber(6568964);
+		stream << SerialController::SerializeNumber(1);
+		stream << SerialController::SerializeNumber(7154);
 		stream << SerialController::SerializeNumber(7896786);
 		serialController->SendData(stream.str());
+		pros::lcd::set_text(7, to_string(sent++).c_str());
+		pros::delay(5);
 	}
 	//pros::lcd::register_btn1_cb(on_center_button);
 }

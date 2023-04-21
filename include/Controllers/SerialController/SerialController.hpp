@@ -17,9 +17,9 @@
 #include "pros/apix.h" //added this in
 #include <vector>
 #include <iostream>
-#include <queue>
 #include <string>
-#include <atomic>
+#include <mutex>
+#include <cstring>
 
 class TerriBull::SerialController {
     public:
@@ -39,41 +39,36 @@ class TerriBull::SerialController {
 
     private:
     vector<char> __next_packet;
-    char __packet_header[4] { (char)115, (char)111, (char)117, (char)116 };
-    char __end_of_transmission[4] { (char)0, (char)0, (char)10, (char)10 };
-    int __header_length = sizeof(__packet_header) + 1;
-    int __footer_length = sizeof(__end_of_transmission);
-    int __packet_index_offset = 15;
+    static constexpr char __packet_header[4] = { (char)115, (char)111, (char)117, (char)116 };
+    static constexpr char __end_of_transmission[4] = { (char)0, (char)0, (char)10, (char)10 };
+    static const int __header_length = (sizeof(__packet_header) / sizeof(char));
+    static const int __footer_length = sizeof(__end_of_transmission) / sizeof(char);
+    static const int __packet_index_offset = 15;
     bool isCollectingTags, tagExchange;
     map<int, CallbackItem*> Callbacks;
     vector<ScheduledCallback*> ScheduledCallbacks;
     TerriBull::RoboController* motherSys;
 
-    std::string input_buffer;
-    volatile bool buffer_has_data = false;
-
     bool CompareBuffer(vector<char> buffer1, int start, int end, char* buffer2);    
 
     public:
-    struct UpdateArgs {
-        volatile bool* buffer_update;
-        std::string* buffer;
-    };
+    // struct UpdateArgs {
+    //     volatile bool* buffer_update;
+        
+    // };
 
+    static std::string input_buffer;
+    static pros::Mutex input_mutex;
 
     static void read_input_task(void* ignore)
     {
-        pros::lcd::print(4, "I STARTED EATING POOP");
-        SerialController::UpdateArgs* args = static_cast<SerialController::UpdateArgs*>(ignore);
-        while (true) 
+        char c;
+        while(true) 
         {
-            if (!*(args->buffer_update))
-            {
-                std::cin >> *(args->buffer);
-                pros::lcd::print(5, args->buffer->c_str());
-                *(args->buffer_update) = true;
-                pros::delay(10);
-            }
+            std::cin.get(c);
+            std::unique_lock<pros::Mutex> lock(TerriBull::SerialController::input_mutex);
+            TerriBull::SerialController::input_buffer += c;
+            lock.unlock();
         }
     }
     SerialController(TerriBull::RoboController* _motherSys);
@@ -81,13 +76,13 @@ class TerriBull::SerialController {
     static std::string SerializeNumber( double f );
     static double DeserializeNumber( char *array, int *si );
     static std::string SerializeString( std::string s );
-    static std::string SerializeString( const char *s );
+    //static std::string SerializeString( const char *s );
     static std::string DeserializeString( char *array, int *si );
     void ExchangeTags();
     int RegisterCallback(std::string tag_name, PacketCallback callback);
     void DeserializePacket();
     void Update(float delta);
-    void ReadBuffer();
+    bool ReadBuffer();
     void processDataFromBuffer();
     void SendData(::std::string data);
     void updateExchangeTags();
