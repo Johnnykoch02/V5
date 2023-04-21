@@ -21,10 +21,11 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     this->pToggled = true;
     this->turnOn();
     this->pMag->update(delta);
-    if (!(this->getRPM() > 50)) { /*TODO*/
+    pros::lcd::set_text(1,to_string(this->getRPM()));
+    if (!(this->getRPM() > 100)) { /*TODO*/
         return 0;
     }
-    pros::lcd::set_text(1,"EEEEEE");
+    
     this->pSystem->TurnOnIntake(1);
     if (this->pMag->getDecToggle()) {
         this->toggled = true;
