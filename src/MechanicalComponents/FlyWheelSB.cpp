@@ -32,7 +32,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     if (this->toggled) {
         this->sumTime+=delta;
     }
-    this->shotComplete = (this->sumTime >= 0.8);
+    this->shotComplete = (this->sumTime >= 2.5);
     return 0;
 }
 
@@ -64,7 +64,7 @@ int FlyWheelSB::Load(float delta, void* args) {
     if (this->toggled) {
         this->sumTime+=delta;
     }
-    this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 0.8;
+    this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 2.5;
     if (this->loaded) this->pSystem->TurnOffIntake();
     delete targetPos;
     return 0;   
