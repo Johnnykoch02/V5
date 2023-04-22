@@ -61,7 +61,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     }
 
     void __inc__(bool inc) {
-        if (inc != this->previousIncState) {
+        if (inc != this->previousIncState && ! this->toggledInc) {
             if (inc) {
                 this->pMagazineCnt++;
                 this->toggledInc = true;
@@ -71,7 +71,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     }
 
     void __dec__(bool dec) {
-        if (dec != this->previousDecState) {
+        if (dec != this->previousDecState && ! this->toggledDec) {
             if (dec) {
                 this->pMagazineCnt--;
                 this->toggledDec = true;
@@ -83,16 +83,16 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     }
 
     int update(float delta) {
-        int inc = 1;
+        bool inc = true;
         for (int i = 0; i < this->numIncSensors; i++) {
             // pros::lcd::set_text(i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
-            inc *= (incSensors[i]->get_value_calibrated() < incDefaults[i])? 1 : 0 ; /* 1 - 0 */
+            inc = inc & (incSensors[i]->get_value_calibrated() < incDefaults[i]); /* 1 - 0 */
         }
         this->__inc__(inc);
-        int dec = 1;
+        int dec = true;
         for (int i = 0; i < this->numDecSensors; i++) {
             // pros::lcd::set_text(this->numIncSensors+i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
-            dec *= (decSensors[i]->get_value_calibrated() < decDefaults[i])? 1 : 0; 
+            dec = dec & (decSensors[i]->get_value_calibrated() < decDefaults[i]); 
         }
         this->__dec__(dec);
         return 0;
@@ -101,6 +101,8 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int reset() {
         this->toggledInc = false;
         this->toggledDec = false;
+        this->previousIncState = false;
+        this->previousDecState = false;
         return 0;
     }
 
