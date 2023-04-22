@@ -75,10 +75,10 @@ int FlyWheelSB::turnOn() {
     pros::lcd::set_text(2, "RPM:"+ to_string(this->getRPM()));
 
     this->pToggled = true;
-    float pwr = this->maxSpeed; /* Make this Variable*/
-    this->pMotorX->move(pwr);
-    this->pMotorY->move(pwr);
-    this->pMag->update(0);
+    /* Make this Variable*/
+    this->pMotorX->(this->targetRPM);
+    this->pMotorY->move(this->targetRPM);
+    // this->pMag->update(0);
     return 0;
 }
 
