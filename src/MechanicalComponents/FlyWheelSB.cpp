@@ -22,7 +22,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     this->turnOn();
     this->pMag->update(delta);
     pros::lcd::set_text(1,to_string(this->getRPM()));
-    if (!(this->getRPM() > this->targetRPM*5)) { /*TODO*/
+    if (!(fabs(this->getRPM() - this->targetRPM) < 25)) { /*TODO*/
         return 0;
     }
     
@@ -101,7 +101,7 @@ int FlyWheelSB::reset() {
     this->pMotorX->tare_position();
     this->pMotorY->tare_position();
     this->pMag->reset();
-    this->targetRPM = 100;
+    this->targetRPM = 600;
 
     return 0;
 }

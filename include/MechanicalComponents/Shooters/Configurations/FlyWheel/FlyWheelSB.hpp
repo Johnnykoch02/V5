@@ -36,8 +36,8 @@ class FlyWheelSB : public TerriBull::Shooter {
     public:
     FlyWheelSB(int _x, bool xReverse, int _y, int yReverse, TerriBull::Magazine* _mag, int gearSet, TerriBull::MechanicalSystem* _system) : Shooter(gearSet), x(_x), y(_y), targetRPM(0), engagedOne(false), cntNoVal(0), maxSpeed(TerriBull::MAX_VOLTAGE), sumTime(0), pMag(_mag), pSystem(_system) {
         this->pType = "FlyWheel-SB";
-        this->pMotorX = new pros::Motor(x, xReverse);
-        this->pMotorY = new pros::Motor(y, yReverse);
+        this->pMotorX = new pros::Motor(x, pros::E_MOTOR_GEARSET_06, xReverse);
+        this->pMotorY = new pros::Motor(y, pros::E_MOTOR_GEARSET_06, yReverse);
         this->setPID(120, 2.5, 0);
         this->pMotorX->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
         this->pMotorY->set_encoder_units(pros::E_MOTOR_ENCODER_COUNTS);
@@ -49,6 +49,7 @@ class FlyWheelSB : public TerriBull::Shooter {
         this->motorRefs = new MechanicalComponent::MotorRefs {
         this->pType, this->pMotorRefs, 2
       };
+      this->targetRPM = 600;
     }
 
     ~FlyWheelSB() {
