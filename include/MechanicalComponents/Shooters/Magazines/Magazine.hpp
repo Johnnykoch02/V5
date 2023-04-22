@@ -25,6 +25,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     uint8_t numIncSensors, numDecSensors;
     int8_t pMagazineCnt; /* Maintain Number of Disks in the Magazine */
     pros::ADIAnalogIn **decSensors;
+    int8_t incCntr, decCntr;
     bool previousIncState, previousDecState;
     float* incDefaults,* decDefaults;
     public: /* TODO:
@@ -45,8 +46,9 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
             decSensors[i]->calibrate();
         }
         pMagazineCnt = 0;
-        previousIncState = false;
         previousDecState = false;        
+        incCntr = 0;
+        decCntr = 0;
     }
     ~Magazine() {
         /* Delete the Sensors and Data Pointers */
@@ -61,23 +63,31 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     }
 
     void __inc__(bool inc) {
-        if (inc != this->previousIncState && ! this->toggledInc) {
+        if (! this->toggledInc) {
             if (inc) {
-                this->pMagazineCnt++;
-                this->toggledInc = true;
+                this->incCntr++;
+                if (this->incCntr > 6) {
+                    this->toggledInc = true;
+                }
             }
-        }
-        this->previousIncState = inc;
+            else {
+                this->incCntr = 0;
+            }
+        } 
     }
 
     void __dec__(bool dec) {
-        if (dec != this->previousDecState && ! this->toggledDec) {
+        if (! this->toggledDec) {
             if (dec) {
-                this->pMagazineCnt--;
-                this->toggledDec = true;
+                this->decCntr++;
+                if (this->decCntr > 6) {
+                    this->toggleddec = true;
+                }
+            }
+            else {
+                this->decCntr = 0;
             }
         }
-        this->previousDecState = dec;
         /* Clamp our Dec to 0*/
         if (this->pMagazineCnt < 0) this->pMagazineCnt = 0;
     }
@@ -101,8 +111,8 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int reset() {
         this->toggledInc = false;
         this->toggledDec = false;
-        this->previousIncState = false;
-        this->previousDecState = false;
+        this->incCntr = 0;
+        this->decCntr = 0;
         return 0;
     }
 

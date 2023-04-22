@@ -77,7 +77,8 @@ int FlyWheelSB::Load(float delta, void* args) {
         
     // }
     this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 2.5;
-    if (this->loaded) this->pSystem->TurnOffIntake();
+    if (this->loaded)
+    { this->pSystem->TurnOffIntake(); this->pSystem->ResetDrive(); }
     delete targetPos;
     return 0;   
 }
