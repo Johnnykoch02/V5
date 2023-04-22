@@ -21,6 +21,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     this->pToggled = true;
     this->turnOn();
     this->pMag->update(delta);
+    pros::lcd::set_text(0,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
     pros::lcd::set_text(1,"RPM: "+to_string(this->getRPM()));
     if (!(this->getRPM() > MIN(0.8*this->targetRPM, 480))) { /*TODO*/ /*480 is the max stable RPM*/
         return 0;
