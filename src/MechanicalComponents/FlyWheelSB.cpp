@@ -34,7 +34,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     if (this->toggled) {
         this->sumTime+=delta;
     }
-    this->shotComplete = (this->sumTime >= 0.8);
+    this->shotComplete = (this->sumTime >= 1.5);
     if (this->shotComplete) {
         /* Ensure that the Mag has been emptied */
         if (this->pMag->getMagazineCount() > 0) {
