@@ -76,8 +76,8 @@ int FlyWheelSB::turnOn() {
 
     this->pToggled = true;
     /* Make this Variable*/
-    this->pMotorX->(this->targetRPM);
-    this->pMotorY->move(this->targetRPM);
+    this->pMotorX->move_velocity(this->targetRPM);
+    this->pMotorY->move_velocity(this->targetRPM);
     // this->pMag->update(0);
     return 0;
 }
