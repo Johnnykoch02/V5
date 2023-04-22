@@ -125,12 +125,12 @@ void TerriBull::RoboController::Init() {
         // );
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
 
-        this->taskManager->addTaskSet(
-            new TaskList({{
-                TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(-25, 0), true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
-            }})
-        );
+        // this->taskManager->addTaskSet(
+        //     new TaskList({{
+        //         TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(-25, 0), true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+        //         // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+        //     }})
+        // );
 
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
         // // this->taskManager->addTaskSet(new TaskList({TerriBull::RollerTask::DynamicInitialize(this->system->getRoller()->posPtr(), -1, this->getSystem() )}));
