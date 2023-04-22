@@ -21,7 +21,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     this->pToggled = true;
     this->turnOn();
     this->pMag->update(delta);
-    pros::lcd::set_text(1,to_string(this->getRPM()));
+    pros::lcd::set_text(1,"RPM: "+to_string(this->getRPM()));
     if (!(this->getRPM() > MIN(0.8*this->targetRPM, 480))) { /*TODO*/ /*480 is the max stable RPM*/
         return 0;
     }
@@ -48,7 +48,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
 
 int FlyWheelSB::Load(float delta, void* args) {
     this->loaded = false;
-    pros::lcd::set_text(1,"Mag Cnt:"+to_string(this->pMag->getMagazineCount()));
+    pros::lcd::set_text(0,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
     this->pToggled = true;
     this->pSystem->TurnOnIntake(-1);
     this->sumTime+=delta;
@@ -80,9 +80,6 @@ int FlyWheelSB::Load(float delta, void* args) {
     return 0;   
 }
 int FlyWheelSB::turnOn() {
-    pros::lcd::set_text(1,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
-    pros::lcd::set_text(2, "RPM:"+ to_string(this->getRPM()));
-
     this->pToggled = true;
     /* Make this Variable*/
     this->pMotorX->move_velocity(this->targetRPM);

@@ -85,13 +85,13 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int update(float delta) {
         int inc = 1;
         for (int i = 0; i < this->numIncSensors; i++) {
-            pros::lcd::set_text(i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
+            // pros::lcd::set_text(i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
             inc *= (incSensors[i]->get_value_calibrated() < incDefaults[i])? 1 : 0 ; /* 1 - 0 */
         }
         this->__inc__(inc);
         int dec = 1;
         for (int i = 0; i < this->numDecSensors; i++) {
-            pros::lcd::set_text(this->numIncSensors+i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
+            // pros::lcd::set_text(this->numIncSensors+i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
             dec *= (decSensors[i]->get_value_calibrated() < decDefaults[i])? 1 : 0; 
         }
         this->__dec__(dec);
