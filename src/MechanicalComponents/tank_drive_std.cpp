@@ -85,10 +85,10 @@ int Tank_Drive_Std::drive(TerriBull::Vector2 v_f, TerriBull::Vector2 v_i, float 
     else if (fabs(offTrack) < 15) {
         // pros::lcd::set_text(4,"--- in target case ---");
         int dir = fabs(offTrack)/offTrack;
-        pL *= 0.5;
-        pR *= 0.5;
-        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.05* pct)) * dir * errorMod * rev;
-        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.05* pct)) * dir * errorMod * rev;
+        pL *= 0.65;
+        pR *= 0.65;
+        pL += MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.09* pct)) * dir * errorMod * rev;
+        pR -= MIN(fabs(this->kPThetaTranslation*offTrack), fabs(0.09* pct)) * dir * errorMod * rev;
     }
     else if (fabs(offTrack) >= 15) {
         pros::lcd::set_text(4,"+++ in wrong 2 case ++++");
