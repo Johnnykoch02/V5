@@ -97,9 +97,11 @@ void TerriBull::RoboController::Init() {
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
         /* TASKS SECTION */
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
-        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, this->getSystem())}));
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::IntakeTask(-1, IntakeTask::ON, this->getSystem())}));
+
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
+        // this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::VariableTask(this->system->getDrive()->getRefMaxSpeed(), new float(70), VariableTask::FLOAT, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(1000, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::IntakeTask(1, IntakeTask::ON, this->getSystem())}));
