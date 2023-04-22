@@ -34,6 +34,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
         this->sumTime+=delta;
     }
     this->shotComplete = (this->sumTime >= 2.5);
+    if (this->shotComplete) this->pSystem->TurnOffIntake();
     return 0;
 }
 
