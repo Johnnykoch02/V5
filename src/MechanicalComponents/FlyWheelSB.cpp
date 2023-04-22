@@ -72,7 +72,7 @@ int FlyWheelSB::Load(float delta, void* args) {
         else {
             float* voltages = new float[this->pSystem->getDrive()->getMotorRefs()->NumMotors];
             for (int i = 0; i < this->pSystem->getDrive()->getMotorRefs()->NumMotors; i++) {
-                voltages[i] = 28;
+                voltages[i] = 20;
             }
             this->pSystem->getDrive()->setVoltage(voltages);
         }
