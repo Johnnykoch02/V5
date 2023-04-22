@@ -121,6 +121,7 @@ int Tank_Drive_Std::change_orientation(float theta, float delta) {
     this->currentError = GetDTheta(theta, *(this->pCurrentAngle));
     this->sumError += this->currentError;
     float pwr = this->kPTheta * this->currentError + this->kITheta * this->sumError + this->kDTheta * this->dError() / delta;
+    pwr = std::clamp(pwr, -60.0f, 60.0f);
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(1);
     s3 << "Err: "<< this->currentError << " Pwr: " << pwr;

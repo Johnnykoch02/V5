@@ -63,18 +63,19 @@ int FlyWheelSB::Load(float delta, void* args) {
         targetPos = obj->getPos();
     } 
     else {
-        Vector2* posUnit = Vector2::polarToVector2(1.6, this->pSystem->getAngle());
+        Vector2* posUnit = Vector2::polarToVector2(3, this->pSystem->getAngle());
         targetPos = *(this->pSystem->getPosition()) + *posUnit; /* Have it move forward */
         delete posUnit;
     }
     this->pSystem->GoToPosition(targetPos, this->pSystem->getPosition(), false);
-    this->pMag->update(delta);
-    if (this->pMag->getDecToggle()) {
+    if (!this->pMag->getDecToggle()) this->pMag->update(delta);
+    else {
         this->toggled = true;
-    }
-    if (this->toggled) {
         this->sumTime+=delta;
     }
+    // if (this->toggled) {
+        
+    // }
     this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 2.5;
     if (this->loaded) this->pSystem->TurnOffIntake();
     delete targetPos;
