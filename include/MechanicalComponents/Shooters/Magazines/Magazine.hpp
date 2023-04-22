@@ -81,7 +81,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
             if (dec) {
                 this->decCntr++;
                 if (this->decCntr > 6) {
-                    this->toggleddec = true;
+                    this->toggledDec = true;
                 }
             }
             else {
