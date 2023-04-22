@@ -66,8 +66,9 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
         if (! this->toggledInc) {
             if (inc) {
                 this->incCntr++;
-                if (this->incCntr > 6) {
+                if (this->incCntr > 4) {
                     this->toggledInc = true;
+                    this->pMagazineCnt++;
                 }
             }
             else {
@@ -80,8 +81,9 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
         if (! this->toggledDec) {
             if (dec) {
                 this->decCntr++;
-                if (this->decCntr > 6) {
+                if (this->decCntr > 4) {
                     this->toggledDec = true;
+                    this->pMagazineCnt--;
                 }
             }
             else {
