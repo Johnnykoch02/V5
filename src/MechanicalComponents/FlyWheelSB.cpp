@@ -72,14 +72,14 @@ int FlyWheelSB::Load(float delta, void* args) {
         else {
             float* voltages = new float[this->pSystem->getDrive()->getMotorRefs()->NumMotors];
             for (int i = 0; i < this->pSystem->getDrive()->getMotorRefs()->NumMotors; i++) {
-                voltages[i] = 10;
+                voltages[i] = 28;
             }
             this->pSystem->getDrive()->setVoltage(voltages);
         }
     }
     this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 2.5;
     if (this->loaded)
-    { this->pSystem->TurnOffIntake(); this->pSystem->ResetDrive(); }
+    { this->pSystem->TurnOffIntake(); this->pSystem->ResetDrive(); this->pMag->reset(); }
     return 0;   
 }
 int FlyWheelSB::turnOn() {
