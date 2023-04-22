@@ -76,5 +76,17 @@ namespace TerriBull {
       }
       return result;
     }
+    
+    int argmin(float* arr, int size) {
+      int min_index = 0;
+      for (int i = 1; i < size; i++) {
+          if (arr[i] < arr[min_index]) {
+              min_index = i;
+          }
+      }
+      return min_index;
+    }
+
+    
 };
 #endif

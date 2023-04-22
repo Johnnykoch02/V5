@@ -94,6 +94,7 @@ namespace TerriBull {
     extern float RAD2DEG( const float rad );
     extern float GetDTheta(float tf, float ti);
     extern matrix matrix_mult(matrix &M1, int M1_rows, int M1_cols, matrix &M2, int M2_rows, int M2_cols);
+    extern int argmin(float* arr, int size);
     extern pros::Imu mu;
     
 

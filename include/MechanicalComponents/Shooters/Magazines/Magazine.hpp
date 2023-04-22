@@ -18,6 +18,61 @@
 
 
 class TerriBull::Magazine : public TerriBull::MechanicalComponent {
+    class StateMachine {
+    public:
+        enum State {
+            PEAK = 0,
+            TROUGH = -1350,
+            MID = -650,
+        };
+
+    private:
+        State current_state;
+        /* Transition Constraints */
+        bool is_in_disk;
+
+
+    public:
+        StateMachine() : current_state(PEAK), is_in_disk(false) {}
+
+        /* Returns true if a sequence has been completed. False Otherwise */
+        bool update(float sensor_reading) {
+            float index_diff[] = {float(int(PEAK)), float(int(TROUGH)), float(int(MID))};
+            for (int i = 0; i < 3; i++) index_diff[i]= fabs(index_diff[i] - sensor_reading);
+            int _currState = TerriBull::argmin(index_diff, 3);
+            
+            switch (current_state) {
+                case PEAK:
+                    if (_currState == 0) { return false; }
+                    else if (_currState == 1) { this->current_state = TROUGH; is_in_disk = true; return false; }
+                    else if (_currState == 2) { this->current_state = MID; is_in_disk = true; return false; }
+                    break;
+                case TROUGH:
+                    if (_currState == 0) {
+                         this->reset(); 
+                         return true;
+                        }
+                    if (_currState == 1) { return false; }
+                    if (_currState == 2) { this->current_state = MID; }
+                    break;
+                case MID:
+                    if (_currState == 0) { return true; }
+                    if (_currState == 1) { this->current_state = TROUGH; return false; }
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        void reset() {
+            current_state = PEAK;
+            is_in_disk = false;
+        }
+
+        State getCurrentState() {
+            return current_state;
+        }
+    };
     protected:
     bool toggledInc;
     bool toggledDec;
@@ -28,6 +83,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int8_t incCntr, decCntr;
     bool previousIncState, previousDecState;
     float* incDefaults,* decDefaults;
+    StateMachine incStateMachine;
     public: /* TODO:
      - some of our sensors might be in state high as default as opposed to low. 
      - if a state is high as default, then we need to multiply that sensor readings like this:
@@ -49,6 +105,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
         previousDecState = false;        
         incCntr = 0;
         decCntr = 0;
+        this->incStateMachine.reset();
     }
     ~Magazine() {
         /* Delete the Sensors and Data Pointers */
@@ -96,11 +153,12 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
 
     int update(float delta) {
         bool inc = true;
-        for (int i = 0; i < this->numIncSensors; i++) {
-            // pros::lcd::set_text(i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
-            inc = inc & (incSensors[i]->get_value_calibrated() < incDefaults[i]); /* 1 - 0 */
-        }
-        this->__inc__(inc);
+        // for (int i = 0; i < this->numIncSensors; i++) {
+        //     // pros::lcd::set_text(i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
+        //     inc = inc & (incSensors[i]->get_value_calibrated() < incDefaults[i]); /* 1 - 0 */
+        // }
+        // this->__inc__(inc);
+        if (this->incStateMachine.update(incSensors[0]->get_value_calibrated())) { pMagazineCnt++; }
         int dec = true;
         for (int i = 0; i < this->numDecSensors; i++) {
             // pros::lcd::set_text(this->numIncSensors+i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
