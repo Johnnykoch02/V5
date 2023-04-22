@@ -58,28 +58,28 @@ int FlyWheelSB::Load(float delta, void* args) {
      */
     GameObject* obj = this->pSystem->getTargetObject();
     // if this->pSystem->Intake
-    Vector2* targetPos = nullptr;
-    if (obj!= nullptr) {
-        targetPos = obj->getPos();
-    } 
-    else {
-        Vector2* posUnit = Vector2::polarToVector2(3, this->pSystem->getAngle());
-        targetPos = *(this->pSystem->getPosition()) + *posUnit; /* Have it move forward */
-        delete posUnit;
-    }
-    this->pSystem->GoToPosition(targetPos, this->pSystem->getPosition(), false);
     if (!this->pMag->getDecToggle()) this->pMag->update(delta);
     else {
         this->toggled = true;
         this->sumTime+=delta;
     }
-    // if (this->toggled) {
-        
-    // }
+    if (!this->toggled) { /* If we Havent toggled the mag then we should slowly drive forward */
+        if (obj!= nullptr) {
+            Vector2* targetPos = obj->getPos();
+            this->pSystem->GoToPosition(targetPos, this->pSystem->getPosition(), false);
+            delete targetPos;
+        } 
+        else {
+            float* voltages = new float[this->pSystem->getDrive()->getMotorRefs()->NumMotors];
+            for (int i = 0; i < this->pSystem->getDrive()->getMotorRefs()->NumMotors; i++) {
+                voltages[i] = 10;
+            }
+            this->pSystem->getDrive()->setVoltage(voltages);
+        }
+    }
     this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 2.5;
     if (this->loaded)
     { this->pSystem->TurnOffIntake(); this->pSystem->ResetDrive(); }
-    delete targetPos;
     return 0;   
 }
 int FlyWheelSB::turnOn() {
