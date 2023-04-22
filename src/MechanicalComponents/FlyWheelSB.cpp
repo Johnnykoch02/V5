@@ -22,7 +22,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     this->turnOn();
     this->pMag->update(delta);
     pros::lcd::set_text(1,to_string(this->getRPM()));
-    if (!(this->getRPM() > 420)) { /*TODO*/
+    if (!(this->getRPM() > 475)) { /*TODO*/
         return 0;
     }
     
