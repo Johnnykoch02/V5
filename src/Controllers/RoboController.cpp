@@ -99,30 +99,30 @@ void TerriBull::RoboController::Init() {
         /* TASKS SECTION */
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::IntakeTask(-1, IntakeTask::ON, this->getSystem())}));
 
-        // this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
-        // this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
-        // this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, this->getSystem())}));
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::LOAD, nullptr, false, this->getSystem())}));
+        this->taskManager->addTaskSet(new TaskList({new TerriBull::ShooterTask(ShooterTask::SHOOT, nullptr, false, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::VariableTask(this->system->getDrive()->getRefMaxSpeed(), new float(70), VariableTask::FLOAT, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(1000, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::IntakeTask(1, IntakeTask::ON, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::RollerTask(1000,this->getSystem())}));
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
-        this->taskManager->addTaskSet(
-            new TaskList({{
-                TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(0, -17.0), true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
-                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
-            }})
-        );
+        // this->taskManager->addTaskSet(
+        //     new TaskList({{
+        //         TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(0, -17.0), true, TerriBull::DriveTask::TRANSLATION, this->getSystem()),
+        //         // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+        //     }})
+        // );
 
-        // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
+        // // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
 
-        this->taskManager->addTaskSet(
-            new TaskList({{
-                TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(-6.8, 0), true, TerriBull::DriveTask::ORIENTATION, this->getSystem()),
-                // new TerriBull::RollerTask(0.75, 1, this->getSystem())
-            }})
-        );
+        // this->taskManager->addTaskSet(
+        //     new TaskList({{
+        //         TerriBull::DriveTask::DynamicInitialize(Vector2::cartesianToVector2(-6.8, 0), true, TerriBull::DriveTask::ORIENTATION, this->getSystem()),
+        //         // new TerriBull::RollerTask(0.75, 1, this->getSystem())
+        //     }})
+        // );
         // this->taskManager->addTaskSet(new TaskList({new TerriBull::TimeTask(0.5, this->getSystem())}));
 
         this->taskManager->addTaskSet(
