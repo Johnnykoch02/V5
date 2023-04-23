@@ -148,7 +148,12 @@ double TerriBull::SerialController::DeserializeNumber(char *array, int *si)
             if ((int)array[i] != 7)
             {
                 number *= 10;
-                number += (int)(array[i] - 11);
+                auto k = (int)(array[i] - 11);
+                number += k;
+                if (k > 10 && i < length && array[i+1] - 11 > 10)
+                {
+                    number *= 10;
+                }
             }
             else
             {
@@ -159,9 +164,11 @@ double TerriBull::SerialController::DeserializeNumber(char *array, int *si)
         {
             if ((int)array[i] != 7)
             {
-                decimal_length++;
-                decimal *= 10;
-                decimal += (int)(array[i] - 11);
+                auto k = (int)(array[i] - 11);
+                auto p = to_string(k).length();
+                decimal *= pow(10, p);
+                decimal += k;
+                decimal_length += p;
             }
             else
             {

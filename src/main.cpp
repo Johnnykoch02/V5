@@ -115,8 +115,8 @@ void initialize() {
 		stream << SerialController::SerializeNumber(654);
 		stream << SerialController::SerializeString("this is a super long string that we are sending over serial that i hope will just be over 255 characters to ensure strings are working properly");
 		stream << SerialController::SerializeNumber(1);
-		stream << SerialController::SerializeNumber(7154);
-		stream << SerialController::SerializeNumber(7896786);
+		stream << SerialController::SerializeNumber(715.4);
+		stream << SerialController::SerializeNumber(789.6786);
 		serialController->SendData(stream.str());
 		pros::lcd::set_text(7, to_string(sent++).c_str());
 		pros::delay(5);
