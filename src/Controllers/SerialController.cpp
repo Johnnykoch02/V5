@@ -348,7 +348,7 @@ int TerriBull::SerialController::GetCallbackIndex(std::string tag_name)
                 return item->jetson_id + SerialController::__packet_index_offset;
         }
     }
-    return this->Callbacks.size() - 1 + SerialController::__packet_index_offset;
+    return this->Callbacks.size() + SerialController::__packet_index_offset;
 }
 
 void TerriBull::SerialController::SendData(std::string data)
