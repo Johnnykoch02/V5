@@ -14,6 +14,7 @@
 #include "../../include/TerriBull/lib/GameObjects/SpinUp/Disk.hpp"
 #include "../../include/TerriBull/lib/GameObjects/SpinUp/FieldRoller.hpp"
 #include "../../include/TerriBull/lib/GameObjects/SpinUp/Goal.hpp"
+#include "../../include/MechanicalComponents/Shooters/Configurations/FlyWheel/FlyWheelSB.hpp"
 #include <sstream>
 #include <iomanip>
 void RoboController::setObjHandler(ObjectHandler* objHandler) {
@@ -91,8 +92,13 @@ void TerriBull::RoboController::Init() {
         this->serialController->RegisterCallback("spin_roller", (SerialController::PacketCallback)SpinRollerCallback);
         this->serialController->RegisterCallback("shoot_disk", (SerialController::PacketCallback)ShootDiskCallback);
         this->serialController->RegisterCallback("load_shooter", (SerialController::PacketCallback)LoadShooterCallback);
+        if(this->pDebug) {
+            this->serialController->ScheduleCallback("serial_test_v5_to_jetson", 0.5);
+        }
+        this->serialController->ExchangeTags();
+        pros::lcd::set_text(0,"Loading in System");
         
-        if(!this->pDebug) this->serialController->ExchangeTags();
+
         // /* Init Object Handler */
         // this->objHandler = new ObjectHandler(); /* TODO: ObjHandler Class Needs serious Update */
 
@@ -207,11 +213,20 @@ void TerriBull::RoboController::Init() {
 
 void TerriBull::RoboController::Run() {
     this->updateTime();
+    pros::lcd::set_text(7, "Framerate: "+ std::to_string(float(1.0 / this->delta())));
     this->system->update(this->delta());
     this->serialController->update(this->delta());
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
         this->taskManager->run(this->delta());
     } else {
+    /**
+     * @DEBUG: THIS CODE SECTION
+     */
+        Magazine* mag = static_cast<FlyWheelSB*>(this->system->getShooter())->getMag();
+        mag->update(this->delta());
+    /**
+     * @DEBUG: END
+     */
         if(!this->pDebug) this->inputController->Update(this->delta());
         else {
             float voltages[] = {0, 0, 0, 0, 0, 0};
@@ -552,7 +567,7 @@ void ClearTasksCallback(TerriBull::RoboController* robot, char * array, int star
 }
 /* Other Callbacks */
 void TagExchangeCallback(TerriBull::RoboController* robot, char * array, int start, int length) {
-    robot->getSerialController()->updateExchangeTags();
+    // robot->getSerialController()->updateExchangeTags();
 }
 /**
  * @brief Sends Test Data to the Jetson
@@ -568,7 +583,7 @@ void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array
     s3 << (unsigned char) robot->getSerialController()->GetCallbackIndex("serial_test_v5_to_jetson");
     s3 << SerialController::SerializeNumber(theta);
     s3 << SerialController::SerializeString("Digits of Pi:");
-    s3 << SerialController::SerializeNumber(3.14159);
+    s3 << SerialController::SerializeNumber(314159);
     robot->getSerialController()->SendData(s3.str());
 }
 /**
@@ -580,5 +595,13 @@ void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array
  * @param length 
  */
 void SerialTestJetsonToV5Callback(TerriBull::RoboController* robot, char * array, int start, int length) {
-    
+    start++;
+    std::string s1 = SerialController::DeserializeString(array, &start);
+    start++;
+    double digitsOfPi = SerialController::DeserializeNumber(array, &start);
+    start++;
+    string dateTime = SerialController::DeserializeString(array, &start);
+    pros::lcd::set_text(2, s1);
+    pros::lcd::set_text(4, to_string(digitsOfPi));
+    pros::lcd::set_text(5, dateTime);
 }

@@ -21,8 +21,8 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     this->pToggled = true;
     this->turnOn();
     this->pMag->update(delta);
-    pros::lcd::set_text(0,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
-    pros::lcd::set_text(1,"RPM: "+to_string(this->getRPM()));
+    // pros::lcd::set_text(0,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
+    // pros::lcd::set_text(1,"RPM: "+to_string(this->getRPM()));
     if (!(this->getRPM() > MIN(0.8*this->targetRPM, 480))) { /*TODO*/ /*480 is the max stable RPM*/
         return 0;
     }
@@ -33,15 +33,17 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
     }
     if (this->toggled) {
         this->sumTime+=delta;
-    }
-    this->shotComplete = (this->sumTime >= 1.5);
-    if (this->shotComplete) {
         /* Ensure that the Mag has been emptied */
         if (this->pMag->getMagazineCount() > 0) {
             this->pMag->reset();
             this->sumTime = 0;
+            this->toggled = false;
             this->shotComplete = false;
+            this->pSystem->TurnOnIntake(0);
         }
+    }
+    this->shotComplete = (this->sumTime >= 1.5);
+    if (this->shotComplete) {
         this->pSystem->TurnOffIntake();
     }
     return 0;
@@ -49,7 +51,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
 
 int FlyWheelSB::Load(float delta, void* args) {
     this->loaded = false;
-    pros::lcd::set_text(0,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
+    pros::lcd::set_text(1,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
     this->pToggled = true;
     this->pSystem->TurnOnIntake(-1);
     this->sumTime+=delta;
@@ -58,12 +60,18 @@ int FlyWheelSB::Load(float delta, void* args) {
      */
     GameObject* obj = this->pSystem->getTargetObject();
     // if this->pSystem->Intake
-    if (!this->pMag->getDecToggle()) this->pMag->update(delta);
-    else {
+    bool toggledBeforeUpdate = this->pMag->getIncToggle();
+    this->pMag->update(delta);
+    bool toggledAfterUpdate = this->pMag->getIncToggle();
+    if(toggledBeforeUpdate != toggledAfterUpdate) {
+        if (this->toggled) this->sumTime = 0; /* We are intaking an extra disk so we need to allow more time for the process to finish */
         this->toggled = true;
+        this->pMag->reset();
+    }
+    if (this->toggled) {
         this->sumTime+=delta;
     }
-    if (!this->toggled) { /* If we Havent toggled the mag then we should slowly drive forward */
+    else { /* If we Havent toggled the mag then we should slowly drive forward */
         if (obj!= nullptr) {
             Vector2* targetPos = obj->getPos();
             this->pSystem->GoToPosition(targetPos, this->pSystem->getPosition(), false);
@@ -77,7 +85,7 @@ int FlyWheelSB::Load(float delta, void* args) {
             this->pSystem->getDrive()->setVoltage(voltages);
         }
     }
-    this->loaded = this->pMag->getMagazineCount() > 0 && this->sumTime > 2.5;
+    this->loaded = this->toggled && this->sumTime > 2.5;
     if (this->loaded)
     { this->pSystem->TurnOffIntake(); this->pSystem->ResetDrive(); this->pMag->reset(); }
     return 0;   
@@ -135,5 +143,8 @@ int FlyWheelSB::UpdateInternalState(void* args) {
     this->maxSpeed = _args->maxSpeed;
     delete _args;
     return 0;
+}
 
+Magazine* FlyWheelSB::getMag() const {
+    return this->pMag;
 }

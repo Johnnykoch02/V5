@@ -66,6 +66,7 @@ class FlyWheelSB : public TerriBull::Shooter {
     bool shotCompleted();
     static void* ConstructUpdateArgs(float targetRPM, float maxSpeed);
     int UpdateInternalState(void* args);
+    Magazine* getMag() const;
 
 };     
 
