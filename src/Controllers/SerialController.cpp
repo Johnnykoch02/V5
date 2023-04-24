@@ -297,11 +297,13 @@ void TerriBull::SerialController::DeserializePacket()
  * @param start_index
  * @param length
  */
+int k =1;
 void TerriBull::SerialController::ProcessTagExchange(char *array, int start_index, int length)
 {
     if (!this->isCollectingTags)
     {
         this->isCollectingTags = true;
+        this->tmpCallbacks.clear();
     }
     
     int ind = start_index + 1;
@@ -326,12 +328,18 @@ void TerriBull::SerialController::ProcessTagExchange(char *array, int start_inde
         item->callback = tmp->callback;
     }
 
+    // pros::lcd::set_text(k++, (to_string(tag_id)+":"+item->friendly_name).c_str());
+
     this->tmpCallbacks[tag_id] = item;
 
     if (step == 0)
     {
-        // john fix
-        this->Callbacks = this->tmpCallbacks;
+        this->Callbacks.clear();
+        for (auto it = this->tmpCallbacks.begin(); it!= this->tmpCallbacks.end(); ++it)
+        {
+            this->Callbacks[it->first] = it->second;
+        }
+        this->tmpCallbacks.clear();
         this->isCollectingTags = false;
         this->tagExchange = true;
     }
@@ -342,7 +350,7 @@ SerialController::CallbackItem* TerriBull::SerialController::FindInternal(std::s
     for (auto it = this->Callbacks.begin(); it != this->Callbacks.end(); ++it)
     {
         SerialController::CallbackItem *item = it->second;
-        if (item->friendly_name == tag_name)
+        if (item->friendly_name.find(tag_name) != std::string::npos)
         {
             return item;
         }
@@ -355,7 +363,8 @@ int TerriBull::SerialController::GetCallbackIndex(std::string tag_name)
     for (auto it = this->Callbacks.begin(); it != this->Callbacks.end(); ++it)
     {
         SerialController::CallbackItem *item = it->second;
-        if (item->friendly_name == tag_name)
+
+        if (item->friendly_name.find(tag_name) != std::string::npos )
         {
             if (item->jetson_id == -1) /* We have not initialized the Packet index*/
                 return it->first + SerialController::__packet_index_offset;

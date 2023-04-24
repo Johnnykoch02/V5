@@ -111,7 +111,7 @@ void initialize() {
 		serialController->ReadBuffer();
 
 		stringstream stream;
-		stream << (unsigned char) (serialController->GetCallbackIndex("test_function") - 2);
+		stream << (unsigned char) (serialController->GetCallbackIndex("test_function"));
 		stream << SerialController::SerializeNumber(654);
 		stream << SerialController::SerializeString("this is a super long string that we are sending over serial that i hope will just be over 255 characters to ensure strings are working properly");
 		stream << SerialController::SerializeNumber(1);

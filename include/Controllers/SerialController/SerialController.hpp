@@ -28,7 +28,7 @@ class TerriBull::SerialController {
     typedef struct {
         PacketCallback callback;
         std::string friendly_name;
-        int jetson_id;
+        int jetson_id = -1;
     } CallbackItem;
 
     typedef struct {
