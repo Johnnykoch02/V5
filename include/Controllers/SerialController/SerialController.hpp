@@ -46,10 +46,12 @@ class TerriBull::SerialController {
     static const int __packet_index_offset = 15;
     bool isCollectingTags, tagExchange;
     map<int, CallbackItem*> Callbacks;
+    map<int, CallbackItem*> tmpCallbacks;
     vector<ScheduledCallback*> ScheduledCallbacks;
     TerriBull::RoboController* motherSys;
 
     bool CompareBuffer(vector<char> buffer1, int start, int end, char* buffer2);    
+    SerialController::CallbackItem* FindInternal(std::string tag_name);
 
     public:
     // struct UpdateArgs {

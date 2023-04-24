@@ -299,7 +299,11 @@ void TerriBull::SerialController::DeserializePacket()
  */
 void TerriBull::SerialController::ProcessTagExchange(char *array, int start_index, int length)
 {
-    this->isCollectingTags = true;
+    if (!this->isCollectingTags)
+    {
+        this->isCollectingTags = true;
+    }
+    
     int ind = start_index + 1;
 
     int step = (int)SerialController::DeserializeNumber(array, &ind);
@@ -310,29 +314,40 @@ void TerriBull::SerialController::ProcessTagExchange(char *array, int start_inde
     ind++;
     std::string friendly_name = SerialController::DeserializeString(array, &ind);
 
-    int our_tag_id = this->GetCallbackIndex(friendly_name) - SerialController::__packet_index_offset;
-
     SerialController::CallbackItem *item;
-    auto ret = this->Callbacks.find(our_tag_id);
 
-    if (ret != this->Callbacks.end())
+    item = new SerialController::CallbackItem();
+    item->jetson_id = tag_id;
+    item->friendly_name = friendly_name;
+
+    SerialController::CallbackItem* tmp = this->FindInternal(friendly_name);
+    if (tmp != nullptr)
     {
-        item = ret->second;
-        item->jetson_id = tag_id;
+        item->callback = tmp->callback;
     }
-    else
-    {
-        item = new SerialController::CallbackItem();
-        item->jetson_id = tag_id;
-        item->friendly_name = friendly_name;
-        this->Callbacks[Callbacks.size()] = item;
-    }
+
+    this->tmpCallbacks[tag_id] = item;
 
     if (step == 0)
     {
+        // john fix
+        this->Callbacks = this->tmpCallbacks;
         this->isCollectingTags = false;
         this->tagExchange = true;
     }
+}
+
+SerialController::CallbackItem* TerriBull::SerialController::FindInternal(std::string tag_name)
+{
+    for (auto it = this->Callbacks.begin(); it != this->Callbacks.end(); ++it)
+    {
+        SerialController::CallbackItem *item = it->second;
+        if (item->friendly_name == tag_name)
+        {
+            return item;
+        }
+    }
+    //return nullptr;
 }
 
 int TerriBull::SerialController::GetCallbackIndex(std::string tag_name)
@@ -348,7 +363,7 @@ int TerriBull::SerialController::GetCallbackIndex(std::string tag_name)
                 return item->jetson_id + SerialController::__packet_index_offset;
         }
     }
-    return this->Callbacks.size() + SerialController::__packet_index_offset;
+    return -1;
 }
 
 void TerriBull::SerialController::SendData(std::string data)
