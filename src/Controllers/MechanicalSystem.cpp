@@ -12,7 +12,7 @@
 #include "../../include/Controllers/MechanicalSystem/MechanicalSystem.hpp"
 #include <sstream>
 #include <iomanip>
-MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake(nullptr), pShooter(nullptr), pRoller(nullptr), pExpansion(nullptr) {
+MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive, bool isAutoShoot) : pIntake(nullptr), pShooter(nullptr), pRoller(nullptr), pExpansion(nullptr), pIsAutoShoot(isAutoShoot) {
     this->pAngle = new double;
     /*IMU Setup*/
     this->pImu = new pros::Imu(_imu);
@@ -24,6 +24,7 @@ MechanicalSystem::MechanicalSystem(int _imu, TerriBull::Drive* _drive) : pIntake
     /*Initalize*/
     this->pThetaFilter = new KalmanFilter1D(0, 0.2, 0.1);
     this->targetGameObj = nullptr;
+
 }
 
 void MechanicalSystem::Init() {
@@ -33,6 +34,10 @@ void MechanicalSystem::Init() {
 
 void MechanicalSystem::setStartingPosition(float x, float y){
     this->pPosition = TerriBull::Vector2::cartesianToVector2(x, y);
+}
+
+void MechanicalSystem::setTargetDeltaShootingAngle(float deltaShootingAngle) {
+    this->targetDeltaShootingAngle = deltaShootingAngle;
 }
 
 /* Tasking Specific */
@@ -134,6 +139,12 @@ TerriBull::Vector2*  MechanicalSystem::getPosition() {
     return this->pPosition;
 }
 
+float TerriBull::MechanicalSystem::getTargetDeltaShootingAngle() const {
+    return this->targetDeltaShootingAngle;
+}
+bool TerriBull::MechanicalSystem::getIsAutoShoot() const {
+    return this->pIsAutoShoot;
+}
 void TerriBull::MechanicalSystem::ResetDrive() {
     this->pDrive->reset();
 }
@@ -147,12 +158,12 @@ float TerriBull::MechanicalSystem::getAngle() {
   return *(this->pAngle);
 }
 
-void TerriBull::MechanicalSystem::update(float delta) {
+void TerriBull::MechanicalSystem::Update(float delta) {
     this->getAngle();
     std::stringstream s3;
     s3 << std::fixed << ::std::setprecision(1);
     s3 << "Ang:" << *(this->pAngle) << "|Pos:x->" << this->pPosition->x << "y->" << this->pPosition->y;
-    pros::lcd::set_text(3, s3.str());
+    //pros::lcd::set_text(3, s3.str());
     // std::stringstream s4;
 
     Vector2* dP = this->pDrive->resultant_vector();
@@ -179,6 +190,18 @@ int TerriBull::MechanicalSystem::TurnOnIntake(float direction) {
 int TerriBull::MechanicalSystem::TurnOffIntake() {
     if (this->pIntake != nullptr) {
         return this->pIntake->TurnOff();
+    } return -1;
+}
+
+int TerriBull::MechanicalSystem::TurnOnRoller(float pct0fMax) {
+    if (this->pRoller!= nullptr) {
+        return this->pRoller->TurnOn(pct0fMax);
+    } return -1;
+}
+
+int TerriBull::MechanicalSystem::TurnOffRoller() {
+    if (this->pRoller!= nullptr) {
+        return this->pRoller->TurnOff();
     } return -1;
 }
 

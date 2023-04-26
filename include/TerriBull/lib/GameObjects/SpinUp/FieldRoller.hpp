@@ -31,17 +31,11 @@ class FieldRoller : public TerriBull::GameObject { /*TODO: Change name not to co
     };
 
     static void* ConstructUpdateArgs(float x, float y, int color, bool is_in_contact) {
-        size_t size = sizeof(float) * 2 + sizeof(int) + sizeof(bool); /* Calculate Size*/
-        void* data = malloc(size);
-        size_t offset = 0;
-        memcpy((char*)data + offset, &x, sizeof(float));
-        offset += sizeof(float);
-        memcpy((char*)data + offset, &y, sizeof(float));
-        offset += sizeof(float);
-        int color_as_int = static_cast<int>(color);
-        memcpy((char*)data + offset, &color_as_int, sizeof(int));
-        offset += sizeof(int);
-        memcpy((char*)data + offset, &is_in_contact, sizeof(bool));
+        UpdateArgs* data = (UpdateArgs*) malloc(sizeof(UpdateArgs));
+        data->x = x;
+        data->y = y;
+        data->color = color;
+        data->is_in_contact = is_in_contact;
         return data;
     }
 

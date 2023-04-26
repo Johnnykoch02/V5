@@ -82,6 +82,12 @@ class TerriBull::Vector2 {
             v->y = ::std::sin(theta);
             return v;
         }
+        static void UpdateValues(TerriBull::Vector2* v, Vector2* updater) {
+            v->x = updater->x;
+            v->y = updater->y;
+            v->r = updater->r;
+            v->theta = updater->theta;
+        }
         bool sameDirection(Vector2 const & other) {
             return this->theta == other.theta;
         }

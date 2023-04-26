@@ -27,6 +27,7 @@ class TerriBull::RollerTask : public TerriBull::Task {
     bool deleteOnCleanup;
     bool needsInitialize;
     RollerType rollerType;
+    float pct0fMax;
 
     RollerTask(TerriBull::MechanicalSystem* _system);
     
@@ -37,7 +38,7 @@ class TerriBull::RollerTask : public TerriBull::Task {
     RollerTask(float pos, TerriBull::MechanicalSystem* _system);
 
     static RollerTask* DynamicInitialize(float* pos, float offset, TerriBull::MechanicalSystem* _system);
-    static RollerTask* TurnOn(int dir, float pwr, TerriBull::MechanicalSystem* _system);
+    static RollerTask* TurnOn(float pct0fMax, TerriBull::MechanicalSystem* _system);
     static RollerTask* TurnOff(TerriBull::MechanicalSystem* _system);
     ~RollerTask();
 

@@ -27,13 +27,10 @@ class Disk : public TerriBull::GameObject {
     };
 
     static void* ConstructUpdateArgs(float x, float y) {
-        size_t size = sizeof(float) * 2; /* Calculate Size*/
-        void* data = malloc(size);
-        size_t offset = 0;
-        memcpy((char*)data + offset, &x, sizeof(float));
-        offset += sizeof(float);
-        memcpy((char*)data + offset, &y, sizeof(float));
-        return data;
+        UpdateArgs* args = (UpdateArgs*) malloc(sizeof(UpdateArgs));
+        args->x = x;
+        args->y = y;
+        return (void*) args;
     }
     
     ~Disk() {

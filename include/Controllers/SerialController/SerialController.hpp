@@ -35,7 +35,7 @@ class TerriBull::SerialController {
         CallbackItem* callbackItem;
         float sumTime;
         float frequency;
-    } ScheduledCallback;
+    } ScheduledUpdate;
 
     private:
     vector<char> __next_packet;
@@ -46,11 +46,18 @@ class TerriBull::SerialController {
     static const int __packet_index_offset = 15;
     bool isCollectingTags, tagExchange;
     map<int, CallbackItem*> Callbacks;
-    vector<ScheduledCallback*> ScheduledCallbacks;
+    map<int, CallbackItem*> tmpCallbacks;
+    vector<ScheduledUpdate*> ScheduledUpdates;
     TerriBull::RoboController* motherSys;
 
-    bool CompareBuffer(vector<char> buffer1, int start, int end, char* buffer2);
-    CallbackItem* GetCallback(std::string tag_name);
+    bool CompareBuffer(vector<char> buffer1, int start, int end, char* buffer2);    
+    SerialController::CallbackItem* FindInternal(std::string tag_name);
+
+    public:
+    // struct UpdateArgs {
+    //     volatile bool* buffer_update;
+        
+    // };
 
     static std::string input_buffer;
     static pros::Mutex input_mutex;
@@ -66,23 +73,23 @@ class TerriBull::SerialController {
             lock.unlock();
         }
     }
-
-    public:
     SerialController(TerriBull::RoboController* _motherSys);
 
     static std::string SerializeNumber( double f );
     static double DeserializeNumber( char *array, int *si );
     static std::string SerializeString( std::string s );
+    //static std::string SerializeString( const char *s );
     static std::string DeserializeString( char *array, int *si );
     
-    void ScheduleCallback(std::string tag_name, float frequency);
+    void ScheduleUpdate(std::string tag_name, float frequency);
     void ExchangeTags();
     int RegisterCallback(std::string tag_name, PacketCallback callback);
     void DeserializePacket();
-    void update(float delta);
+    void Update(float delta);
     bool ReadBuffer();
     void processDataFromBuffer();
     void SendData(::std::string data);
+    void updateExchangeTags();
     bool isInitialized();
     void ProcessTagExchange(char * array, int start_index, int length);
     int GetCallbackIndex(std::string tag_name);

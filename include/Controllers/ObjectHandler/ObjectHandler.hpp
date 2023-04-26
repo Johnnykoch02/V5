@@ -39,12 +39,12 @@ class TerriBull::ObjectHandler {
     ~ObjectHandler() {
 
     }
-    TerriBull::GameObject* query(GameObject::Types type, char identifier) {return nullptr;} /*TODO*/
+    TerriBull::GameObject* query(GameObject::Types type, char identifier);/*TODO*/
     TerriBull::GameObject* getClosestObjByType(GameObject::Types type, Vector2* currentPos);
     TerriBull::GameObject* getClosestObj(Vector2* currentPos);
     void updateObjPos(char identifier,GameObject::Types type, Vector2 pos); /*TODO*/
-    void addObject(GameObject* _obj); /*TODO*/
-    void update(GameObject::Types type, char id, void* args); 
+    char addObject(GameObject* _obj); /*TODO*/
+    void Update(GameObject::Types type, char id, void* args); 
 };
 
 // TerriBull::GameObject* TerriBull::ObjectHandler::getClosestObj (GameObject::Types type, TerriBull::Vector2 pos) {

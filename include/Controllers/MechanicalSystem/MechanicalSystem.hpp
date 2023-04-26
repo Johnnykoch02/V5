@@ -33,20 +33,27 @@ class TerriBull::MechanicalSystem {
         TerriBull::Vector2 * pPosition;
         KalmanFilter1D* pThetaFilter;
         GameObject* targetGameObj;
+        float targetDeltaShootingAngle;
         double * pAngle;
         float pStartingAngle;
+        bool pIsAutoShoot;
 
     public:
 
-    MechanicalSystem(int _imu, TerriBull::Drive * _drive);
+    MechanicalSystem(int _imu, TerriBull::Drive * _drive, bool isAutoShoot = false);
     float getAngle();
     
     void setStartingAngle(float angle) {
         this->pStartingAngle = angle;
     }
     
+    /* Tracking Data */
     TerriBull::Vector2* getPosition();
+    float getTargetDeltaShootingAngle() const;
+    bool getIsAutoShoot() const;
     void setStartingPosition(float x, float y);
+    void setTargetDeltaShootingAngle(float angle);
+    bool setIsAutoShoot(bool isAutoShoot);
 
     /* Tasking Specific */
     float getDriveError() const;
@@ -57,6 +64,9 @@ class TerriBull::MechanicalSystem {
     bool isShotCompleted() const;
     bool isShooterLoaded() const;
     bool isRollerCompleted() const;
+
+
+
     // bool isExpansionCompleted() const;
     bool isRollerToggled() const;
     bool isIntakeToggled() const;
@@ -68,7 +78,7 @@ class TerriBull::MechanicalSystem {
     bool isShooterReset() const;
     
     void Init();
-    void update(float delta);
+    void Update(float delta);
 
     /* API To Mechanical System */
     int GoToPosition(Vector2 v_f, Vector2 v_i, bool reverse);
@@ -76,6 +86,8 @@ class TerriBull::MechanicalSystem {
     int TurnToAngle(float theta);
     int TurnOnIntake(float direction); //+
     int TurnOffIntake();
+    int TurnOnRoller(float pct0fMax);
+    int TurnOffRoller();
     int SpinRollerTo(float pos);
     int SpinRollerFor(int direction, float time);
     int ResetRoller();

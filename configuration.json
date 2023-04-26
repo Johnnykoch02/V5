@@ -1,5 +1,5 @@
 {
-    "version": "0.2.1",
+    "version": "0.3.0",
     "configurations": [
         {
             "name": "Big_Boy",
@@ -7,6 +7,8 @@
             "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
+                "delta_shooting_angle": 0,
+                "is_auto_shoot": true,
                 "starting_position": {
                     "x": 0,
                     "y": 0
@@ -51,6 +53,8 @@
             "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
+                "delta_shooting_angle": 0,
+                "is_auto_shoot": true,
                 "starting_position": {
                     "x": 0,
                     "y": 0
@@ -90,6 +94,8 @@
             "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
+                "delta_shooting_angle": 0,
+                "is_auto_shoot": true,
                 "starting_position": {
                     "x": 0,
                     "y": 0
@@ -103,12 +109,12 @@
                     "cf": 0.5573,
                     "radius": 1.5,
                     "wheel_base": 12.0,
-                    "k_pos": [9.2, 0.0001, 1.8],
-                    "k_theta": [3.5, 0.002, 0.4]
+                    "k_pos": [12.5, 0.0001, 0.3],
+                    "k_theta": [12.1, 0.002, 0.4]
                 },
                 "intake": {
                     "config": "IntakeUni",
-                    "motor_ports": [5],
+                    "motor_ports": [6],
                     "reverse_motors": [0],
                     "gear_ratio": "GREEN",
                     "max_speed": 120
@@ -129,9 +135,9 @@
                 },
                 "magazine": {
                     "incPorts": "DE",
-                    "inc_thresholg": [0.64, 0.64],
-                    "decPorts": "B",
-                    "dec_threshold": [0.64]
+                    "inc_threshold": [-150, -150],
+                    "decPorts": "C",
+                    "dec_threshold": [-95.0]
                 }
             }
         },
@@ -141,6 +147,8 @@
             "controller_deadzone": 5,
             "mechanical_system": {
                 "starting_angle": 90,
+                "delta_shooting_angle": 0,
+                "is_auto_shoot": true,
                 "starting_position": {
                     "x": 0,
                     "y": 0

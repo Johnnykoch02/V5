@@ -27,10 +27,17 @@ int Roller_Duo::Spin(int direction, float time, float delta) {
     return 0;
 }
 
-int Roller_Duo::TurnOn(int direction, float pwr) {
+int Roller_Duo::TurnOn(float pct0fMax) {
     this->pToggled = true;
-    this->pMotorI->move(direction * pwr);
-    this->pMotorJ->move(direction * pwr);
+    this->pMotorI->move(pct0fMax * this->maxSpeed);
+    this->pMotorJ->move(pct0fMax * this->maxSpeed);
+    return 0;
+}
+
+int Roller_Duo::TurnOff() {
+    this->pToggled = false;
+    this->pMotorI->move(0);
+    this->pMotorJ->move(0);
     return 0;
 }
 
@@ -53,13 +60,10 @@ int Roller_Duo::SpinToPos(float pos) {
 }
 
 void Roller_Duo::reset() {
-    this->pToggled = false;
     this->timeFlag = false;
     this->sumTime = 0;
     this->sumError = 0;
     this->previousError = 0;
-    this->pMotorI->move(0);
-    this->pMotorJ->move(0);
 }
 
 void Roller_Duo::update() {

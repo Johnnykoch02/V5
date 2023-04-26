@@ -170,16 +170,18 @@ TerriBull::MechanicalSystem* ConfigurationParser::getMechanicalSystemConfig() {
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }
-    if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StartingPos.isNull()) {
+    if (this->pConfigVariables.StartingAngle.isNull() || this->pConfigVariables.StartingPos.isNull() || this->pConfigVariables.DeltaShootingAngle.isNull() || this->pConfigVariables.IsAutoShoot.isNull()) {
         pros::lcd::set_text(3, "Null Start Info : " + this->pConfigVariables.DriveConfig.Config.asString());
         this->errCode = VARIABLE_PARSE_ERROR;
         return nullptr;
     }
+    
 
     /* Construct a new base System */
-    TerriBull::MechanicalSystem* system = new TerriBull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive);
+    TerriBull::MechanicalSystem* system = new TerriBull::MechanicalSystem(this->pConfigVariables.IMUConfig.asInt(), drive, this->pConfigVariables.IsAutoShoot.asBool());
     system->setStartingAngle(this->pConfigVariables.StartingAngle.asFloat());
     system->setStartingPosition(this->pConfigVariables.StartingPos["x"].asFloat(), this->pConfigVariables.StartingPos["y"].asFloat());
+    system->setTargetDeltaShootingAngle(this->pConfigVariables.DeltaShootingAngle.asFloat());
     system->Init();
 
     /* Iterate through Mechanical System Config Member Fields */

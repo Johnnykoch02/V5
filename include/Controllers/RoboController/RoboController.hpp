@@ -81,22 +81,29 @@ extern void SetGoalObjectCallback(TerriBull::RoboController* robot, char * array
 extern void GetGoalObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void SetPositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GetPositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void UpdateMagCountCallback(TerriBull::RoboController* robot, char * array, int start_index, int length); // [Brain -> Jetson] (count)
+
 /* API Callbacks */
 extern void GoToPositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GoToPositionDxDyCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GoToPositionDRDThetaCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void CreateObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void SetTargetObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void UpdateTargetObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void UpdateTargetObjectDRDThetaCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GoToObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void TurnToAngleCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void SpinRollerCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void TurnOffRollerCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void ShootDiskCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void LoadShooterCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 
 /* Task Management Callbacks */
 extern void ClearTasksCallback(TerriBull::RoboController* robot, char * array, int start, int length);
-
+extern void TaskFinishedCallback(TerriBull::RoboController* robot, char * array, int start, int length);
 /* Other Callbacks */
 extern void TagExchangeCallback(TerriBull::RoboController* robot, char * array, int start, int length);
 extern void SerialTestJetsonToV5Callback(TerriBull::RoboController* robot, char * array, int start, int length);
 extern void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array, int start, int length);
+//recieve status callback, update status
 #endif

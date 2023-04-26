@@ -20,12 +20,14 @@
 class Goal : public TerriBull::GameObject {
     public:
     typedef enum {
-            RED, BLUE, NEUTRAL
+            RED, BLUE
     } Color;
 
     private:
     float pDTheta;
-        
+    Color pColor; 
+    bool valid;
+
     ~Goal() {}
 
     public:
@@ -34,28 +36,31 @@ class Goal : public TerriBull::GameObject {
         float x;
         float y;
         float dTheta;
+        bool valid;
     };
-    
-    static void* ConstructUpdateArgs(float x, float y, float dtheta) {
-        size_t size = sizeof(float) * 3; /* Calculate Size*/
-        void* data = malloc(size);
-        size_t offset = 0;
-        memcpy((char*)data + offset, &x, sizeof(float));
-        offset += sizeof(float);
-        memcpy((char*)data + offset, &y, sizeof(float));
-        offset += sizeof(float);
-        memcpy((char*)data + offset, &dtheta, sizeof(bool));
-        return data;
+
+    static void* ConstructUpdateArgs(float x, float y, float dtheta, bool valid) {
+        UpdateArgs* args = (UpdateArgs*) malloc(sizeof(UpdateArgs));
+        args->x = x;
+        args->y = y;
+        args->dTheta = dtheta;
+        args->valid = valid;
+        return (void*)args;
     }
     
-    Goal(TerriBull::Vector2* pos, char identifier) : GameObject(pos, identifier, DISK, 8, 8) { }
+    Goal(TerriBull::Vector2* pos, char identifier, Goal::Color color) : GameObject(pos, identifier, DISK, 8, 8), pColor(color), valid(false) { }
     
     float getDTheta() {
         return pDTheta;
     }
-    
+    bool getValid() {
+        return valid;
+    }
     void setDTheta(float pDTheta) {
         this->pDTheta = pDTheta;
+    }
+    void setValid(bool valid) {
+        this->valid = valid;
     }
 
 };

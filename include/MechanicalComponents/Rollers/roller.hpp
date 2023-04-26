@@ -24,7 +24,8 @@ class TerriBull::Roller : public TerriBull::MechanicalComponent {
     bool timeFlag;
     Roller(int maxSpeed, int gearSet) : TerriBull::MechanicalComponent(gearSet), maxSpeed(maxSpeed), timeFlag(false), currentPos(0) {}
     virtual int Spin(int direction, float time, float delta) = 0;
-    virtual int TurnOn(int direction, float pwr) = 0;
+    virtual int TurnOn(float pct0fMax) = 0;
+    virtual int TurnOff() = 0;
     virtual float getRPM() const = 0;
     virtual float* posPtr() final { return &currentPos; }
     virtual float getPos() const final { return currentPos; }    

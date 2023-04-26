@@ -11,10 +11,27 @@
 */
 #include "../../include/MechanicalComponents/Shooters/Configurations/FlyWheel/FlyWheelSB.hpp"
 int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
-    if (this->pMag->getMagazineCount() <= 0) {
+    if ( this->pMag->getMagazineCount() <= 0 || this->pSystem->getTargetObject()->type != GameObject::GOAL ) {
         this->shotComplete = true;
         return 0;
     } 
+    /**
+     * @brief We must first turn to the Desired Angle if the Robot is using Autoshoot Mode.
+     * Assume since that we are using Autoshoot Mode, our Mechanical System has the Target Object Loaded in.
+     */
+    if ( this->pSystem->getIsAutoShoot() && !(this->pToggled) ) {
+        /* NOTE: this may cause undesirable changes, ensure that if Auto-Shoot then the Jetson has set the Target Object accordingly */
+        Goal* goal = dynamic_cast<Goal*>(this->pSystem->getTargetObject()); 
+        float desiredAngle = (float) fmod(this->pSystem->getAngle() + goal->getDTheta() + this->pSystem->getTargetDeltaShootingAngle(), 360.0);
+        if ( fabs(TerriBull::GetDTheta(desiredAngle, this->pSystem->getAngle())) < 0.9 ) {
+            this->pToggled = true;
+            this->pSystem->ResetDrive();
+        }
+        else { /* Turning to the Desired Angle */
+            this->pSystem->TurnToAngle(desiredAngle);
+        }
+    }
+
     /**
      * @brief Wait for the FlyWheel to Spin up, then start the Shooting.
      */
@@ -27,8 +44,8 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
         return 0;
     }
     
-    this->pSystem->TurnOnIntake(0.75);
-    if (this->pMag->getDecToggle()) {
+    this->pSystem->TurnOnIntake(1);
+    if ( this->pMag->getDecToggle() ) {
         this->toggled = true;
     }
     if (this->toggled) {
@@ -42,7 +59,7 @@ int FlyWheelSB::Shoot(float delta, void* args) { /* TODO: Create Target RPM */
             this->pSystem->TurnOnIntake(0);
         }
     }
-    this->shotComplete = (this->sumTime >= 1.5);
+    this->shotComplete = (this->sumTime >= 0.5);
     if (this->shotComplete) {
         this->pSystem->TurnOffIntake();
     }
@@ -54,7 +71,6 @@ int FlyWheelSB::Load(float delta, void* args) {
     pros::lcd::set_text(1,"Mag Cnt: "+to_string(this->pMag->getMagazineCount()));
     this->pToggled = true;
     this->pSystem->TurnOnIntake(-1);
-    this->sumTime+=delta;
     /**
      * @brief Assuming we are Querying the Mechanical System for an Object to Load
      */
@@ -72,7 +88,7 @@ int FlyWheelSB::Load(float delta, void* args) {
         this->sumTime+=delta;
     }
     else { /* If we Havent toggled the mag then we should slowly drive forward */
-        if (obj!= nullptr) {
+        if (obj!= nullptr && this->pSystem->getTargetObject()->type == GameObject::DISK) {
             Vector2* targetPos = obj->getPos();
             this->pSystem->GoToPosition(targetPos, this->pSystem->getPosition(), false);
             delete targetPos;
@@ -85,7 +101,7 @@ int FlyWheelSB::Load(float delta, void* args) {
             this->pSystem->getDrive()->setVoltage(voltages);
         }
     }
-    this->loaded = this->toggled && this->sumTime > 2.5;
+    this->loaded = this->toggled && this->sumTime > 1.2;
     if (this->loaded)
     { this->pSystem->TurnOffIntake(); this->pSystem->ResetDrive(); this->pMag->reset(); }
     return 0;   

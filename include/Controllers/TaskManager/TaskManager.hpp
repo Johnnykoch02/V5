@@ -28,12 +28,17 @@ private:
     std::list<TerriBull::TaskList*> tasks;
     TerriBull::TaskList* currentTaskSet = nullptr;
     int tasksCompleted = 0;
+    bool InterruptFlag = false;
     // std::vector<Expression*> Expressions;
 public:
     TaskManager() = default;
 
     ~TaskManager() {
         ClearAllTasks();
+    }
+
+    int GetTasksCompleted() const {
+        return tasksCompleted;
     }
 
     void ClearAllTasks() {
@@ -53,6 +58,14 @@ public:
             delete taskList;
         }
         tasks.clear();
+        this->InterruptFlag = true;
+    }
+
+    bool Interrupted() const {
+        return InterruptFlag;
+    }
+    void LowerInterruptFlag() {
+        InterruptFlag = false;
     }
 
     TerriBull::TaskList* InterruptCurrentTask() {
@@ -72,7 +85,7 @@ public:
 
     void Init() {}
 
-    void run(float delta) {
+    int run(float delta) {
         if (currentTaskSet != nullptr) { /* Update and check our current task */
             pros::lcd::set_text(7, "Task Number: " + std::to_string(tasksCompleted + 1));
             int finishedTasks = 0, totalTasks = 0;
@@ -93,7 +106,7 @@ public:
                 }
                 delete currentTaskSet;
                 currentTaskSet = nullptr;
-                tasksCompleted++;
+                return ++tasksCompleted;
             }
         } else if (!tasks.empty()) { /* Obtain the next task */
             currentTaskSet = tasks.front();
@@ -109,6 +122,7 @@ public:
         // for (auto expression : Expressions) {
         //     expression->updateTotal();
         // }
+        return -1;
     }
 };
 #endif

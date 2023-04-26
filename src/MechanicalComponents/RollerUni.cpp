@@ -19,9 +19,15 @@ int Roller_Uni::Spin(int direction, float time, float delta) {
     this->update();
     return 0;
 }
-int Roller_Uni::TurnOn(int direction, float pwr) {
+int Roller_Uni::TurnOn(float pct0fMax) {
     this->pToggled = true;
-    this->pMotorI->move(direction * pwr);
+    this->pMotorI->move(pct0fMax * this->maxSpeed);
+    return 0;
+}
+
+int Roller_Uni::TurnOff() {
+    this->pToggled = false;
+    this->pMotorI->move(0);
     return 0;
 }
 
@@ -40,12 +46,10 @@ int Roller_Uni::SpinToPos(float pos) {/* TODO: Fix this */
 }
 
 void Roller_Uni::reset() {
-    this->pToggled = false;
     this->timeFlag = false;
     this->sumTime = 0;
     this->sumError = 0;
     this->previousError = 0;
-    this->pMotorI->move(0);
 }
 
 void Roller_Uni::update() {

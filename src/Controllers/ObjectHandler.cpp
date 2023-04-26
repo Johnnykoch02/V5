@@ -12,9 +12,13 @@
 #include "../../include/Controllers/ObjectHandler/ObjectHandler.hpp"
 #include <sstream>
 #include <iomanip>
-void ObjectHandler::addObject(GameObject* _obj) {
+
+char ObjectHandler::addObject(GameObject* _obj) {
     this->pNumObjects++;
     this->Objects[_obj->type].push_back(_obj);
+    char index = static_cast<char>(this->Objects[_obj->type].size() - 1);
+    _obj->id = index;
+    return index;
 }
 
 GameObject* ObjectHandler::getClosestObjByType(GameObject::Types type, Vector2* currentPos) {
@@ -32,6 +36,15 @@ GameObject* ObjectHandler::getClosestObjByType(GameObject::Types type, Vector2* 
         }
         return closestObj;
 }
+
+ TerriBull::GameObject* ObjectHandler::query(GameObject::Types type, char identifier) {
+    std::vector<GameObject*> objects = this->Objects[type];
+    for (GameObject* obj : objects) {
+            if (obj->checkID(identifier)) { // Check if the object's identifier matches the inputted identifier
+                return obj;
+            }
+        }
+ }
 
 
 GameObject* ObjectHandler::getClosestObj(Vector2* currentPos) {
@@ -55,12 +68,11 @@ void ObjectHandler::updateObjPos(char identifier, GameObject::Types type, Vector
     GameObject* queryObj = this->query(type, identifier);
     if (queryObj!= nullptr) {
         Vector2* updateVector = queryObj->getPosPtr();
-        updateVector->x = pos.x;
-        updateVector->y = pos.y;
+        Vector2::UpdateValues(updateVector, &pos);
     }
 }
 
-void ObjectHandler::update(GameObject::Types type, char id, void* args) {
+void ObjectHandler::Update(GameObject::Types type, char id, void* args) {
     GameObject* obj = this->query(type, id); // Find the GameObject with the specified type and id
     if(obj != nullptr) { // If the object exists
         switch(type) {
@@ -68,8 +80,10 @@ void ObjectHandler::update(GameObject::Types type, char id, void* args) {
                 Disk* disk = dynamic_cast<Disk*>(obj);
                 if (disk != nullptr) {
                   Disk::UpdateArgs* diskArgs = static_cast<Disk::UpdateArgs*>(args);
-                  disk->pos->x = diskArgs->x;
-                  disk->pos->y = diskArgs->y;
+                  Vector2* updater = Vector2::cartesianToVector2(diskArgs->x, diskArgs->y);
+                  Vector2::UpdateValues(disk->pos, updater);
+                  delete updater;
+                  delete diskArgs;
                 }
                 break;
             }
@@ -77,9 +91,12 @@ void ObjectHandler::update(GameObject::Types type, char id, void* args) {
                 Goal* goal = dynamic_cast<Goal*>(obj);
                 if (goal != nullptr) {
                   Goal::UpdateArgs* goalArgs = static_cast<Goal::UpdateArgs*>(args);
-                  goal->pos->x = goalArgs->x;
-                  goal->pos->y = goalArgs->y;
+                  Vector2* updater = Vector2::cartesianToVector2(goalArgs->x, goalArgs->y);
+                  Vector2::UpdateValues(goal->pos, updater);
                   goal->setDTheta(goalArgs->dTheta);
+                  goal->setValid(goalArgs->valid);
+                  delete updater;
+                  delete goalArgs;
                 }
                 break;
             }
@@ -87,10 +104,12 @@ void ObjectHandler::update(GameObject::Types type, char id, void* args) {
                 FieldRoller* roller = dynamic_cast<FieldRoller*>(obj);
                 if (roller != nullptr) {
                   FieldRoller::UpdateArgs* rollerArgs = static_cast<FieldRoller::UpdateArgs*>(args);
-                  roller->pos->x = rollerArgs->x;
-                  roller->pos->y = rollerArgs->y;
+                  Vector2* updater = Vector2::cartesianToVector2(rollerArgs->x, rollerArgs->y);
+                  Vector2::UpdateValues(roller->pos, updater);
                   roller->setCurrentColor((FieldRoller::Color)rollerArgs->color);
                   roller->setIsInContact(rollerArgs->is_in_contact);
+                  delete updater;
+                  delete rollerArgs;
                 }
                 break;
             }

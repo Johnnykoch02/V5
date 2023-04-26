@@ -146,7 +146,7 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
         int dec = true;
         for (int i = 0; i < this->numDecSensors; i++) {
             // pros::lcd::set_text(this->numIncSensors+i, to_string((incSensors[i]->get_value_calibrated() < incDefaults[i])));
-            dec = dec & (decSensors[i]->get_value_calibrated() < -50); 
+            dec = dec & (decSensors[i]->get_value_calibrated() < - 95); 
         }
         this->__dec__(dec);
         return 0;

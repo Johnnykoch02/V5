@@ -51,6 +51,8 @@ class ConfigurationParser {
         /* IMU Sensor */
         Json::Value IMUConfig;
         Json::Value StartingAngle;
+        Json::Value DeltaShootingAngle;
+        Json::Value IsAutoShoot;
         Json::Value StartingPos;
         /* CONTROLLER CONFIG VARIABLES */
         Json::Value ControllerConfig;
@@ -102,6 +104,8 @@ class ConfigurationParser {
             this->pConfigVariables.DriveConfig.KTheta = this->pConfigVariables.Config["mechanical_system"]["drive"]["k_theta"];
             this->pConfigVariables.IMUConfig = this->pConfigVariables.Config["mechanical_system"]["imu"];
             this->pConfigVariables.StartingAngle = this->pConfigVariables.Config["mechanical_system"]["starting_angle"];
+            this->pConfigVariables.DeltaShootingAngle = this->pConfigVariables.Config["mechanical_system"]["delta_shooting_angle"];
+            this->pConfigVariables.IsAutoShoot = this->pConfigVariables.Config["mechanical_system"]["is_auto_shoot"];
             this->pConfigVariables.StartingPos = this->pConfigVariables.Config["mechanical_system"]["starting_position"];
             pros::lcd::set_text(1, "Parsed DriveType: " + this->pConfigVariables.DriveConfig.Config.asString());
             // pros::lcd6::set_text(3, "Parsed Start Pos: " + std::to_string(this->pConfigVariables.StartingPos["x"].asFloat()) + " " + std::to_string(this->pConfigVariables.StartingPos["y"].asFloat()));

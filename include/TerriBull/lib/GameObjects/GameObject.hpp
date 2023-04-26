@@ -21,7 +21,7 @@ class TerriBull::GameObject {
     private:
     public:
     typedef enum {
-        DISK, ROBOT, ROLLER, GOAL, LOWER_GOAL
+        DISK, ROLLER, GOAL, LOWER_GOAL, ROBOT
     } Types;
 
     char id;
