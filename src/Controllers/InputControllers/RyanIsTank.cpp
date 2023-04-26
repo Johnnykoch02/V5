@@ -54,16 +54,26 @@ void RyanIsTank::Update(float delta) {
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       }
     }
-    /* Shooter */ /*TODO: Change To Toggle */
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-      this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
-      this->roboController->getSystem()->TurnOnShooter();
-      this->roboController->getSystem()->getShooter()->Shoot(delta, nullptr);
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
+       if (this->roboController->getSystem()->isShooterToggled()) {
+        this->roboController->getSystem()->ResetShooter();
+        this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
+      } else {
+      this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
+        this->roboController->getSystem()->TurnOnIntake(-1);
+        // this->roboController->getSystem()->getShooter()->Shoot(delta, nullptr);
     }
-    else {
-      this->roboController->getSystem()->ResetShooter();
-      if (!this->roboController->getSystem()->isShooterToggled()) {
+    }
+
+    /* Shooter */ /*TODO: Change To Toggle */
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+      if (this->roboController->getSystem()->isShooterToggled()) {
+        this->roboController->getSystem()->ResetShooter();
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
+      } else {
+      this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
+        this->roboController->getSystem()->TurnOnShooter();
+        // this->roboController->getSystem()->getShooter()->Shoot(delta, nullptr);
       }
     }
 }

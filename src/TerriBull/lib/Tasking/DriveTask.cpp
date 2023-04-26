@@ -121,7 +121,7 @@ void DriveTask::update(float delta) {
                     }
                     else {
                         this->system->GoToPosition(*(this->v_f), *(this->v_i), this->reversed); /*TODO: Test Delta Value  */
-                        if (currentAngleCurrection == this->lastNeedsCorrection) this->hitTarget = (fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.01) && !this->system->isDriveReset() && this->system->isDriveToggled(); 
+                        if (currentAngleCurrection == this->lastNeedsCorrection) this->hitTarget = (fabs(this->system->getDriveError()) < 2 && (fabs(this->system->getDriveDError()) / delta) < 0.01) && !this->system->isDriveReset() && this->system->isDriveToggled(); 
                 }
                }
                 else {
@@ -157,7 +157,7 @@ void DriveTask::update(float delta) {
                         delete v_i_to_bot;
                     }
                     else {
-                        this->system->GoToPosition(*(this->v_f), *(this->v_i), this->reversed); /*TODO: Test Delta Value  */
+                        this->system->GoToPosition(*(this->v_f), *(this->v_i), this->reversed); 
                         if (currentAngleCurrection == this->lastNeedsCorrection) this->hitTarget = (fabs(this->system->getDriveError()) < 1 && (fabs(this->system->getDriveDError()) / delta) < 0.01) && !this->system->isDriveReset() && this->system->isDriveToggled(); 
                 }
                }

@@ -44,6 +44,7 @@ GameObject* ObjectHandler::getClosestObjByType(GameObject::Types type, Vector2* 
                 return obj;
             }
         }
+    return nullptr;
  }
 
 

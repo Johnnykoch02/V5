@@ -32,7 +32,7 @@ class TerriBull::RoboController {
     TerriBull::InputController* inputController;
     ConfigurationParser* configParser;
     uint32_t currentTime, previousTime;
-    bool pDebug;
+    bool pUseSerial, pDebug;
 
     public:
 
@@ -81,6 +81,7 @@ extern void SetGoalObjectCallback(TerriBull::RoboController* robot, char * array
 extern void GetGoalObjectCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void SetPositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void GetPositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
+extern void OverridePositionCallback(TerriBull::RoboController* robot, char * array, int start_index, int length);
 extern void UpdateMagCountCallback(TerriBull::RoboController* robot, char * array, int start_index, int length); // [Brain -> Jetson] (count)
 
 /* API Callbacks */
@@ -105,5 +106,6 @@ extern void TaskFinishedCallback(TerriBull::RoboController* robot, char * array,
 extern void TagExchangeCallback(TerriBull::RoboController* robot, char * array, int start, int length);
 extern void SerialTestJetsonToV5Callback(TerriBull::RoboController* robot, char * array, int start, int length);
 extern void SerialTestV5ToJetsonCallback(TerriBull::RoboController* robot, char * array, int start, int length);
+extern void NullCallback(TerriBull::RoboController* robot, char * array, int start, int length);
 //recieve status callback, update status
 #endif
