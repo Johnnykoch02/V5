@@ -44,12 +44,13 @@ void RyanIsTank::Update(float delta) {
     if (l1 || r1) {
       this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       float currentPos = this->roboController->getSystem()->getRoller()->getPos();
-      if(this->roboController->getSystem()->SpinRollerTo(currentPos + 50*(l1 - r1))) {
+      if(this->roboController->getSystem()->TurnOnRoller(1.5*(r1-l1))) {
         pros::lcd::set_text(2, "Error with Roller");
       }
     } 
     else {
       this->roboController->getSystem()->ResetRoller();
+      this->roboController->getSystem()->TurnOffRoller();
       if (!this->roboController->getSystem()->isRollerToggled()) {
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       }
