@@ -80,7 +80,7 @@ void TerriBull::RoboController::Init() {
                 this->serialController->RegisterCallback("serial_test_jetson_to_v5", (SerialController::PacketCallback)SerialTestJetsonToV5Callback);
                 this->serialController->ScheduleUpdate("serial_test_v5_to_jetson", 0.5);
             }
-            else if(this->pUseSerial)  {        
+            else  {        
                 this->serialController->RegisterCallback("set_disk_obj", (SerialController::PacketCallback)SetDiskObjectCallback);
                 this->serialController->RegisterCallback("get_disk_obj", (SerialController::PacketCallback)GetDiskObjectCallback);
                 this->serialController->RegisterCallback("set_goal_obj", (SerialController::PacketCallback)SetGoalObjectCallback);
@@ -109,13 +109,17 @@ void TerriBull::RoboController::Init() {
                 this->serialController->RegisterCallback("null_callback", (SerialController::PacketCallback)NullCallback);
                 this->serialController->ScheduleUpdate("get_pos", 0.2);
             }
+            this->serialController->ExchangeTags();
+            if (! this->pDebug) 
+            {/* Lets add in all of the data scheduling */
+                this->serialController->ScheduleUpdate("update_mag_count", 1.0);
+                this->serialController->ScheduleUpdate("get_pos", 0.1);
+            }
+            else {
+                this->serialController->ScheduleUpdate("serial_test_v5_to_jetson", 1.0);
+            }
         }        
-        this->serialController->ExchangeTags();
-        if (! this->pDebug) 
-        {/* Lets add in all of the data scheduling */
-            this->serialController->ScheduleUpdate("update_mag_count", 1.0);
-            this->serialController->ScheduleUpdate("get_pos", 0.1);
-        }
+       
         //pros::lcd::set_text(0,"Loading in System");
         
         // /* Init Object Handler */
