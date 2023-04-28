@@ -42,8 +42,7 @@ void RyanIsTank::Update(float delta) {
     int l1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
     int r1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
     if (l1 || r1) {
-      this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
-      float currentPos = this->roboController->getSystem()->getRoller()->getPos();
+      // this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       if(this->roboController->getSystem()->TurnOnRoller(1.5*(r1-l1))) {
         pros::lcd::set_text(2, "Error with Roller");
       }
@@ -52,27 +51,27 @@ void RyanIsTank::Update(float delta) {
       this->roboController->getSystem()->ResetRoller();
       this->roboController->getSystem()->TurnOffRoller();
       if (!this->roboController->getSystem()->isRollerToggled()) {
-        this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
+        // this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       }
     }
     if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
        if (this->roboController->getSystem()->isIntakeToggled()) {
         this->roboController->getSystem()->TurnOffIntake();
-        this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
+        // this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
       } else {
-      this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
+      // this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
         this->roboController->getSystem()->TurnOnIntake(-1);
         // this->roboController->getSystem()->getShooter()->Shoot(delta, nullptr);
-    }
+      }
     }
 
     /* Shooter */ /*TODO: Change To Toggle */
     if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
       if (this->roboController->getSystem()->isShooterToggled()) {
         this->roboController->getSystem()->ResetShooter();
-        this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
+        // this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
       } else {
-      this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
+      // this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getShooter()->getMotorRefs());
         this->roboController->getSystem()->TurnOnShooter();
         // this->roboController->getSystem()->getShooter()->Shoot(delta, nullptr);
       }
