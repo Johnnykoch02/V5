@@ -55,9 +55,9 @@ void RyanIsTank::Update(float delta) {
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
       }
     }
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
-       if (this->roboController->getSystem()->isShooterToggled()) {
-        this->roboController->getSystem()->ResetShooter();
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+       if (this->roboController->getSystem()->isIntakeToggled()) {
+        this->roboController->getSystem()->TurnOffIntake();
         this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
       } else {
       this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getIntake()->getMotorRefs());
