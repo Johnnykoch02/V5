@@ -1,10 +1,12 @@
 {
-    "version": "0.3.0",
+    "version": "0.3.1",
     "configurations": [
         {
             "name": "Big_Boy",
             "controller_config": "DanTheMan",
             "controller_deadzone": 5,
+            "use_serial": false,
+            "debug_mode": false,
             "mechanical_system": {
                 "starting_angle": 90,
                 "delta_shooting_angle": 0,
@@ -51,6 +53,8 @@
             "name": "Left_Nut",
             "controller_config": "AidanJoeShmo",
             "controller_deadzone": 5,
+            "use_serial": false,
+            "debug_mode": false,
             "mechanical_system": {
                 "starting_angle": 90,
                 "delta_shooting_angle": 0,
@@ -92,10 +96,12 @@
             "name": "TinyBull",
             "controller_config": "RyanIsTank",
             "controller_deadzone": 5,
+            "use_serial": true,
             "mechanical_system": {
                 "starting_angle": 90,
                 "delta_shooting_angle": 0,
                 "is_auto_shoot": true,
+                "debug_mode": true,
                 "starting_position": {
                     "x": 0,
                     "y": 0
@@ -145,6 +151,8 @@
             "name": "Rocky",
             "controller_config": "NateIsTank",
             "controller_deadzone": 5,
+            "use_serial": false,
+            "debug_mode": false,
             "mechanical_system": {
                 "starting_angle": 90,
                 "delta_shooting_angle": 0,

@@ -54,10 +54,6 @@ class TerriBull::SerialController {
     SerialController::CallbackItem* FindInternal(std::string tag_name);
 
     public:
-    // struct UpdateArgs {
-    //     volatile bool* buffer_update;
-        
-    // };
 
     static std::string input_buffer;
     static pros::Mutex input_mutex;

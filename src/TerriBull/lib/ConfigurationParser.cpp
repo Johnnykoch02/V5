@@ -44,6 +44,13 @@ ConfigurationParser::~ConfigurationParser () {
     delete pFile;
 }
 
+bool ConfigurationParser::getSerialMode() {
+    return this->pConfigVariables.UseSerial.asBool();
+}
+bool ConfigurationParser::getDebugMode() {
+    return this->pConfigVariables.DebugMode.asBool();
+}
+
 TerriBull::Drive* ConfigurationParser::getDriveConfig() {
     if (this->pConfigVariables.DriveConfig.Config.isNull() || this->pConfigVariables.DriveConfig.MotorPorts.isNull() || this->pConfigVariables.DriveConfig.MotorGearset.isNull() || this->pConfigVariables.DriveConfig.WheelRadius.isNull() || this->pConfigVariables.DriveConfig.WheelRadius.isNull() || this->pConfigVariables.DriveConfig.ConversionFactor.isNull()) {
         this->errCode = VARIABLE_PARSE_ERROR;

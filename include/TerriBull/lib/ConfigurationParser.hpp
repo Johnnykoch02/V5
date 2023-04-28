@@ -50,10 +50,13 @@ class ConfigurationParser {
         RoboDriveConfig DriveConfig;
         /* IMU Sensor */
         Json::Value IMUConfig;
+        /*PROGRAM CONSTANTS*/
         Json::Value StartingAngle;
         Json::Value DeltaShootingAngle;
         Json::Value IsAutoShoot;
         Json::Value StartingPos;
+        Json::Value UseSerial;
+        Json::Value DebugMode;
         /* CONTROLLER CONFIG VARIABLES */
         Json::Value ControllerConfig;
         Json::Value ControllerDeadzone;
@@ -93,6 +96,8 @@ class ConfigurationParser {
             /* Load In Configuration Variables */
             this->pConfigVariables.ControllerConfig = this->pConfigVariables.Config["controller_config"];
             this->pConfigVariables.ControllerDeadzone = this->pConfigVariables.Config["controller_deadzone"];
+            this->pConfigVariables.UseSerial = this->pConfigVariables.Config["use_serial"];
+            this->pConfigVariables.DebugMode = this->pConfigVariables.Config["debug_mode"];
             this->pConfigVariables.DriveConfig.Config = this->pConfigVariables.Config["mechanical_system"]["drive"]["config"];
             this->pConfigVariables.DriveConfig.MotorPorts = this->pConfigVariables.Config["mechanical_system"]["drive"]["motor_ports"];
             this->pConfigVariables.DriveConfig.MotorReverse = this->pConfigVariables.Config["mechanical_system"]["drive"]["reverse_motors"];
@@ -116,6 +121,8 @@ class ConfigurationParser {
         Functions to return Robot Configuration
         */
         TerriBull::Drive* getDriveConfig();
+        bool getSerialMode();
+        bool getDebugMode();
         TerriBull::Intake* getIntakeConfig();
         TerriBull::Roller* getRollerConfig();
         TerriBull::Shooter* getShooterConfig(TerriBull::MechanicalSystem* _system);

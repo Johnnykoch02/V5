@@ -67,9 +67,9 @@ void TerriBull::RoboController::Init() {
         if (inputController == nullptr) {
             // exit(1);
         }
-        /* THIS VAR WILL PUT THE SYSTEM INTO DEBUG MODE */
-        this->pDebug = true; //false;
-        this->pUseSerial = true;
+        /* THIESE HELP DEBUG ISSUES ON THE BRAIN AND ON THE JETSON */
+        this->pDebug = this->configParser->getDebugMode();
+        this->pUseSerial = this->configParser->getSerialMode();
         /* Init Task Manager */
         this->taskManager = new TaskManager();
         /* Init Serial Controller */
@@ -242,7 +242,7 @@ void TerriBull::RoboController::Run() {
     this->updateTime();
     pros::lcd::set_text(7, "Framerate: "+ std::to_string(float(1.0 / this->delta())));
     this->system->Update(this->delta());
-    this->serialController->Update(this->delta());
+    if (this->pUseSerial) this->serialController->Update(this->delta());
     if (pros::competition::is_autonomous()) { /*TODO: Or engaged Autonomous Control */
         if (this->taskManager->run(this->delta()) > 0 || this->taskManager->Interrupted()) {
             TaskFinishedCallback(this, nullptr, this->taskManager->GetTasksCompleted(), 0);
