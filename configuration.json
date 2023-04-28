@@ -98,13 +98,13 @@
             "controller_deadzone": 5,
             "use_serial": true,
             "mechanical_system": {
-                "starting_angle": 90,
+                "starting_angle": 0,
                 "delta_shooting_angle": 0,
                 "is_auto_shoot": true,
                 "debug_mode": true,
                 "starting_position": {
-                    "x": 0,
-                    "y": 0
+                    "x": 84.0,
+                    "y": 12
                 },
                 "imu": 11,
                 "drive": {
@@ -120,14 +120,14 @@
                 },
                 "intake": {
                     "config": "IntakeUni",
-                    "motor_ports": [6],
+                    "motor_ports": [5],
                     "reverse_motors": [0],
                     "gear_ratio": "GREEN",
                     "max_speed": 120
                 },
                 "roller": {
                     "config": "RollerUni",
-                    "motor_ports": [6],
+                    "motor_ports": [5],
                     "reverse_motors": [0],
                     "gear_ratio": "GREEN",
                     "max_speed": 120

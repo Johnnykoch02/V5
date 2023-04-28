@@ -43,12 +43,13 @@ void RyanIsTank::Update(float delta) {
     int r1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
     if (l1 || r1) {
       // this->roboController->getSystem()->UnConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());
-      if(this->roboController->getSystem()->TurnOnRoller(1.5*(r1-l1))) {
-        pros::lcd::set_text(2, "Error with Roller");
-      }
+      this->roboController->getSystem()->TurnOnRoller(1.5*(r1-l1));//) {
+      //   pros::lcd::set_text(2, "Error with Roller");
+      // }
     } 
     else {
       this->roboController->getSystem()->ResetRoller();
+      if (! this->roboController->getSystem()->isIntakeToggled())
       this->roboController->getSystem()->TurnOffRoller();
       if (!this->roboController->getSystem()->isRollerToggled()) {
         // this->roboController->getSystem()->ConstrictMotorGroupCurrent(this->roboController->getSystem()->getRoller()->getMotorRefs());

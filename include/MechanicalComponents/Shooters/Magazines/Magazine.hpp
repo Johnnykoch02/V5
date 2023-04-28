@@ -162,6 +162,9 @@ class TerriBull::Magazine : public TerriBull::MechanicalComponent {
     int8_t getMagazineCount() {
         return this->pMagazineCnt;
     }
+    void setMagazineCount(int cnt) {
+        this->pMagazineCnt = cnt;
+    }
     bool getIncToggle() {
         return this->toggledInc;
     }
